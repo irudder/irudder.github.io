@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,knn,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="使用knn算法进行分类预测1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798">
+<meta name="keywords" content="机器学习,knn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="knn算法预测约会对象是否符合条件">
+<meta property="og:url" content="https://mrpastor.github.io/2018-05-03/knn/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="使用knn算法进行分类预测1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-14T10:16:27.468Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="knn算法预测约会对象是否符合条件">
+<meta name="twitter:description" content="使用knn算法进行分类预测1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2018-05-03/knn/">
+
+
+
+
+
+  <title>knn算法预测约会对象是否符合条件 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-05-03/knn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">knn算法预测约会对象是否符合条件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-03T19:19:18+08:00">
+                2018-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MachineLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">MachineLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="使用knn算法进行分类预测"><a href="#使用knn算法进行分类预测" class="headerlink" title="使用knn算法进行分类预测"></a>使用knn算法进行分类预测</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">from numpy import *</span><br><span class="line">import operator # 运算符操作模块</span><br><span class="line">import os</span><br><span class="line">from collections import Counter # 快速计数工具</span><br><span class="line"></span><br><span class="line"># inx 自定义用于分类的输入向量 - 标准向量 即计算数据集到标准向量的&quot;距离&quot;</span><br><span class="line"># dataset 训练数据集 lables 标签</span><br><span class="line"># 最近邻的特征数量</span><br><span class="line">def classify(inx, dataset, lables, k):</span><br><span class="line">	dataSetSize = dataset.shape[0]</span><br><span class="line">	# tile(A,(2,3)) 表示第一个维度重复三次，第二个维度重复两次 tile(A,(2,3)) =&gt; array([[1, 2, 1, 2, 1, 2],[1, 2, 1, 2, 1, 2]])</span><br><span class="line">	diffMat = tile(inx, (dataSetSize, 1)) - dataset</span><br><span class="line">	# 计算训练集的数据与标准向量的距离 - 欧氏距离 =&gt; [[1,2,3],[1,2,3]]-[[1,2,3],[1,2,0]]</span><br><span class="line">	sqDiffMat = diffMat ** 2</span><br><span class="line">	# 计算平方和 再开方 =&gt; (A1-A2)^2+(B1-B2)^2+(c1-c2)^2</span><br><span class="line">	sqDistances = sqDiffMat.sum(axis = 1)</span><br><span class="line">	distances = sqDistances ** 0.5</span><br><span class="line">	# 按照距离从小到大排序 并获取其对应索引放入数组中 =&gt; y=array([3,0,2,1,4,5]) x[3]距离最小 x[5]最大</span><br><span class="line">	sorteDistIndicies = distances.argsort()</span><br><span class="line"></span><br><span class="line">	# 从距离排序中选取最小距离的k个向量</span><br><span class="line">	classCount = &#123;&#125;</span><br><span class="line">	for i in range(k):</span><br><span class="line">		voteIlable = lables[sorteDistIndicies[i]]</span><br><span class="line">		# 字典的get方法</span><br><span class="line">		# 如：list.get(k,d) 其中 get相当于一条if...else...语句,参数k在字典中，字典将返回list[k];如果参数k不在字典中则返回参数d,如果K在字典中则返回k对应的value值</span><br><span class="line">		# l = &#123;5:2,3:4&#125;</span><br><span class="line">		# print l.get(3,0)返回的值是4；</span><br><span class="line">		# Print l.get（1,0）返回值是0；</span><br><span class="line"></span><br><span class="line">		classCount[voteIlable] = classCount.get(voteIlable,0) + 1</span><br><span class="line"></span><br><span class="line">	# 排序选取 出现次数最多的标签</span><br><span class="line">	sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)</span><br><span class="line">	return sortedClassCount[0][0]</span><br><span class="line"></span><br><span class="line"># 数据归一化 0,1矩阵</span><br><span class="line">def autoNorm(dataset):</span><br><span class="line">	# 计算数据集中的最小最大特征值</span><br><span class="line">	minVals = dataset.min(0)</span><br><span class="line">	maxVals = dataset.max(0)</span><br><span class="line">	rangs = maxVals - minVals</span><br><span class="line">	# 转为同维度的零矩阵</span><br><span class="line">	normDataset = zeros(shape(dataset))</span><br><span class="line">	m = dataset.shape[0]</span><br><span class="line">	# 生成与最小值之差的矩阵</span><br><span class="line">	normDataset = dataset - tile(minVals,(m,1))</span><br><span class="line">	# 将最小值除以极差组成的矩阵</span><br><span class="line">	normDataset = normDataset / tile(rangs, (m,1))</span><br><span class="line">	return normDataset, rangs, minVals</span><br><span class="line"></span><br><span class="line">def file2matrix(filename):</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	导入训练数据</span><br><span class="line">	:param filename: 数据文件路径</span><br><span class="line">	:return: 数据矩阵returnMat和对应的类别classLabelVector</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	fr = open(filename, &apos;r&apos;)</span><br><span class="line">	# 获得文件中的数据行的行数</span><br><span class="line">	numberOfLines = len(fr.readlines())</span><br><span class="line">	# 生成对应的空矩阵</span><br><span class="line">	# 例如：zeros(2，3)就是生成一个 2*3 的矩阵，各个位置上全是 0 </span><br><span class="line">	returnMat = zeros((numberOfLines, 3))  # prepare matrix to return</span><br><span class="line">	classLabelVector = []  # prepare labels return</span><br><span class="line">	fr = open(filename, &apos;r&apos;)</span><br><span class="line">	index = 0</span><br><span class="line">	for line in fr.readlines():</span><br><span class="line">		# str.strip([chars]) --返回移除字符串头尾指定的字符生成的新字符串</span><br><span class="line">		line = line.strip()</span><br><span class="line">		# 以 &apos;\t&apos; 切割字符串</span><br><span class="line">		listFromLine = line.split(&apos;\t&apos;)</span><br><span class="line">		# 每列的属性数据，即 features</span><br><span class="line">		returnMat[index] = listFromLine[0 : 3]</span><br><span class="line">		# 每列的类别数据，就是 label 标签数据</span><br><span class="line">		classLabelVector.append(int(listFromLine[-1]))</span><br><span class="line">		index += 1</span><br><span class="line">	# 返回数据矩阵returnMat和对应的类别classLabelVector</span><br><span class="line">	return returnMat, classLabelVector</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 约会网站用户数据进行分类 预测 数据在kaggle</span><br><span class="line">def datingClassTest():</span><br><span class="line">	# 设置测试数据的的一个比例（训练数据集比例=1-hoRatio）</span><br><span class="line">	hoRatio = 0.1  # 测试范围,一部分测试一部分作为样本</span><br><span class="line">	# datingDataMat, datingLabels = file2matrix(&quot;https://raw.githubusercontent.com/pbharrin/machinelearninginaction/master/Ch02/datingTestSet2.txt&quot;)  # load data setfrom file</span><br><span class="line">	datingDataMat, datingLabels = file2matrix(&quot;E:\\python\\MachineLearning\\data\\2.KNN/datingTestSet2.txt&quot;)  # load data setfrom file</span><br><span class="line">	# 归一化数据</span><br><span class="line">	normMat, ranges, minVals = autoNorm(datingDataMat)</span><br><span class="line">	# m 表示数据的行数，即矩阵的第一维</span><br><span class="line">	m = normMat.shape[0]</span><br><span class="line">	# 设置测试的样本数量， numTestVecs:m表示训练样本的数量</span><br><span class="line">	numTestVecs = int(m * hoRatio)</span><br><span class="line">	print(&apos;numTestVecs=&apos;, numTestVecs)</span><br><span class="line">	errorCount = 0</span><br><span class="line">	for i in range(numTestVecs):</span><br><span class="line">		# 对数据测试</span><br><span class="line">		classifierResult = classify(normMat[i], normMat[numTestVecs : m], datingLabels[numTestVecs : m], 3)</span><br><span class="line">		print(&quot;the classifier came back with: %d, the real answer is: %d&quot; % (classifierResult, datingLabels[i]))</span><br><span class="line">		errorCount += classifierResult != datingLabels[i]</span><br><span class="line">	print(&quot;the total error rate is: %f&quot; % (errorCount / numTestVecs))</span><br><span class="line">	print(errorCount)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">	datingClassTest()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2018-05-03/knn/" title="knn算法预测约会对象是否符合条件">https://mrpastor.github.io/2018-05-03/knn/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/knn/" rel="tag"># knn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018-04-28/webrtc_business_2/" rel="next" title="webrtc的便利性">
+                <i class="fa fa-chevron-left"></i> webrtc的便利性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018-05-04/webrtc_business_3/" rel="prev" title="浏览器支持情况">
+                浏览器支持情况 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用knn算法进行分类预测"><span class="nav-number">1.</span> <span class="nav-text">使用knn算法进行分类预测</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,decisionTree,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="使用决策树预测隐形眼镜类型1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798">
+<meta name="keywords" content="机器学习,decisionTree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="决策树算法">
+<meta property="og:url" content="https://mrpastor.github.io/2018-05-06/decisionTree/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="使用决策树预测隐形眼镜类型1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-19T08:41:28.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="决策树算法">
+<meta name="twitter:description" content="使用决策树预测隐形眼镜类型1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2018-05-06/decisionTree/">
+
+
+
+
+
+  <title>决策树算法 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-05-06/decisionTree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">决策树算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-06T19:19:18+08:00">
+                2018-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MachineLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">MachineLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="使用决策树预测隐形眼镜类型"><a href="#使用决策树预测隐形眼镜类型" class="headerlink" title="使用决策树预测隐形眼镜类型"></a>使用决策树预测隐形眼镜类型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line"></span><br><span class="line">import operator</span><br><span class="line">from math import log</span><br><span class="line">import decisionTreePlot as dtPlot</span><br><span class="line">from collections import Counter</span><br><span class="line"></span><br><span class="line"># 计算香农熵</span><br><span class="line">def calcShannonEnt(dataset):</span><br><span class="line">	numEnteries = len(dataset)</span><br><span class="line">	labelCounts = &#123;&#125;</span><br><span class="line">	# 统计分类中标签出现的次数</span><br><span class="line">	for featVec in dataset:</span><br><span class="line">		# 默认每一行中最后一个特征为标签</span><br><span class="line">		currentLable = featVec[-1]</span><br><span class="line">		if currentLable not in labelCounts.key():</span><br><span class="line">			labelCounts[currentLable] = 0</span><br><span class="line">		labelCounts[currentLable] +=1</span><br><span class="line"></span><br><span class="line">	shannonEnt = 0.0</span><br><span class="line">	for key in labelCounts:</span><br><span class="line">		# 计算每种标签出现的频率 作为 概论</span><br><span class="line">		prob = float(labelCounts[key])/numEnteries</span><br><span class="line">		# 根据香农熵的公式 - 负 概论*log以2为底概率值的对数</span><br><span class="line">		shannonEnt -= prob * log(prob,2)</span><br><span class="line"></span><br><span class="line">	## 方式二</span><br><span class="line">	# # 统计标签出现的次数</span><br><span class="line">	# label_count = Counter(data[-1] for data in dataSet)</span><br><span class="line">	# # 计算概率</span><br><span class="line">	# probs = [p[1] / len(dataSet) for p in label_count.items()]</span><br><span class="line">	# # 计算香农熵</span><br><span class="line">	# shannonEnt = sum([-p * log(p, 2) for p in probs])</span><br><span class="line">	# # </span><br><span class="line"></span><br><span class="line">	return shannonEnt</span><br><span class="line"></span><br><span class="line">def majorityCnt(classList):</span><br><span class="line">	# 选择出现次数最多的一个结果</span><br><span class="line">	classCount = &#123;&#125;</span><br><span class="line">	for vote in classList:</span><br><span class="line">		if vote not in classCount.keys():</span><br><span class="line">			classCount[vote] = 0</span><br><span class="line">		classCount[vote] +=1</span><br><span class="line">	# 倒叙排列classCount得到一个字典集合，然后取出第一个就是结果（yes/no），即出现次数最多的结果</span><br><span class="line">	sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)</span><br><span class="line">	# print(&apos;sortedClassCount:&apos;, sortedClassCount)</span><br><span class="line">	return sortedClassCount[0][0]</span><br><span class="line"></span><br><span class="line"># 选择切分数据集的最佳特征</span><br><span class="line">def chooseBestFeatureToSplit(dataSet):</span><br><span class="line">	# 求第一行有多少列的 Feature, 最后一列是label列嘛</span><br><span class="line">	numFeatures = len(dataSet[0]) - 1</span><br><span class="line">	# label的信息熵</span><br><span class="line">	baseEntropy = calcShannonEnt(dataSet)</span><br><span class="line">	# 最优的信息增益值, 和最优的Featurn编号</span><br><span class="line">	bestInfoGain, bestFeature = 0.0, -1</span><br><span class="line">	# iterate over all the features</span><br><span class="line">	for i in range(numFeatures):</span><br><span class="line">		# create a list of all the examples of this feature</span><br><span class="line">		# 获取每一个实例的第i+1个feature，组成list集合</span><br><span class="line">		featList = [example[i] for example in dataSet]</span><br><span class="line">		# get a set of unique values</span><br><span class="line">		# 获取剔重后的集合，使用set对list数据进行去重</span><br><span class="line">		uniqueVals = set(featList)</span><br><span class="line">		# 创建一个临时的信息熵</span><br><span class="line">		newEntropy = 0.0</span><br><span class="line">		# 遍历某一列的value集合，计算该列的信息熵 </span><br><span class="line">		# 遍历当前特征中的所有唯一属性值，对每个唯一属性值划分一次数据集，计算数据集的新熵值，并对所有唯一特征值得到的熵求和。</span><br><span class="line">		for value in uniqueVals:</span><br><span class="line">			subDataSet = splitDataSet(dataSet, i, value)</span><br><span class="line">			prob = len(subDataSet)/float(len(dataSet))</span><br><span class="line">			newEntropy += prob * calcShannonEnt(subDataSet)</span><br><span class="line">		# gain[信息增益]: 划分数据集前后的信息变化， 获取信息熵最大的值</span><br><span class="line">		# 信息增益是熵的减少或者是数据无序度的减少。最后，比较所有特征中的信息增益，返回最好特征划分的索引值。</span><br><span class="line">		infoGain = baseEntropy - newEntropy</span><br><span class="line">		print(&apos;infoGain=&apos;, infoGain, &apos;bestFeature=&apos;, i, baseEntropy, newEntropy)</span><br><span class="line">		if (infoGain &gt; bestInfoGain):</span><br><span class="line">			bestInfoGain = infoGain</span><br><span class="line">			bestFeature = i</span><br><span class="line">	return bestFeature</span><br><span class="line"></span><br><span class="line"># 创建决策树</span><br><span class="line">def createTree(dataset, lables):</span><br><span class="line">	classList = [example[-1] for example in dataset]</span><br><span class="line">	# 如果数据集只有一种则直接返回</span><br><span class="line">	# </span><br><span class="line">	if classList.count(classList[0]) == len(classList):</span><br><span class="line">		return classList[0]</span><br><span class="line">	# ?使用完了所有特征 依旧还有未包含的数据集</span><br><span class="line">	if len(dataset[0]) == 1:</span><br><span class="line">		return majorityCnt(classList)</span><br><span class="line"></span><br><span class="line">	# 选择最优的列，得到最优列对应的label含义</span><br><span class="line">	bestFeat = chooseBestFeatureToSplit(dataSet)</span><br><span class="line">	# 获取label的名称</span><br><span class="line">	bestFeatLabel = labels[bestFeat]</span><br><span class="line">	# 初始化myTree</span><br><span class="line">	myTree = &#123;bestFeatLabel: &#123;\&#125;\&#125; # hexo的bug 双大括号 会异常 需转义</span><br><span class="line">	# 注：labels列表是可变对象，在PYTHON函数中作为参数时传址引用，能够被全局修改</span><br><span class="line">	# 所以这行代码导致函数外的同名变量被删除了元素，造成例句无法执行，提示&apos;no surfacing&apos; is not in list</span><br><span class="line">	del(labels[bestFeat])</span><br><span class="line">	# 取出最优列，然后它的branch做分类</span><br><span class="line">	featValues = [example[bestFeat] for example in dataSet]</span><br><span class="line">	uniqueVals = set(featValues)</span><br><span class="line">	for value in uniqueVals:</span><br><span class="line">		# 求出剩余的标签label</span><br><span class="line">		subLabels = labels[:]</span><br><span class="line">		# 遍历当前选择特征包含的所有属性值，在每个数据集划分上递归调用函数createTree()</span><br><span class="line">		myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)</span><br><span class="line">		# print(&apos;myTree&apos;, value, myTree)</span><br><span class="line">	return myTree</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def ContactLensesTest():</span><br><span class="line">	# 预测隐形眼镜的测试代码，并将结果画出来</span><br><span class="line">	# fr = open(&apos;https://raw.githubusercontent.com/pbharrin/machinelearninginaction/master/Ch03/lenses.txt&apos;)</span><br><span class="line">	fr = open(&apos;../../../../data/3.DecisionTree/lenses.txt&apos;)</span><br><span class="line">	# 解析数据，获得 features 数据</span><br><span class="line">	lenses = [inst.strip().split(&apos;\t&apos;) for inst in fr.readlines()]</span><br><span class="line">	# 得到数据的对应的 Labels</span><br><span class="line">	# age（年龄）、prescript（症状）、astigmatic（是否散光）、tearRate（眼泪数量）</span><br><span class="line">	lensesLabels = [&apos;age&apos;, &apos;prescript&apos;, &apos;astigmatic&apos;, &apos;tearRate&apos;]</span><br><span class="line">	# 使用上面的创建决策树的代码，构造预测隐形眼镜的决策树</span><br><span class="line">	lensesTree = createTree(lenses, lensesLabels)</span><br><span class="line">	print(lensesTree)</span><br><span class="line">	# 画图可视化展现</span><br><span class="line">	dtPlot.createPlot(lensesTree)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	ContactLensesTest()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2018-05-06/decisionTree/" title="决策树算法">https://mrpastor.github.io/2018-05-06/decisionTree/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/decisionTree/" rel="tag"># decisionTree</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018-05-04/webrtc_business_3/" rel="next" title="浏览器支持情况">
+                <i class="fa fa-chevron-left"></i> 浏览器支持情况
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018-05-13/reference/practical-programming-books/README/" rel="prev" title="计算机相关技术资料整理">
+                计算机相关技术资料整理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用决策树预测隐形眼镜类型"><span class="nav-number">1.</span> <span class="nav-text">使用决策树预测隐形眼镜类型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

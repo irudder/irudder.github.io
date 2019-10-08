@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Knowledge Graph,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本次Tutorial主要包括以下三方面内容：  行业知识图谱概述，包括行业图谱简介，行业知识图谱的应用及挑战，以及行业知识图谱生命周期管理。  行业知识图谱关键技术，包括行业知识图谱生命周期中各过程的相关技术、现有可用的工具，以及各过程中的最佳实践及相关组件。  行业知识图谱应用实战，以金融证券行业应用为例，演示知识图谱从知识建模、知识抽取到行业应用的全过程。   目标听众与我们公众号的粉丝群体一">
+<meta name="keywords" content="Knowledge Graph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CCKS-2017 行业知识图谱构建与应用-上篇">
+<meta property="og:url" content="https://mrpastor.github.io/2019-07-02/行业知识图谱构建与应用-上篇/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="本次Tutorial主要包括以下三方面内容：  行业知识图谱概述，包括行业图谱简介，行业知识图谱的应用及挑战，以及行业知识图谱生命周期管理。  行业知识图谱关键技术，包括行业知识图谱生命周期中各过程的相关技术、现有可用的工具，以及各过程中的最佳实践及相关组件。  行业知识图谱应用实战，以金融证券行业应用为例，演示知识图谱从知识建模、知识抽取到行业应用的全过程。   目标听众与我们公众号的粉丝群体一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-a2e7426c1a7688a3.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-403d9b372f8ec537.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-a307410fb155d258.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-7978b46cd6d49e35.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-4e58c70db2a18b64.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-671530d678a02982.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-49cf9330cdd1da9e.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-be4b4a7a64f20766.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-f39bc935b348cd19.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-80f272ba2d53e7be.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-84edeadc6e50a4b7.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-e4b2bc10cb25f078.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-20a9efa1ceb1e27a.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-16610f15f136818b.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-f76f7d18e49db257.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-1e4d2d5ac159421b.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-e62105af0fc806a2.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-4dd0ea480dcff903.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-29348df096ba443c.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-ac9fc6306ec1ade1.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-26a88befe1b54310.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-79979342e869d48f.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-9519b3929e387005.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-dec67526e334d54a.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-7a752d871d9eefba.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-5ce28264b35ead93.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-cef2795206b888e9.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-1a60a296b7e2ca06.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-14d4f3feeb7446b1.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-e3eaa984f72fae69.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-7357a29b1957321e.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-9c03d19e78c41e9e.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-0d83c9d21739b4da.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-331706243e6d4342.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-b19aa09dbc8b4bc7.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-57b9833082ad7226.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-91d05a3dd14e4c44.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-b4d3e879bcc2f478.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-0829f29e84c0dc39.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-a921631a5fc6e68f.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-885f407fc4ed5d00.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-811a30e62e80b815.jpg">
+<meta property="og:updated_time" content="2019-07-19T08:24:28.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CCKS-2017 行业知识图谱构建与应用-上篇">
+<meta name="twitter:description" content="本次Tutorial主要包括以下三方面内容：  行业知识图谱概述，包括行业图谱简介，行业知识图谱的应用及挑战，以及行业知识图谱生命周期管理。  行业知识图谱关键技术，包括行业知识图谱生命周期中各过程的相关技术、现有可用的工具，以及各过程中的最佳实践及相关组件。  行业知识图谱应用实战，以金融证券行业应用为例，演示知识图谱从知识建模、知识抽取到行业应用的全过程。   目标听众与我们公众号的粉丝群体一">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/18390058-a2e7426c1a7688a3.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-07-02/行业知识图谱构建与应用-上篇/">
+
+
+
+
+
+  <title>CCKS-2017 行业知识图谱构建与应用-上篇 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-02/行业知识图谱构建与应用-上篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CCKS-2017 行业知识图谱构建与应用-上篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-02T19:18:19+08:00">
+                2019-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/知识图谱/" itemprop="url" rel="index">
+                    <span itemprop="name">知识图谱</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本次Tutorial主要包括以下三方面内容：</p>
+<ol>
+<li><p>行业知识图谱概述，包括行业图谱<strong>简介</strong>，行业知识图谱的<strong>应用及挑战</strong>，以及行业知识图谱<strong>生命周期</strong>管理。</p>
+</li>
+<li><p>行业知识图谱关键技术，包括行业知识图谱生命周期中各过程的<strong>相关技术</strong>、现有<strong>可用的工具</strong>，以及各过程中的<strong>最佳实践</strong>及相关组件。</p>
+</li>
+<li><p>行业知识图谱应用实战，以<strong>金融证券</strong>行业应用为例，演示知识图谱从知识建模、知识抽取到行业应用的全过程。</p>
+</li>
+</ol>
+<p>目标听众与我们公众号的粉丝群体一致：</p>
+<ul>
+<li><p>知识图谱学习者，对知识图谱在行业应用感兴趣的<strong>技术人员</strong>。</p>
+</li>
+<li><p>各行业应用中想引入知识图谱相关技术的<strong>知识及数据管理人员</strong>，尤其是有行业知识库构建及上层问答搜索等需求的。</p>
+</li>
+<li><p>希望了解知识图谱如何在行业中应用的<strong>管理决策者</strong>。</p>
+</li>
+</ul>
+<p>这篇文章通读完大致需要60分钟时间，不过这些时间都是值得的，因为你将可以：</p>
+<ol>
+<li><p>了解行业知识图谱相关概念及其在<strong>行业中的现有应用</strong>，理解其给行业应用带来的价值。</p>
+</li>
+<li><p>理解知识图谱在行业中应用的相关<strong>挑战</strong>与<strong>生命周期</strong>，理解生命周期各过程的基本目标及相关组件。</p>
+</li>
+<li><p>对行业知识图谱应用相关的技术进行熟悉，了解有哪些<strong>现有的工具</strong>可以使用和相关注意事项、以及一些<strong>行业应用的最佳实践</strong>。</p>
+</li>
+</ol>
+<p>我们假定阅读本Tutorial的听众具备如下基础知识：</p>
+<blockquote>
+<p><strong>RD**</strong>F**：资源描述框架</p>
+<p><strong>OWL</strong>： RDF Schema 的扩展</p>
+<p><strong>SPARQL</strong>：RDF查询语言</p>
+</blockquote>
+<p> <strong>第一节 行业知识图谱简介</strong></p>
+<p><strong>“Things not strings”</strong></p>
+<p>众所周知，知识图谱是Google于2012年提出，用来优化搜索结果。</p>
+<p>经过多年的发展，知识图谱在人工智能的许多行业都拥有了成熟落地的应用。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-a2e7426c1a7688a3.jpg" alt="行业知识图谱"> </p>
+<p>按照知识图谱的覆盖面来看，主要分为通用知识图谱与行业知识图谱。</p>
+<p><strong>1.1 通用知识图谱</strong></p>
+<p>Google所提出的知识图谱即为通用知识图谱，他是面向<strong>全领域</strong>的。通用知识图谱主要应用于面向互联网的<strong>搜索、推荐、问答</strong>等业务场景。由于它强调的是<strong>广度</strong>，因而更多的是强调<strong>实体</strong>，很难生成完整的全局性本体层的统一管理。</p>
+<p>通用知识图谱一些常见的项目如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-403d9b372f8ec537.jpg" alt="通用知识图谱"> </p>
+<p><strong>1.2 行业知识图谱</strong></p>
+<p>号称“硅谷最神秘科技公司”的Palantir是行业知识图谱领域的典型代表，其软件允许客户对大量的敏感数据进行语义关联分析，以防止欺诈，确保数据安全等。</p>
+<p>行业知识图谱相对通用知识图谱拥有如下特性：</p>
+<ul>
+<li><p>面向<strong>特定领域</strong>的知识图谱。</p>
+</li>
+<li><p>用户目标对象需要考虑行业中各种级别的人员，不同人员对应的操作和业务场景不同，因而需要一定的<strong>深度</strong>与<strong>完备性</strong>。</p>
+</li>
+<li><p>行业知识图谱对准确度要求非常高，通常用于辅助各种<strong>复杂的分析应用</strong>或<strong>决策支持</strong>。</p>
+</li>
+<li><p>有<strong>严格与丰富的数据模式</strong>，行业知识图谱中的实体通常属性比较多且具有行业意义。</p>
+</li>
+</ul>
+<p>行业数据的特点包括：</p>
+<ul>
+<li><p><strong>数据来源多</strong>：内部数据、互联网数据、第三方数据。</p>
+</li>
+<li><p><strong>数据类型多</strong>：包含结构化、半结构化、非结构化数据，且后两者越来越多。</p>
+</li>
+<li><p><strong>数据模式无法预先确定</strong>：模式在数据出现之后才能确定；数据模式随数据增长不断演变。</p>
+</li>
+<li><p><strong>数据量大</strong>：在大数据背景下，行业应用的数据的数量通常都以亿级别计算，存在通常在TB、PB级别甚至更多。</p>
+</li>
+</ul>
+<p>行业知识图谱已经在以下很多领域有了很好的应用，在后面我们会以金融证券领域为例，详细展开介绍。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-a307410fb155d258.jpg" alt="行业知识图谱"></p>
+<p>下面这张图是部分知名的行业知识图谱项目</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-7978b46cd6d49e35.jpg" alt="行业知识图谱项目"> </p>
+<p>通过上面的介绍我们已经大致了解通用知识图谱和行业知识图谱的区别，这里简单总结一下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-4e58c70db2a18b64.jpg" alt="知识图谱和行业知识图谱的区别"> </p>
+<p>当然通用知识图谱与行业知识图谱并不是相互对立，而是<strong>相互补充</strong>的一个关系，利用通用知识图谱的广度结合行业知识图谱的深度，可以形成更加完善的知识图谱。</p>
+<p>通用知识图谱中的知识，可以作为行业知识图谱构建的基础；而构建的行业知识图谱，再融合到通用知识图谱中。</p>
+<p>因此两者是相辅相成，结合使用的。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-671530d678a02982.jpg" alt="通用知识图谱"></p>
+<h2 id="第二节-行业知识图谱应用"><a href="#第二节-行业知识图谱应用" class="headerlink" title="第二节 行业知识图谱应用"></a><strong>第二节 行业知识图谱应用</strong></h2><h2 id="介绍完行业知识图谱的基本知识后，我们来看下行业知识图谱都有哪些应用。"><a href="#介绍完行业知识图谱的基本知识后，我们来看下行业知识图谱都有哪些应用。" class="headerlink" title="介绍完行业知识图谱的基本知识后，我们来看下行业知识图谱都有哪些应用。"></a>介绍完行业知识图谱的基本知识后，我们来看下行业知识图谱都有哪些应用。</h2><h2 id="首先看金融领域，目前金融证券领域应用主要侧重于两个方面，一个是企业知识图谱，另一个是金融交易知识图谱。"><a href="#首先看金融领域，目前金融证券领域应用主要侧重于两个方面，一个是企业知识图谱，另一个是金融交易知识图谱。" class="headerlink" title="首先看金融领域，目前金融证券领域应用主要侧重于两个方面，一个是企业知识图谱，另一个是金融交易知识图谱。"></a>首先看金融领域，目前金融证券领域应用主要侧重于两个方面，一个是企业知识图谱，另一个是金融交易知识图谱。</h2><h2 id="2-1-企业知识图谱"><a href="#2-1-企业知识图谱" class="headerlink" title="2.1 企业知识图谱"></a><strong>2.1 企业知识图谱</strong></h2><p><strong><img src="https://upload-images.jianshu.io/upload_images/18390058-49cf9330cdd1da9e.jpg" alt="企业知识图谱"></strong> </p>
+<p>企业数据包括：企业基础数据、投资关系、任职关系、企业专利数据、企业招投标数据、企业招聘数据、企业诉讼数据、企业失信数据、企业新闻数据。</p>
+<p>利用知识图谱融合以上企业数据，我们做了企业知识图谱，并在企业知识图谱之上利用图谱的特性，针对金融业务场景研发了一系列的图谱应用。</p>
+<p>以下6大功能为我们当前已投入使用的企业知识图谱应用。</p>
+<p><strong>2.1.1 企业风险评估</strong></p>
+<p>基于企业的基础信息、投资关系、诉讼、失信等多维度关联数据，利用图计算等方法构建科学、严谨的企业风险评估体系，有效规避潜在的经营风险与资金风险。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-be4b4a7a64f20766.jpg" alt="企业风险评估"> </p>
+<p><strong>2.1.2 企业社交图谱查询</strong></p>
+<p>基于投资、任职、专利、招投标、涉诉关系以目标企业为核心向外层层扩散，形成一个网络关系图，直观立体展现企业关联。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-f39bc935b348cd19.jpg" alt="网络关系图"></p>
+<p><strong>2.1.3 企业最终控制人查询</strong></p>
+<p>基于股权投资关系寻找持股比例最大的股东，最终追溯至自然人或国有资产管理部门。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-80f272ba2d53e7be.jpg" alt="企业最终控制人查询"> </p>
+<p><strong>2.1.4 企业之间路径发现</strong></p>
+<p>在基于股权、任职、专利、招投标、涉诉等关系形成的网络关系中，查询企业之间的最短关系路径，衡量企业之间的联系密切度。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-84edeadc6e50a4b7.jpg" alt="企业之间路径发"> </p>
+<p><strong>2.1.5 初创企业融资发展历程</strong></p>
+<p>基于企业知识图谱中的投融资事件发生的时间顺序，记录企业的融资发展历程。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-e4b2bc10cb25f078.png" alt="融资发展历程"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-20a9efa1ceb1e27a.jpg" alt="融资发展历程"></p>
+<p><strong>2.1.6 上市企业智能问答</strong></p>
+<p>用户可以通过输入自然语言问题，系统直接给出用户想要的答案。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-16610f15f136818b.jpg" alt="上市企业智能问答"> </p>
+<p><strong>2.2 金融交易知识图谱</strong></p>
+<p>金融交易知识图谱在企业知识图谱之上，增加交易客户数据、客户之间的关系数据以及交易行为数据等，利用图挖掘技术，包括很多业务相关的规则，来分析实体与实体之间的关联关系，最终形成金融领域的交易知识图谱。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-f76f7d18e49db257.jpg" alt="金融交易知识图谱"></p>
+<p>有了这样一个交易知识图谱之后，可以支持如下的应用（这块普惠金融的李文哲之前有篇文章有过相似介绍）。</p>
+<p><strong>2.2.1 辅助信贷审核</strong></p>
+<p>基于知识图谱数据的统一查询，全面掌握客户信息；避免由于系统、数据等孤立造成的信息不一致造成信用重复使用、信息不完整等问题。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-1e4d2d5ac159421b.jpg" alt="辅助信贷审核"></p>
+<p><strong>2.2.2 反欺诈（1）</strong></p>
+<p>不一致性验证可以用来判断一个借款人的欺诈风险，类似交叉验证。比如借款人A和借款人B填写的是同一个公司电话，但借款人A填写的公司和借款人B填写的公司完全不一样，这就成了一个风险点，需要审核人员格外的注意。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-e62105af0fc806a2.jpg" alt="反欺诈（1）"></p>
+<p><strong>2.2.3 反欺诈（2）</strong></p>
+<p>组团进行欺诈的成员会用虚假的身份去申请贷款，但部分信息是共享的。如下图可以看出贷款人A、B和C之间没有直接的关系，但通过知识图谱可以很容易的看出这三者之间都共享着某一部分信息，存在一定的组团骗贷风险。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-4dd0ea480dcff903.jpg" alt="反欺诈（2）"> </p>
+<p><strong>2.2.4 其它应用场景</strong></p>
+<p>异常分析（异常交易、异常客户）</p>
+<p>失联客户管理</p>
+<p>精准营销</p>
+<p>智能投研</p>
+<p>智能公告</p>
+<p>……</p>
+<p><strong>2.3 医疗知识图谱</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-29348df096ba443c.jpg" alt="医疗知识图谱"></p>
+<p>知识图谱与医疗数据的结合形成医疗知识图谱，医疗数据包括：医疗专业知识、医疗文献、医疗常识、电子病历大数据、医案、现有医疗资源、疾病库、指南与规范。</p>
+<p>行业内比较知名的应用和项目如下</p>
+<p><strong>2.3.1 中医药知识平台</strong></p>
+<p>中医药知识平台（<a href="http://www.tcmkb.cn）是一个针对中医药知识体系系统梳理、建模和展示的平台，它以图形可视化方式展示核心概念之间的关系，辅助中医专家厘清学术发展脉络，浏览中医知识，发现知识点之间的联系。" target="_blank" rel="noopener">http://www.tcmkb.cn）是一个针对中医药知识体系系统梳理、建模和展示的平台，它以图形可视化方式展示核心概念之间的关系，辅助中医专家厘清学术发展脉络，浏览中医知识，发现知识点之间的联系。</a></p>
+<p>其优势在于与阅读文献等手段相比，可大幅度节约知识检索获取时间。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-ac9fc6306ec1ade1.jpg" alt="中医药知识平台"></p>
+<p><strong>2.3.2 Watson辅助诊断与治疗</strong></p>
+<p>IBM 的 Watson 机器人已经在医院里辅助医生对病人进行医疗诊断。安德森癌症中心联合IBM Watson开展终结癌症的任务，其底层核心就是用了知识图谱相关技术。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-26a88befe1b54310.jpg" alt="Watson"> </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-79979342e869d48f.jpg" alt="Watson"></p>
+<p><strong>2.3.3 Open PHACTS 新药物发现</strong></p>
+<p>在欧盟，Open PHACTS重大联合攻关项目，这一面向药物研发的开放数据访问平台开发，其核心技术就是采用语义技术为有关研究人员提供高效的数据访问技术环境的支持。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-9519b3929e387005.jpg" alt="新药物发现"></p>
+<p><strong>2.4 图情资源知识图谱</strong></p>
+<p>通过行业知识图谱结合图书情报资源，包括图书馆分类学体系、特定方向的知识体系、图书、期刊、论文、专利、报刊、百科数据、行业网站等数据，构建图情资源知识图谱，可以帮助图情领域在文献信息检索和文献信息资源管理推荐等方面，提供新的思路。</p>
+<p>以下为我们在图情资源知识图谱之上的一些应用案例。</p>
+<p><strong>2.4.1 知识导航与资源展示</strong></p>
+<p>使用知识图谱中的知识体系进行知识导航，引导用户学习知识体系，以及通过实体链接所关联的资源。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-dec67526e334d54a.jpg" alt="知识导航与资源展示"> </p>
+<p><strong>2.4.2 知识点推荐与搜索</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-7a752d871d9eefba.jpg" alt="知识点推荐与搜索"></p>
+<p><strong>2.4.3 图情资源统计</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-5ce28264b35ead93.jpg" alt="图情资源统计"></p>
+<p><strong>2.5 其他行业应用</strong></p>
+<p>知识图谱在许多其他行业也有应用，这里篇幅有限，我们仅列出方向及应用点。</p>
+<ul>
+<li><p>农业</p>
+</li>
+<li><p>识别作物危害</p>
+</li>
+<li><p>政府行业</p>
+</li>
+<li><p>政府大数据管理</p>
+</li>
+<li><p>客服系统</p>
+</li>
+<li><p>基于知识图谱的智能客服系统</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<h2 id="第三节-知识图谱应用挑战"><a href="#第三节-知识图谱应用挑战" class="headerlink" title="第三节 知识图谱应用挑战"></a><strong>第三节 知识图谱应用挑战</strong></h2><p>从数据库时代发展到大数据时代，企业希望融合使用全量数据，在融合使用的过程中会遇到非常多的挑战，首先我们看下从DB（DataBase）到BD（BigData）到底会有哪些不一样的地方？</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-cef2795206b888e9.jpg" alt="知识图谱应用挑战"> </p>
+<p>这个图在我们公众号<a href="http://mp.weixin.qq.com/s?__biz=MzI5NjY0NDEyNg==&amp;mid=2247484181&amp;idx=1&amp;sn=4a9b9ee30168538b4a71f12b36497ba4&amp;chksm=ec407864db37f1728259f17671687c7ff40813f7645904ac15ef442f0cd71e912e25f9e7cffd&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">前几期分享</a>中有介绍过，无论是从数据规模、数据类型、数据模式还是处理方法，数据库时代与大数据时代均存在非常大的差异性，大数据时代，<strong>没有一种通用的处理方法可以解决所有问题</strong>。因此我们结合PlantData平台在许多行业应用中的实战经验，总结了以下5点企业全量数据应用中会面临到的挑战。</p>
+<p><strong>一） 多源异构数据难以融合</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-1a60a296b7e2ca06.jpg" alt="多源异构数据难以融合"></p>
+<p>企业包括不仅内部的数据，还有从第三方接入的数据以及互联网公开数据，甚至是采购的数据，这些数据很多，可能描述同一个事物有很多的数据源，它们分散在不同的地方，怎么去把它们融合起来？这是我们面临的第一个挑战。</p>
+<p><strong>二）数据模式动态变迁困难</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-14d4f3feeb7446b1.jpg" alt="数据模式动态变迁困难"></p>
+<p>大数据时代，数据模式是在不断变化的场景下，因此迫切需要一种可自由扩展的数据模式，而传统的数据库定义好数据库表结构和业务逻辑之后，修改起来成本非常高。第二个挑战在于如何简便的进行数据模式的动态变迁。</p>
+<p><strong>三）非结构化数据计算机难以理解</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-e3eaa984f72fae69.jpg" alt="非结构化数据计算机难以理解"></p>
+<p>非结构化的数据最重要的部分就是文本数据，对于文本数据如何处理，传统的方式主要是基于字符串的检索，对文本中丰富信息的使用率非常低，因此第三个挑战在于怎么对非结构化的数据去进行有效的应用？</p>
+<p><strong>四）数据使用专业程度过高</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-7357a29b1957321e.jpg" alt="数据使用专业程度过高"></p>
+<p>传统数据在使用的时候需要专业的程序员去编写程序去进行查询使用，普通的应用分析人员很难对数据去进行探索，第四个挑战在于需要有一种快速的方式去对数据进行探索和使用。</p>
+<p><strong>五）分散的数据难以统一消费利用</strong></p>
+<p><strong><img src="https://upload-images.jianshu.io/upload_images/18390058-9c03d19e78c41e9e.jpg" alt="分散的数据难以统一消费利用"></strong> </p>
+<p>在传统的数据库时代，构建的不同系统使用方式不一样，数据集成的时候会非常混乱，我们更多的期待把这些分散的数据融合起来，形成一个统一的消费利用的入口，工作人员可以从统一的入口进行数据的消费。</p>
+<p>针对以上五个挑战，我们的解决方案是：<strong>基于行业知识图谱进行数据融合使用</strong>。</p>
+<p>首先从最底层开始，针对挑战1，使用知识图谱（本体）对各种类型的数据进行抽象建模，<strong>基于可动态变化的“概念—实体—属性—关系”数据模型</strong>，实现各类数据的统一建模。</p>
+<p>针对挑战2，使用<strong>可支持数据模式动态变化的知识图谱的数据存储</strong>，实现对大数据及数据模式动态变化的支持。</p>
+<p>针对挑战3：利用信息抽取、实体链接相关的技术，<strong>对非结构化及半结构化数据进行抽取和转换</strong>，形成知识图谱形式的知识，以及和知识图谱里面的结构化的知识进行链接。</p>
+<p>最后针对挑战4、5：在<strong>知识融合</strong>的基础上，基于<strong>语义检索、智能问答、图计算、推理、可视化</strong>等技术，提供统一的数据检索、分析和利用平台。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-0d83c9d21739b4da.jpg" alt="语义检索"></p>
+<p><strong>第四节 行业知识图谱生命周期</strong></p>
+<p>从行业知识图谱的全生命周期来看，可以分为知识建模，知识获取，知识融合，知识融合，知识存储，知识计算和知识应用6个部分。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-331706243e6d4342.jpg" alt="行业知识图谱生命周期"></p>
+<p><strong>4.1 知识建模</strong></p>
+<p>知识建模即建立知识图谱的数据模式，行业知识图谱的数据模式对整个知识图谱的结构进行定义，因此需要保证可靠性。</p>
+<p>通常采用两种方法：一种是自顶向下的方法，专家手工编辑形成数据模式；另一种是自底向上的方法，基于行业现有的标准进行转换或者从现有的高质量行业数据源（如业务系统数据库表）中进行映射。</p>
+<p>其中的关键技术与难点包括：</p>
+<ul>
+<li><p>如何保证多人在线协同编辑，并且实时更新；</p>
+</li>
+<li><p>能够支持导入集成使用现有的（结构化）知识；</p>
+</li>
+<li><p>支持大数据量；</p>
+</li>
+<li><p>能够支撑时间、时序等复杂知识表达；</p>
+</li>
+<li><p>可以与自动算法进行结合，避免全人工操作</p>
+</li>
+</ul>
+<p>建模完成后，需要往里面填充相应的知识，这就需要用到知识获取。</p>
+<p><strong>4.2 知识获取</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-b19aa09dbc8b4bc7.jpg" alt="知识获取"></p>
+<p>从不同来源、不同结构的数据中进行知识提取，形成知识存入到知识图谱，这一过程我们称为知识获取。</p>
+<p>上图中的三类数据基本涵盖了我们目前所需要处理的所有数据类型，针对不同种类的数据，我们利用不同的技术进行提取。</p>
+<ul>
+<li><p>从结构化数据库中获取知识：D2R</p>
+<ul>
+<li>难点：复杂表数据的处理</li>
+</ul>
+</li>
+<li><p>从链接数据中获取知识：图映射</p>
+<ul>
+<li>难点：数据对齐</li>
+</ul>
+</li>
+<li><p>从半结构化（网站）数据中获取知识：使用包装器</p>
+<ul>
+<li>难点：方便的包装器定义方法，包装器自动生成、更新与维护</li>
+</ul>
+</li>
+<li><p>从文本中获取知识：信息抽取</p>
+<ul>
+<li>难点：结果的准确率与覆盖率</li>
+</ul>
+</li>
+</ul>
+<p><strong>4.3 知识融合</strong></p>
+<p>已经从不同的数据源把不同结构的数据提取知识之后，接下来要做的是把它们融合成一个统一的知识图谱，这时候需要用到知识融合的技术。</p>
+<p>知识融合主要分为数据模式层融合和数据层融合，分别用的技术如下：</p>
+<p>a) 数据模式层融合</p>
+<ul>
+<li><p>概念合并</p>
+</li>
+<li><p>概念上下位关系合并</p>
+</li>
+<li><p>概念的属性定义合并</p>
+</li>
+</ul>
+<p>b) 数据层融合</p>
+<ul>
+<li><p>实体合并</p>
+</li>
+<li><p>实体属性融合</p>
+</li>
+<li><p>冲突检测与解决</p>
+</li>
+</ul>
+<p>由于行业知识图谱的数据模式通常采用自顶向下和自底向上结合的方式，在模式层基本都经过人工的校验，保证了可靠性，因此，知识融合的关键任务在数据层的融合。</p>
+<p>举几个知识融合工具的例子：一体化医学语言系统（Unified Medical Language System，UMLS），它提供了一种位于生物医学领域词表之间的映射结构，方便不同术语系统之间能够彼此转换。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-57b9833082ad7226.jpg" alt="知识融合"> </p>
+<p>另一个例子是Dbpedia知识图谱，依托于维基百科，通过实体链接实现不同语言实体间的映射。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-91d05a3dd14e4c44.jpg" alt="Dbpedia知识图谱"></p>
+<p>还有zhishi.me，它主要利用识别sameAs关系，将分散在中文三大百科网站（中文维基百科、互动百科和百度百科）中的知识进行融合。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-b4d3e879bcc2f478.jpg" alt="sameAs关系"> </p>
+<p>Google在收购了大型知识库Freebase后，对于其众包形式的信息扩展速度仍不满意，因此创建了名为Knowledge Vault的全球最大知识库，通过特定算法<strong>自动搜集整编**</strong>互联网信息**，再将其融入整体数据库中。</p>
+<p>截至2014年，Knowledge Vault的入库信息已达16亿条，其中2.71亿条内容为“事实”（真实性在90%以上）。</p>
+<p>Knowledge Vault能够建立<strong>历史和社会</strong>的模型。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-0829f29e84c0dc39.jpg" alt="大型知识库Freebase后"> </p>
+<p>以上简单介绍了目前国内外在知识融合方面的一些项目的基本情况，总结一下知识融合中的关键技术与难点，包括四点：</p>
+<ol>
+<li><p>实现不同来源、不同形态数据的融合</p>
+</li>
+<li><p>海量数据的高效融合</p>
+</li>
+<li><p>新增知识的实时融合</p>
+</li>
+<li><p>多语言的融合</p>
+</li>
+</ol>
+<p><strong>4.4 知识存储</strong></p>
+<p>接下来要介绍的是知识存储，图谱的数据存储既需要完成基本的数据存储，同时也要能支持上层的知识推理、知识快速查询、图实时计算等应用，因此需要存储以下信息：</p>
+<ul>
+<li><p>三元组知识的存储</p>
+</li>
+<li><p>事件信息的存储</p>
+</li>
+<li><p>时态信息的存储</p>
+</li>
+<li><p>使用知识图谱组织的数据的存储</p>
+</li>
+</ul>
+<p>其关键技术和难点就在于：</p>
+<ul>
+<li><p>大规模三元组数据的存储</p>
+</li>
+<li><p>知识图谱组织的大数据的存储</p>
+</li>
+<li><p>事件与时态信息的存储</p>
+</li>
+<li><p>快速推理与图计算的支持</p>
+</li>
+</ul>
+<p><strong>4.5 知识计算</strong></p>
+<p>知识计算主要是在知识图谱中知识和数据的基础上，通过各种算法，发现其中显式的或隐含的知识、模式或规则等，知识计算的范畴非常大，这里主要讲三个方面：</p>
+<ul>
+<li><p>图挖掘计算：基于图论的相关算法，实现对图谱的探索和挖掘。</p>
+</li>
+<li><p>本体推理：使用本体推理进行新知识发现或冲突检测。</p>
+</li>
+<li><p>基于规则的推理：使用规则引擎，编写相应的业务规则，通过推理辅助业务决策。</p>
+</li>
+</ul>
+<p>知识计算涉及到的技术非常多，每一项都需要专门去研究，而且已经有很多研究成果，此处我们先列出关键技术和难点，在下一篇文章中详细介绍：</p>
+<ul>
+<li><p>图挖掘计算</p>
+<ul>
+<li>大规模图算法的效率</li>
+</ul>
+</li>
+<li><p>本体推理与规则推理</p>
+<ul>
+<li><p>大数据量下的快速推理</p>
+</li>
+<li><p>对于增量知识和规则的快速加载</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>4.6 知识应用</strong></p>
+<p>基于知识图谱融合的海量知识和数据，结合上一步的知识计算相关技术，知识图谱可以产生大量的智能应用，比如我们之前提到的企业画像，反欺诈不一致性检测，用户通过自然语言进行搜索等。知识图谱目前的应用很多，这里主要讲三类常见的应用：</p>
+<ul>
+<li><p>语义搜索：基于知识图谱中的知识，解决传统搜索中遇到的关键字语义多样性及语义消歧的难题；通过实体链接实现知识与文档的混合检索。</p>
+</li>
+<li><p>智能问答：针对用户输入的自然语言进行理解，从知识图谱中或目标数据中给出用户问题的答案。</p>
+</li>
+<li><p>可视化决策支持：通过提供统一的图形接口，结合可视化、推理、检索等，为用户提供信息获取的入口。</p>
+</li>
+</ul>
+<p>这三类的关键技术与难点分别为：</p>
+<p>语义检索：</p>
+<ul>
+<li><p>自然语言的表达多样性问题</p>
+</li>
+<li><p>自然语言的的歧义问题</p>
+</li>
+</ul>
+<p>智能问答：</p>
+<ul>
+<li><p>准确的语义解析</p>
+</li>
+<li><p>正确理解用户的真实意图</p>
+</li>
+<li><p>答案确定与排序</p>
+</li>
+</ul>
+<p>可视化决策支持</p>
+<ul>
+<li><p>通过可视化方式辅助用户模式快速发现</p>
+</li>
+<li><p>高效地缩放和导航</p>
+</li>
+<li><p>大图环境下底层算法（图挖掘算法）的效率</p>
+</li>
+</ul>
+<p>通过上述分析，我们列举一下行业知识图谱全生命周期中相关的9大关键技术，这些技术保证了行业知识图谱更加规范的数据表示，更强的数据关联，以及能够体现更深邃的数据价值。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-a921631a5fc6e68f.jpg" alt="下行业知识图谱全生命周期"></p>
+<p><strong>4.7 LOD2</strong></p>
+<p>当然在行业内，知识图谱的全生命周期管理方面已经有部分现成的套装工具，比如欧盟的LOD2项目，它主要目标是构建结构化链接数据的企业级管理工具和方法学，提供一个搜索、浏览和生成链接数据的平台。</p>
+<p>不过LOD2 侧重于链接数据的生命周期管理，其它类型的数据需要首先转换成链接数据，并且LOD2 没有对中文处理的支持。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-885f407fc4ed5d00.jpg" alt="LOD2"> </p>
+<p><strong>4.8 Stardog</strong></p>
+<p>另一个代表性工具是Stardog，它是一个企业级知识图谱平台，通过把数据转换成知识，使用知识图谱进行组织，对外提供查询、检索、分析服务。其主要特点为：</p>
+<ul>
+<li><p>把关系数据库映射成虚拟图</p>
+</li>
+<li><p>支持OWL2的推理</p>
+</li>
+<li><p>支持Gremlin</p>
+</li>
+</ul>
+<p>但 Stardog 的不足之处在于仅包含对结构化数据（RDBMS、Excel等）的处理，没有针对非结构化数据的知识抽取，也没有包含知识融合功能。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-811a30e62e80b815.jpg" alt="Stardog"> </p>
+<p>总结一下，我们首先从根源介绍了知识图谱的前身及其基础技术规范，其次对生命周期中每个环节进行了简单的概述，以及关键技术和难点总结，最后介绍了两个目前较为主流的知识图谱平台。</p>
+<p>根据难易程度，对于如何在行业应用中使用知识图谱，大致有如下几种方式：</p>
+<ul>
+<li><p>使用现有的套装工具（如 LOD2、Stardog）</p>
+</li>
+<li><p>在现有套装工具的基础上进行扩充：</p>
+</li>
+<li><p>使用各生命周期过程的相应工具并进行组合使用</p>
+</li>
+<li><p>针对性开发或扩展生命周期中特定工具</p>
+</li>
+<li><p>完全从零开始构建</p>
+</li>
+</ul>
+<p>那么究竟使用哪种方式呢？这需要根据不同的数据，以及不同的业务需求进行相应的取舍。</p>
+<p>在下一篇文章中，我们会结合自身在PlantData平台里对图谱全生命周期管理的一些探索，深度介绍行业知识图谱全生命周期的关键技术。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-07-02/行业知识图谱构建与应用-上篇/" title="CCKS-2017 行业知识图谱构建与应用-上篇">https://mrpastor.github.io/2019-07-02/行业知识图谱构建与应用-上篇/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Knowledge-Graph/" rel="tag"># Knowledge Graph</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-07-02/reference/Architect/架构师之路/" rel="next" title="架构师之路">
+                <i class="fa fa-chevron-left"></i> 架构师之路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-07-03/行业知识图谱构建与应用-下篇/" rel="prev" title="CCKS-2017 行业知识图谱构建与应用-下篇">
+                CCKS-2017 行业知识图谱构建与应用-下篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二节-行业知识图谱应用"><span class="nav-number">1.</span> <span class="nav-text">第二节 行业知识图谱应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍完行业知识图谱的基本知识后，我们来看下行业知识图谱都有哪些应用。"><span class="nav-number">2.</span> <span class="nav-text">介绍完行业知识图谱的基本知识后，我们来看下行业知识图谱都有哪些应用。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#首先看金融领域，目前金融证券领域应用主要侧重于两个方面，一个是企业知识图谱，另一个是金融交易知识图谱。"><span class="nav-number">3.</span> <span class="nav-text">首先看金融领域，目前金融证券领域应用主要侧重于两个方面，一个是企业知识图谱，另一个是金融交易知识图谱。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-企业知识图谱"><span class="nav-number">4.</span> <span class="nav-text">2.1 企业知识图谱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三节-知识图谱应用挑战"><span class="nav-number">5.</span> <span class="nav-text">第三节 知识图谱应用挑战</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

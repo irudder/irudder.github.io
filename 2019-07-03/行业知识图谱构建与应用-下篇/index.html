@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Knowledge Graph,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="行业知识图谱关键技术上篇我们讲行业知识图谱生命周期划分为6个阶段，分为知识建模，知识获取，知识融合，知识存储，知识计算和知识应用。接下来我们详细描述每个阶段具体是如何完成的，有没有现成可用的工具、工具的优缺点如何、没有现成工具的话如何实现；同时，我们会以金融证券领域的创投知识图谱为例来进行实战描述。 知识建模即为行业的知识和数据进行抽象建模。上篇描述了行业数据的特点和企业面临的数据利用挑战，也提到">
+<meta name="keywords" content="Knowledge Graph">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CCKS-2017 行业知识图谱构建与应用-下篇">
+<meta property="og:url" content="https://mrpastor.github.io/2019-07-03/行业知识图谱构建与应用-下篇/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="行业知识图谱关键技术上篇我们讲行业知识图谱生命周期划分为6个阶段，分为知识建模，知识获取，知识融合，知识存储，知识计算和知识应用。接下来我们详细描述每个阶段具体是如何完成的，有没有现成可用的工具、工具的优缺点如何、没有现成工具的话如何实现；同时，我们会以金融证券领域的创投知识图谱为例来进行实战描述。 知识建模即为行业的知识和数据进行抽象建模。上篇描述了行业数据的特点和企业面临的数据利用挑战，也提到">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-ddc7b9658b96ff67.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-7b21755c8f2646c8.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-1b8a6285775f5fa9.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-4b7137410d977541.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-400b2f537e635ebf.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-02446ff982bc689a.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-cbcd610ce2a3c4cb.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-9e101efb95fbf8db.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-e5f546d6054c0e44.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-fadb219f196087cb.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-849e98c1fa8210c0.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-c04eefbb212d2864.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-b37d704b19dac365.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-2b34754173473c63.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-6ef3770f0dfec142.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-9e33df3ff7b6d276.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-d485f45eaf09c563.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-927a511606f4e34f.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-8c0760657359ce7f.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-2dc9be02efff1217.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-df09efb8193dedda.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-88773c81122e8943.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-e089207bc7f7f916.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-907c03f3f9a3641e.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-d9b110260ffc9b29.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-04e13e8afaf4f972.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-62e7ca74052ed0c1.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-18e4df1c5865511f.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-6f917ad5dd9906e2.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-570d35e4eea1bfe8.jpg">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/18390058-918cc8ab78cfa23d.jpg">
+<meta property="og:updated_time" content="2019-07-19T08:24:39.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CCKS-2017 行业知识图谱构建与应用-下篇">
+<meta name="twitter:description" content="行业知识图谱关键技术上篇我们讲行业知识图谱生命周期划分为6个阶段，分为知识建模，知识获取，知识融合，知识存储，知识计算和知识应用。接下来我们详细描述每个阶段具体是如何完成的，有没有现成可用的工具、工具的优缺点如何、没有现成工具的话如何实现；同时，我们会以金融证券领域的创投知识图谱为例来进行实战描述。 知识建模即为行业的知识和数据进行抽象建模。上篇描述了行业数据的特点和企业面临的数据利用挑战，也提到">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/18390058-ddc7b9658b96ff67.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-07-03/行业知识图谱构建与应用-下篇/">
+
+
+
+
+
+  <title>CCKS-2017 行业知识图谱构建与应用-下篇 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-03/行业知识图谱构建与应用-下篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CCKS-2017 行业知识图谱构建与应用-下篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-03T19:18:19+08:00">
+                2019-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/知识图谱/" itemprop="url" rel="index">
+                    <span itemprop="name">知识图谱</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="行业知识图谱关键技术"><a href="#行业知识图谱关键技术" class="headerlink" title="行业知识图谱关键技术"></a><strong>行业知识图谱关键技术</strong></h2><p>上篇我们讲行业知识图谱生命周期划分为6个阶段，分为知识建模，知识获取，知识融合，知识存储，知识计算和知识应用。接下来我们详细描述每个阶段具体是如何完成的，有没有现成可用的工具、工具的优缺点如何、没有现成工具的话如何实现；同时，我们会以金融证券领域的创投知识图谱为例来进行实战描述。</p>
+<h2 id="知识建模"><a href="#知识建模" class="headerlink" title="知识建模"></a><strong>知识建模</strong></h2><p>即为行业的知识和数据进行抽象建模。上篇描述了行业数据的特点和企业面临的数据利用挑战，也提到了使用行业知识图谱来克服这些难题。具体而言，首先使用知识图谱相关技术对行业知识和数据进行建模：</p>
+<ul>
+<li>以<strong>实体</strong>为主体目标，实现对不同来源的数据进行映射与合并。（实体抽取与合并）</li>
+<li>利用<strong>属性</strong>来表示不同数据源中针对实体的描述，形成对实体的全方位描述。（属性映射与归并）</li>
+<li>利用<strong>关系</strong>来描述各类抽象建模成实体的数据之间的关联关系，从而支持关联分析。（关系抽取）</li>
+<li>通过<strong>实体链接</strong>技术，实现围绕实体的多种类型数据的关联存储。（实体链接）</li>
+<li>使用<strong>事件</strong>机制描述客观世界中动态发展，体现事件与实体间的关联；并利用<strong>时序</strong>描述事件的发展状况。（动态事件描述）</li>
+</ul>
+<p>了解语义网或知识工程的朋友应该都使用过或者听过Protégé，它是由斯坦福大学开发的一个本体编辑器软件，基于RDF(S)，OWL等语义网规范，并且还提供图形化界面以及在线版本（WebProtégé）。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-ddc7b9658b96ff67.jpg" alt="image"></p>
+<p>但是Protégé在使用过程中存在以下不足之处：</p>
+<ol>
+<li>基本只提供单人编辑，在线版本的并发功能支持也不完善；并发编辑时需要通过文件共享来实现；</li>
+<li>完全依靠人工，难以实现与知识图谱构建（半）自动化过程的交互。</li>
+<li>不支持复杂事件及时态的建模；</li>
+<li>因为基于单机构建，因此对大数据量支持不够，会出现内存溢出； 因此，可以说Protégé适用于原型快速构建的场景，在生产环境下使用会遇到各种问题。</li>
+</ol>
+<p>通过我们在行业中的经验积累，结合以上几个问题，总结得出构建一个良好的知识建模工具应该具备如下一些特性：</p>
+<p><strong>一）在线并发协作编辑</strong></p>
+<p>支持在线并发协作编辑，能够将编辑的知识实时保存，当其它用户对当前用户正在编辑的内容有更新时，系统自动提示加载最新版本，因此能够有效地解决并发知识编辑冲突。</p>
+<p>这是我们所构建的知识建模的在线编辑界面</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-7b21755c8f2646c8.jpg" alt="image"></p>
+<p>这是上下位关系定义界面：</p>
+<p>这是属性定义编辑界面：</p>
+<p><strong>二）自动导入、集成</strong></p>
+<p>同时它提供导入、集成功能，能够把现有的知识通过导入功能进行集成，以存储为桥梁，可以对自动算法的结果进行编辑。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-1b8a6285775f5fa9.jpg" alt="image"></p>
+<p><strong>三）支持复杂动态事件建模</strong></p>
+<p>在对动态事件数据的建模时，使用时态信息存储实现事件时间的描述。</p>
+<p>该图为融资事件的建模示例</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-4b7137410d977541.jpg" alt="image"></p>
+<p><strong>四）大数据量支持</strong></p>
+<p>支持大数据量的知识图谱编辑：编辑是基于底层的知识图谱存储的，每次编辑时加载到前端的仅为当前相关的数据，因此不会造成内存溢出等问题。</p>
+<h2 id="知识获取"><a href="#知识获取" class="headerlink" title="知识获取"></a><strong>知识获取</strong></h2><p>针对不同种类的数据，我们利用不同的技术进行获取。利用D2R从结构化数据库中获取知识，利用包装器Wrapper从半结构化数据中获取知识，利用文本信息抽取技术从非结构化文本中获取知识。</p>
+<p><strong>一）D2R</strong></p>
+<p>我们先看下目前主流的D2R工具—D2RQ，D2RQ是一个将关系数据库转换为虚拟的RDF数据库的平台，主要包括三个模块</p>
+<p>1. D2R Server，HTTP Server，提供对 RDF数据的查询访问接口，以供上层的 RDF 浏览器、SPARQL查询客户端以及传统的 HTML 浏览器调用；</p>
+<p>2. D2RQ Engine：利用一个可定制的 D2RQ Mapping 文件将关系型数据库中的数据换成 RDF 格式；</p>
+<p>3. D2RQ Mapping Language：定义将关系型数据转换成 RDF 格式的 Mapping 规则。</p>
+<p>D2RQ的主体架构如下：</p>
+<p>从其功能描述我们可知D2RQ是直接将关系型数据库转换成RDF的，因此难以与知识建模结果对应，同样也难以同其他知识进行融合，在新数据的增量映射以及海量数据映射时会出现问题。</p>
+<p>因此我们的解决方案是将D2R映射与知识建模结合，在数据模式的基础上进行映射；例如从数据库中的“企业信息表”中把记录映射成概念“企业”下的实体。</p>
+<p>同时通过设置合并条件，把D2R的结果与知识图中的已有知识进行融合；例如对于企业，设置“如果企业名称相同则进行合并”的规则。</p>
+<p>在实现数据的增量映射功能时，通过特定的关键词及规则来设置数据更新的标记；例如，对于企业，设置“若成立时间为上次更新时间之后的企业为新的企业”。</p>
+<p>最终经过D2R映射的数据直接存储成为知识图谱中的知识，因而其数据量仅取决于存储的支撑量，也就不存在海量数据映射会导致的性能问题。</p>
+<p>下面是D2R操作过程演示的视频，从创投新闻数据库中进行实体、实体属性和关系知识的抽取。</p>
+<p> [<img src="https://upload-images.jianshu.io/upload_images/18390058-400b2f537e635ebf.jpg" alt="视频封面"></p>
+<p>PlantData平台D2R演示-公众号版_腾讯视频</p>
+<p>v.qq.com视频](<a href="https://v.qq.com/x/cover/u05458xapar/u05458xapar.html" target="_blank" rel="noopener">https://v.qq.com/x/cover/u05458xapar/u05458xapar.html</a>) </p>
+<p><strong>二）包装器</strong></p>
+<p>半结构化行业数据源解析一般采用<strong>包装器</strong>的方式，由于这些行业的数据源网站大多通过模板生成。包装器可以自动进行学习，但为了保证准确度，我们通常会使用<strong>人机结合</strong>的方法。</p>
+<p>在行业数据源解析实践中，由于网站的高度可变性，因此目前尚没有统一的包装器工具，所以在实际应用中，<strong>通常针对不同结构的数据配置相应的包装器</strong>，完成数据的解析。</p>
+<p>下图为我们研发使用的包装器配置工具，一般分为5个步骤，前两步较为直观，首先设置输入源，可以是网页的URL、网页的源码文件等，然后进行预处理，主要是过滤CSS、JavaScript等与信息抽取无关的噪声数据；第三步，配置抽取的目标，指定抽取的是知识图谱中的何种元素；第四步中我们为抽取的目标设置了一系列的抽取规则，包括网页标签规则、前置规则、后置规则，正则表达式等；最后是对抽取结果的过滤等后处理操作</p>
+<p>下面我们来看几个从半结构化数据中抽取专利知识的包装器的示例</p>
+<p>示例1：抽取专利，设置抽取的目标为专利实体名称及专利的属性，然后依据网页的特征设置相应的规则。</p>
+<p>示例2：另一个专利信息抽取的例子</p>
+<p><strong>三）文本信息抽取</strong></p>
+<p>行业知识图谱构建过程中文本信息抽取的任务非常多，这里主要讨论实体识别、概念抽取、关系抽取以及事件抽取。</p>
+<p>信息抽取的方法主要有CloseIE和OpenIE两类，两者的对比状况如下：</p>
+<p>OpenIE 的典型代表工具有 ReVerb、TextRunner。由于OpenIE 工具准确率比较低，会增加知识融合的难度，因此在行业知识图谱构建中实用性不高。通常被用于做第一轮的信息抽取探索，从它的结果中发现新的关系，然后在此基础上应用其它的信息抽取方法。</p>
+<p>CloseIE的典型工具为DeepDive。</p>
+<p>Deepdive是由斯坦福大学InfoLab实验室开发的一个开源知识抽取系统。它通过弱监督学习，从非结构化的文本中抽取结构化的关系数据，核心关键点是能够在更短的时间内提供更高质量的数据。</p>
+<p>其基于联合推理的算法，让用户只需要关心<strong>特征</strong>本身，要求用户<strong>思考特征而不是算法</strong>，而其他机器学习系统则要求开发者思考聚类算法、分类算法的使用等；同时DeepDive允许<strong>用户使用简单的规则来影响学习过程以提升结果的质量</strong>，也会<strong>根据用户反馈来提高预测的准确度</strong>；DeepDive使用机器学习算法训练系统来减少各种形式的噪音和不确定性，并<strong>为每一个决断进行复杂的可能性计算</strong>。</p>
+<p>下图为Deep Dive进行关系抽取的基本过程，首先指定抽取任务；其次进行中文分词、命名实体识别；再进行实体定位；生成候选实体关系对；接着使用DDlib为候选词和候选关系自动生成特征；加载标注的数据源；然后基于规则的远程监督自动标注；模型训练；最终输出结果。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-02446ff982bc689a.jpg" alt="image"></p>
+<p>总结一下：DeepDive主要针对<strong>关系抽取</strong>，在指定的关系抽取中效果比较理想，在实体确定后可以很好地进行关系抽取。同时也支持中文关系抽取，仅需要引入中文相关的基础处理工具即可。不足之处在于未提供专门的针对概念、实体和事件抽取的支持，同时需要大量的标注语料支持，并通过人工设置标注规则。</p>
+<p>对于文本信息抽取的方法，目前还没有统一的实现各类信息抽取的现成工具。 我们采用的是把现有的工具进行集成，依据抽取任务使用不同的工具，包括</p>
+<ul>
+<li>NLP分词、命名实体识别工具：NLPIR、LTP、FudanNLP、Stanford NLP……</li>
+<li>关系抽取工具：DeepDive</li>
+</ul>
+<p>而对于行业抽取任务，需要针对性的方法来完成，通常采用的做法是基于已有的结构化知识进行远程监督学习。</p>
+<p>接下来介绍事件抽取</p>
+<p>事件抽取可以分为预定义事件抽取和开放域事件抽取，行业知识图谱中主要为<strong>预定义事件抽取</strong>。 我们通常会采用采用模式匹配方法，包括三个步骤：</p>
+<ol>
+<li>准备事件触发词表</li>
+<li>候选事件抽取：寻找含有触发词的句子</li>
+<li>事件元素识别：根据事件模版抽取相应的元素</li>
+</ol>
+<p>下图为创投知识图谱融资事件抽取的示例，事件元素识别的过程与包装器模板配置过程基本相似</p>
+<p>知识抽取实践过程中，我们采用的是一种称为“多策略学习”的方法；“多策略”体现在多数据源、多目标类型、多抽取方法，总体原则是：利用不同数据源之间的冗余信息，使用较易抽取的信息（结构化数据库）来辅助抽取那些不易抽取的信息。</p>
+<p>下图是多策略学习方法的整体过程示意图：</p>
+<p>以下为我们的多策略学习方法示例</p>
+<h2 id="知识融合"><a href="#知识融合" class="headerlink" title="知识融合"></a><strong>知识融合</strong></h2><p>知识图谱中的知识融合是一件非常复杂的工作，包括数据模式层（概念、概念的上下位关系、概念的属性）的融合与数据层的融合。行业知识图谱的数据模式通常采用自顶向下和自底向上结合的方式，因此基本都经过人工的校验，保证了可靠性；所以知识融合的关键任务在数据层的融合。对于数据层的融合，为保证数据的质量，通常<strong>在知识抽取环节中进行控制</strong>，减少知识融合过程的难度。</p>
+<p>下面直接介绍我们的实践方案</p>
+<p><strong>数据模式层融合方法</strong>：</p>
+<p>行业知识图谱的数据模式层通常是由专家人工构建或从可靠的结构化数据中映射得到的，通常在映射时会通过<strong>设置融合的规则</strong>来确保数据的统一。</p>
+<p><strong>数据层的融合</strong>：</p>
+<p>实体合并，在构建行业知识图谱时，实体优先从结构化的数据中获取；</p>
+<p>对于结构化的数据，通常有对实体进行唯一标识的主键，因此在进行知识抽取时即可设定实体合并的依据；</p>
+<p>从非结构化数据中抽取的实体，同样使用设置合并条件的规则来完成实体的合并；例如：企业合并可以通过企业名称直接合并；企业高管合并可以采用人名相同+同一企业进行合并，因为同一家企业高管中同名的概率是极低的。</p>
+<p>实体属性与关系的合并，具有时态特性的属性，我们可以使用新的数据覆盖老的数据；其次可依据数据源的可靠性进行选取，通常结构化数据源中的质量较高。</p>
+<p>以人物实体合并为例来看下数据层融合的方法过程：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-cbcd610ce2a3c4cb.jpg" alt="image"></p>
+<h2 id="知识存储"><a href="#知识存储" class="headerlink" title="知识存储"></a><strong>知识存储</strong></h2><p>针对知识存储，我们微信服务号之前《<a href="https://link.zhihu.com/?target=http%3A//mp.weixin.qq.com/s%3F__biz%3DMzI5NjY0NDEyNg%3D%3D%26mid%3D2247483806%26idx%3D1%26sn%3D952518d2f15cbf8ddf494a6c1684666b%26chksm%3Dec407aefdb37f3f9303cde2e994f44f04e2b7b4cabdb6ca305f828e9ac792085d1aad38703ad%26scene%3D21%23wechat_redirect" target="_blank" rel="noopener">大规模知识图谱数据存储实战解析</a>》里详细介绍过，主要理念就是“<strong>使用不同的存储来实现不同类型数据的存储和使用</strong>”。</p>
+<p>知识图谱是基于图的数据结构，其存储方式主要有两种方式：<strong>RDF存储</strong> 和 <strong>图数据库(Graph Database)</strong>。Wikipedia对两者的解释分别如下：</p>
+<blockquote>
+<p>A triplestore or RDF store is a purpose-built database for the storage and retrieval of triples through semantic queries. A triple is a data entity composed of subject-predicate-object. [Wikipedia]</p>
+</blockquote>
+<blockquote>
+<p>A graph database has a more generalized structure than a triplestore, using graph structures with nodes, edges, and properties to represent and store data. [Wikipedia]</p>
+</blockquote>
+<p>下图为db-engine中常见图数据存储的排名，里面的多个Graph DBMS我们都有介绍过。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-9e101efb95fbf8db.jpg" alt="image"></p>
+<p>如何选用合适的图数据存储呢？下列指标是我们重点考量的：</p>
+<ul>
+<li>数据存储支持</li>
+<li>数据操作和管理方式</li>
+<li>支持的图结构</li>
+<li>实体和关系表示</li>
+<li>查询机制</li>
+</ul>
+<p>针对主流图数据存储我们整理了如下表格，从数据存储支持、数据操作和管理方式、支持的图结构、实体和关系表示以及查询机制角度来进行全面的比较（数据可能不全是最新的）。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-e5f546d6054c0e44.jpg" alt="image"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-fadb219f196087cb.jpg" alt="image"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-849e98c1fa8210c0.jpg" alt="image"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-c04eefbb212d2864.jpg" alt="image"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-b37d704b19dac365.jpg" alt="image"></p>
+<p>介绍一下Neo4j，它是当前图数据存储排名第一的图数据库，它具有支持原生图存储和处理、支持ACID事务处理的特点，同时neo4j不使用schema，因此在开始添加数据之前，你是不需要定义概念、属性和关系的，但这样带来的不足之处在于，在企业数据管理场景下如不使用 Schema则难以从整体把握数据；同时neo4j也不支持时态信息的存储，非企业版本会受到数据量、查询速度等方面的限制。</p>
+<p>我们的大规模知识图谱存储解决方案如下：</p>
+<ol>
+<li><p><strong>基础存储</strong></p>
+</li>
+<li><p>可按数据场景选择使用关系数据库、NoSQL数据库及内存数据库。</p>
+</li>
+<li><p>基础存储保证可扩展、高可用</p>
+</li>
+<li><p><strong>数据分割</strong></p>
+</li>
+<li><p>属性表：依据数据类型划分</p>
+</li>
+<li><p>基本类型：整数表、浮点数表、日期类型表、…</p>
+</li>
+<li><p>集合类型：List型表、Range型表、Map型表、…</p>
+</li>
+<li><p>大属性单独列表：例如数量超过10M的属性单独列表</p>
+</li>
+<li><p><strong>缓存与索引</strong></p>
+</li>
+<li><p>使用分布式 Redis 作为缓存，按需对数据进行缓存。</p>
+</li>
+<li><p>对三元组表按需进行索引，最多情况下可建立九重索引。</p>
+</li>
+<li><p><strong>善于使用现在成熟存储</strong></p>
+</li>
+<li><p>使用 ElasticSearch 实现数据的全文检索</p>
+</li>
+<li><p>结构固定型的数据可使用关系数据库或NoSQL</p>
+</li>
+<li><p><strong>对于非关系型的数据尽量不入图存储，避免形成大节点</strong></p>
+</li>
+<li><p>非关系型的数据，使用适合的数据存储机器进行存储，通过实体链接的方式实现与图谱数据的关联。</p>
+</li>
+<li><p><strong>不直接在图存储中进行统计分析计算</strong></p>
+</li>
+<li><p>对于需要进行统计分析计算的数据，需要导出到合适的存储中进行。</p>
+</li>
+</ol>
+<p>前面还提到知识图谱中的时态信息，时态信息的需求与技术一直是伴随着数据库技术的发展而产生和发展的，下图为时态数据库与其他类型数据库相比的发展趋势：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-2b34754173473c63.jpg" alt="image"></p>
+<p>可以发现时态数据库的发展趋势远远高于与其他数据存储方式。</p>
+<p>知识图谱中的时态信息包含事实的生成时间和某事实的有效时间段，比如融资事件的事件。</p>
+<p>因此在知识图谱时态信息存储的实践应用中，我们使用了<strong>历史数据库</strong>，用于记录事实的有效时间，用有限的数据冗余实现数据时态信息的应用。</p>
+<p>具体实践原则如下：</p>
+<ul>
+<li>在基础知识图谱的基础上，构建针对时态数据处理的中间件；</li>
+<li>对于特定类型的时序型数据，采用其它的存储机制进行存储。</li>
+</ul>
+<p>关于知识图谱数据存储的更详细的内容，请参看之前公众号发布的详细专题文章。</p>
+<h2 id="知识计算"><a href="#知识计算" class="headerlink" title="知识计算"></a><strong>知识计算</strong></h2><p>知识计算的范畴同样非常广，这里仅以图挖掘计算、基于本体的推理以及基于规则的推理三个最常用的技术进行介绍。</p>
+<p><strong>一）图挖掘计算</strong></p>
+<p>前面讲到知识图谱是一种基于图的数据结构，因此它自然会集成实现基本图算法，这些算法在我们之前那篇《<a href="https://link.zhihu.com/?target=http%3A//mp.weixin.qq.com/s%3F__biz%3DMzI5NjY0NDEyNg%3D%3D%26mid%3D2247484181%26idx%3D1%26sn%3D4a9b9ee30168538b4a71f12b36497ba4%26chksm%3Dec407864db37f1728259f17671687c7ff40813f7645904ac15ef442f0cd71e912e25f9e7cffd%26scene%3D21%23wechat_redirect" target="_blank" rel="noopener">图谱在手 天下我有</a>》文章中详细介绍过，可以参照对比阅读。</p>
+<p>列举一些我们常用的图算法：</p>
+<ol>
+<li>图遍历：广度优先遍历、深度优先遍历</li>
+<li>最短路径查询： Dijkstra（迪杰斯特拉算法）、Floyd（弗洛伊德算法）</li>
+<li>路径探寻：给定两个或多个节点，发现它们之间的关联关系</li>
+<li>权威节点分析：PageRank算法</li>
+<li>族群发现：最大流算法</li>
+<li>相似节点发现：基于节点属性、关系的相似度算法</li>
+</ol>
+<p>其中权威节点分析做过社交网络分析的人应该都知道，可以用来做社交网络里的权威人物分析，我们在创投知识图谱中用来做权威投资机构的发现。</p>
+<p>族群发现算法一般用来在社交网络中主题社区的发现，在这里我们同样可以用来识别企业知识图谱中的派系（阿里系、腾讯系）。</p>
+<p>相似节点发现应用就更加广泛了，在企业知识图谱中可以做相似企业的发现，这里有个很重要的实际应用场景，可以利用相似企业进行精准的获客营销。</p>
+<p><strong>二）基于本体的推理</strong></p>
+<p>本体推理基本方法包括：</p>
+<ul>
+<li>基于表运算及改进的方法：FaCT++、Racer、 Pellet Hermit等</li>
+<li>基于一阶查询重写的方法（Ontology based data access，基于本体的数据访问）</li>
+<li>基于产生式规则的算法（如rete）：Jena 、Sesame、OWLIM等</li>
+<li>基于Datalog转换的方法如KAON、RDFox等</li>
+<li>回答集程序 Answer set programming</li>
+</ul>
+<p>这里我们介绍一个本体知识推理工具：RDFox，它的特点如下：</p>
+<ul>
+<li>支持共享内存并行OWL 2 RL推理</li>
+<li>三元组数据可以导出为Turtle文件，规则文件可以导出为RDF数据记录文件；全部数据内容可以导出为二进制文件，可完全恢复数据存储状态</li>
+<li>支持Java、Python多语言APIs访问，并且 RDFox 还支持一种简单的脚本语言与系统的命令行交互</li>
+</ul>
+<p>由于RDFox是完全基于内存的，所以对硬件的要求较高。</p>
+<p>当然基于本体的知识推理应用也非常的多，比如我们在实际场景中的冲突检测。因为不管是手动构建，还是自动构建知识图谱，都会碰到这样一个问题：或者数据来源不同，或者构建的人员不同、方法不同，这就会不可避免的导致一些冲突，这些冲突自身很难直观的去发现，但是可以利用知识图谱里面的冲突检测去发现存在的有矛盾的、有冲突的知识。</p>
+<p>下图为我们从不同渠道获取花椒直播融资金额的冲突检测示例</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-6ef3770f0dfec142.jpg" alt="image"></p>
+<p><strong>三）基于规则的推理</strong></p>
+<p>基于规则的推理是在知识图谱基础知识的基础上，专家依据行业应用的业务特征进行规则的定义，这在业务应用中是非常常见的。</p>
+<p>介绍一下我们常用的Drools（因被JBOSS收购，现已更名为JBoss Rules），它是为Java量身定制的基于Charles Forgy的RETE算法的规则引擎的实现，使用了OO接口的RETE,使得商业规则有了更自然的表达，其推理的效率也比较高。</p>
+<p>结合规则引擎工具，基于基础知识与所定义的规则，执行推理过程给出推理结果。</p>
+<p>以下代码为我们使用drools定义的一个高风险企业规则</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-9e33df3ff7b6d276.jpg" alt="image"></p>
+<h2 id="知识应用"><a href="#知识应用" class="headerlink" title="知识应用"></a><strong>知识应用</strong></h2><p>关于知识应用我们主要介绍以下三个方向的关键技术：语义搜索、智能问答和可视化辅助决策。</p>
+<p><strong>一）语义搜索</strong></p>
+<p>知识图谱提出的初衷即为解决搜索的准确率问题，改进搜索质量；由于传统基于关键词的检索完全不考虑语义信息，因此传统的搜索主要面临两个难题：</p>
+<ol>
+<li>自然语言表达的多样性</li>
+<li>自然语言的歧义</li>
+</ol>
+<p>对此我们的解决方案为利用实体链接技术，进行基于知识图谱的语义搜索。</p>
+<p>先看下目前常见的两款实体链接工具</p>
+<p>Wikipedia Miner，在应用中集成维基百科的数据。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-d485f45eaf09c563.jpg" alt="image"></p>
+<p>该工具用来分析有歧义的实体的上下文和发现出现在维基百科里的概念。</p>
+<p>另一个广泛使用的基于维基百科的语义标注系统是DBpedia Spotlight，这是一个免费的可定制的web系统，它通过DBpeida的URIs标注文本，其目标是DBpedia本体。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-927a511606f4e34f.jpg" alt="image"></p>
+<p>市面上目前现有的实体链接工具大部分都是针对百科类的知识库工作的，基本上不支持中文的处理。</p>
+<p>在我们具体实践过程中采用了如下三种实体链接方法：</p>
+<ol>
+<li>基于向量模型相似度计算的实体链接方法</li>
+<li>基于知识图谱语义扩展的实体链接方法</li>
+<li>基于propagation计算相似度的实体链接方法</li>
+</ol>
+<p>实体链接的基本方法过程如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-8c0760657359ce7f.jpg" alt="image"></p>
+<p>该视频为基于实体连接的创投数据语义标注演示：</p>
+<p> [<img src="https://upload-images.jianshu.io/upload_images/18390058-2dc9be02efff1217.jpg" alt="视频封面"></p>
+<p>PlanData平台创投新闻标注–公众号_腾讯视频</p>
+<p>v.qq.com视频](<a href="https://v.qq.com/x/cover/m0545qe2i6r/m0545qe2i6r.html" target="_blank" rel="noopener">https://v.qq.com/x/cover/m0545qe2i6r/m0545qe2i6r.html</a>) </p>
+<p>实体链接完成后，我们可以把它引入到基于知识图谱的语义搜索中。语义搜索是对传统搜索的一种改变，其发展的最终形态为智能问答。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-df09efb8193dedda.jpg" alt="image"></p>
+<p>最后看一个创投知识图谱中的语义搜索示例，在PlantData平台中搜索“北京小桔科技”实体，会识别出这是一个企业实体，系统会自动返回企业相关的融资状况，高管信息以及链接的新闻数据信息。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-88773c81122e8943.jpg" alt="image"></p>
+<p><strong>二）智能问答</strong></p>
+<p>智能问答是指用户以自然语言提问的形式提出信息查询需求，系统对用户查询意图分析与理解，从各种数据资源中自动查询检索出最符合用户意图的答案。</p>
+<p>以下为基于知识图谱的自动问答系统的基本过程流程图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-e089207bc7f7f916.jpg" alt="image"></p>
+<p>智能问答现在的方法主要有这么四类</p>
+<p><strong>1. 基于信息检索的方法</strong></p>
+<p>基于信息检索的方法首先利用中文分词，命名实体识别等自然语言处理工具找到问句中所涉及到的实体和关键词，然后去知识资源库中去进行检索。它的优点在于实现简单，应用面广，在大部分场景下均可得到结果。缺点在于要求答案中必须至少包含问句中的一个字或词，所以不如语义解析方法精确。改进的方法可以利用基于知识图谱的知识进行<strong>语义扩充</strong>，提高匹配率，同时基于知识图谱进行检索时的<strong>语义消岐</strong>。</p>
+<p><strong>2. 基于语义分析的方法</strong></p>
+<p>基于语义分析的方法非常符合人们的直觉，它将一个自然语言形式的问句，按照特定语言的语法规则，解析成语义表达式，在得到语义表达式之后，我们可以非常容易地将其转化为某种数据库的查询语言。最常用的方法是利用组合范畴语法（CCG），CCG的核心是词汇，首先自然语言问句的词汇被映射到语义表达式中的词汇，然后按照特定的语法规则将汇组合起来，进而得到了最终的语义表达式。我们的做法是在特定的领域里边，<strong>基于知识图谱的实体、属性、概念等进行词法解析与映射</strong>，然后基于图结构进行语法规则匹配，这就相当于是图里面的子图查询匹配问题。</p>
+<p><strong>3. 基于规则的专家系统方法</strong></p>
+<p>专家系统是一个具有大量的专门知识与经验的程序系统，它应用人工智能技术和计算机技术，根据某领域一个或多个专家提供的知识和经验，进行推理和判断，模拟人类专家的决策过程，以便解决那些需要人类专家处理的复杂问题。</p>
+<p>在智能问答系统中，不是所有的问题都可以利用现存的知识库直接进行回答，有很多隐含知识我们需要通过已经抽取到的知识进行推理回答。因此基于知识推理的方法通常不单独使用，而是与其它的方法进行结合，增强对复杂问题回答的支持。</p>
+<p><strong>4. 基于深度学习的方法</strong></p>
+<p>近几年卷积神经网络（CNN）和循环神经网络（RNN）在NLP领域任务中表现出来的语言表示能力，越来越多的研究人员尝试深度学习的方法完成问答领域的关键任务，包括问题分类（question classification），语义匹配与答案选择（answer selection），答案自动生成（answer generation）。此外，互联网用户为了交流信息而产生的大规模诸如微博回复、社区问答对的自然标注数据，给训练深度神经网络模型提供了可靠的数据资源，并很大程度上解决自动问答研究领域的数据匮乏问题。</p>
+<p>该方法优点是实现“<strong>端到端</strong>”的问答：把问题与答案均使用复杂的特征向量表示，使用深度学习来计算问题与答案的相似度。不足之处在于不支持复杂的查询；需要比较长的训练过程，不适用于现实应用场景中的知识更新后的实时查询。</p>
+<p>知识图谱应该算是自动问答里面的大脑，我们在实践过程中选用的最佳方法是<strong>基于语义解析的方法</strong>加上<strong>基于信息检索的方法</strong>。</p>
+<p>这样做的好处在于<strong>基于语义解析的方法可解释性强</strong>，并且能够方便地转换成知识图谱的查询，给出明确的答案；因此对于用户输入，首先使用基于语义解析的方法进行回答；</p>
+<p>而<strong>基于信息检索的方法应用面广</strong>，因此当语义解析方法无法给出结果时，则使用信息检索的方法进行回答。</p>
+<p>下面两张图是我们在创投行业应用里实践智能问答的示例，首先我们会人工配置语义解析的模板，其次对用户的输入进行分词匹配，与知识图谱里面的元素进行映射，即知识图谱通用的子图匹配模板。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-907c03f3f9a3641e.jpg" alt="image"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-d9b110260ffc9b29.jpg" alt="image"></p>
+<p><strong>三）可视化辅助决策</strong></p>
+<p>首先介绍两个比较常见的可视化工具D3.js和ECharts。</p>
+<p>D3.js全称Data-Driven Documents，是一个用动态图形显示数据的JavaScript库，一个数据可视化工具，它提供了各种简单易用的函数，大大方便了数据可视化的工作。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-04e13e8afaf4f972.jpg" alt="image"></p>
+<p>ECharts是一款由百度前端技术部开发的，同样基于Javascript的数据可视化图标库。（个人觉得这是目前百度最有价值的产品）它提供大量常用的数据可视化图表，底层基于ZRender（一个全新的轻量级canvas类库），创建了坐标系，图例，提示，工具箱等基础组件，并在此上构建出折线图（区域图）、柱状图（条状图）、散点图（气泡图）、饼图（环形图）、K线图、地图、力导向布局图以及和弦图，同时支持任意维度的堆积和多图表混合展现。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-62e7ca74052ed0c1.jpg" alt="image"></p>
+<p>这两款都是非常优秀的可视化工具，但是目前还没有一款面向知识图谱的可视化工具，在选择知识图谱可视化的时候，需要思考以下三点问题：</p>
+<ol>
+<li>依托的设备及环境是什么？</li>
+<li>需要展现数据的什么特点？</li>
+<li>数据量过大（小）时我该怎么做？</li>
+</ol>
+<p>我们最终选用集成现有的可视化工具，实现知识图谱的可视化。以下是PlantData的图谱可视化基本组件，包括图谱展示、统计分析等。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-18e4df1c5865511f.jpg" alt="image"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-6f917ad5dd9906e2.jpg" alt="image"></p>
+<p>这是PlantData平台在创投图谱中进行可视化应用的演示视频</p>
+<p> [<img src="https://upload-images.jianshu.io/upload_images/18390058-570d35e4eea1bfe8.jpg" alt="视频封面"></p>
+<p>PlantData平台图谱可视化应用–公众号_腾讯视频</p>
+<p>v.qq.com视频](<a href="https://v.qq.com/x/cover/m05454e3gr0/m05454e3gr0.html" target="_blank" rel="noopener">https://v.qq.com/x/cover/m05454e3gr0/m05454e3gr0.html</a>) </p>
+<h2 id="PlantData"><a href="#PlantData" class="headerlink" title="PlantData"></a><strong>PlantData</strong></h2><p>基于知识图谱各过程的最佳实践，我们构建了一个<strong>基于知识图谱大数据的统一决策支持分析平台</strong>——PlantData，下图描述了平台中从数据源获取到到最终的知识应用的所有过程。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/18390058-918cc8ab78cfa23d.jpg" alt="image"></p>
+<p>底层首先对多源异构的数据源进行数据的采集，采集即运用信息抽取相关的技术对数据尤其是非结构化数据进行处理，然后形成结构化的知识，再往上进行数据的融合与合并，形成知识图谱形式的知识，存储在右边大规模知识图谱数据存储引擎中，最上面是一个统一的消费平台，通过数据可视化，知识计算，语义检索智能问答，以及与数据分析挖掘相关的一些方法去提供给用户。</p>
+<p><strong>未来规划</strong></p>
+<p>最后介绍下我们PlantData平台未来的规划</p>
+<ul>
+<li>在更多的行业中应用知识图谱技术</li>
+<li>研发更丰富的组件，使用户可以组合不同的组件实现应用场景</li>
+<li><p>面向非商业用户的开放知识图谱平台，为开放知识图谱社区作贡献</p>
+</li>
+<li><p>基础平台开放：让用户可以快速地在线体验知识图谱行业应用</p>
+</li>
+<li>开放平台中的数据集</li>
+<li>提供面向用户的开发接口、集成接口</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-07-03/行业知识图谱构建与应用-下篇/" title="CCKS-2017 行业知识图谱构建与应用-下篇">https://mrpastor.github.io/2019-07-03/行业知识图谱构建与应用-下篇/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Knowledge-Graph/" rel="tag"># Knowledge Graph</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-07-02/行业知识图谱构建与应用-上篇/" rel="next" title="CCKS-2017 行业知识图谱构建与应用-上篇">
+                <i class="fa fa-chevron-left"></i> CCKS-2017 行业知识图谱构建与应用-上篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-07-10/reference/MacOS/mac-shell/" rel="prev" title="Mac 高效shell终端设置">
+                Mac 高效shell终端设置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#行业知识图谱关键技术"><span class="nav-number">1.</span> <span class="nav-text">行业知识图谱关键技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识建模"><span class="nav-number">2.</span> <span class="nav-text">知识建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识获取"><span class="nav-number">3.</span> <span class="nav-text">知识获取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识融合"><span class="nav-number">4.</span> <span class="nav-text">知识融合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识存储"><span class="nav-number">5.</span> <span class="nav-text">知识存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识计算"><span class="nav-number">6.</span> <span class="nav-text">知识计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识应用"><span class="nav-number">7.</span> <span class="nav-text">知识应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PlantData"><span class="nav-number">8.</span> <span class="nav-text">PlantData</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

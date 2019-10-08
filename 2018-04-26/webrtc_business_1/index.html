@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Business,Tutorial,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="什么是webrtcwebrtc是实时通讯的标准方式之一，它包含了两种技术：VoIP语音通话和web开发. 图一：webrtc技术处于VoIP与web之间 VoIP是基于ip的语音通话,通过网络连接来传输媒体流(通常是音频和视屏流).VoIP语音通讯一直处于自己生态系统的孤岛上,直到webrtc推出后,通过蓬勃发展的互联网我们可以通过浏览器相互连接. webrtc使用VoIP来连接我们的浏览器,网站">
+<meta name="keywords" content="Business,Tutorial">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于WebRtc">
+<meta property="og:url" content="https://mrpastor.github.io/2018-04-26/webrtc_business_1/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="什么是webrtcwebrtc是实时通讯的标准方式之一，它包含了两种技术：VoIP语音通话和web开发. 图一：webrtc技术处于VoIP与web之间 VoIP是基于ip的语音通话,通过网络连接来传输媒体流(通常是音频和视屏流).VoIP语音通讯一直处于自己生态系统的孤岛上,直到webrtc推出后,通过蓬勃发展的互联网我们可以通过浏览器相互连接. webrtc使用VoIP来连接我们的浏览器,网站">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-15T01:35:41.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于WebRtc">
+<meta name="twitter:description" content="什么是webrtcwebrtc是实时通讯的标准方式之一，它包含了两种技术：VoIP语音通话和web开发. 图一：webrtc技术处于VoIP与web之间 VoIP是基于ip的语音通话,通过网络连接来传输媒体流(通常是音频和视屏流).VoIP语音通讯一直处于自己生态系统的孤岛上,直到webrtc推出后,通过蓬勃发展的互联网我们可以通过浏览器相互连接. webrtc使用VoIP来连接我们的浏览器,网站">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2018-04-26/webrtc_business_1/">
+
+
+
+
+
+  <title>关于WebRtc | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-04-26/webrtc_business_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于WebRtc</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T19:19:18+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="什么是webrtc"><a href="#什么是webrtc" class="headerlink" title="什么是webrtc"></a>什么是webrtc</h4><p>webrtc是实时通讯的标准方式之一，它包含了两种技术：VoIP语音通话和web开发.</p>
+<p>图一：webrtc技术处于VoIP与web之间</p>
+<p>VoIP是基于ip的语音通话,通过网络连接来传输媒体流(通常是音频和视屏流).VoIP语音通讯一直处于自己生态系统的孤岛上,直到webrtc推出后,通过蓬勃发展的互联网我们可以通过浏览器相互连接.</p>
+<p>webrtc使用VoIP来连接我们的浏览器,网站和移动端app。webrtc通过浏览器实现了简约的JavaScript的api接口,是HTML5规范的一部分。这意味着每个web开发人员都可以在他们的网站或者web应用上使用实时通讯的功能。</p>
+<p>WebRtc有两个方面的优势:</p>
+<ul>
+<li>免费</li>
+<li>由VoIP发展而来</li>
+</ul>
+<p>它们共同将通讯服务的准入门槛降低，但又不使用旧的案例技术来实现.</p>
+<h5 id="webrtc是什么"><a href="#webrtc是什么" class="headerlink" title="webrtc是什么"></a>webrtc是什么</h5><p>Webrtc这个术语有一定的误导性,它意味着两种不同的东西:</p>
+<ol>
+<li>webrtc协议规范</li>
+<li>webrtc开源项目<br>这两种概念在大多数时间是可以互换的，最重要的是你能区别两者的区别</li>
+</ol>
+<h6 id="1-webrtc协议规范"><a href="#1-webrtc协议规范" class="headerlink" title="1. webrtc协议规范"></a>1. webrtc协议规范</h6><p>webrtc是W3C和IETF的标准规范.<br>规范处理：</p>
+<ul>
+<li>数据传输协议- 通过网络传输,两个webrtc应用能够进行交互</li>
+<li>浏览器本身的api接口 - 封装Webrtc暴露出javascript接口</li>
+</ul>
+<p>webrtc1.0标准化已经在最后的审批阶段了。这已经持续了1年之久,很多的第三方软件都忽略webrtc的不便之处转而开始采用其产品.当然,在不停地浏览器间的webrtc的实现方式有差异,但是这种差异随着浏览器的发展将会慢慢弥合。</p>
+<h6 id="2-webrtc开源项目"><a href="#2-webrtc开源项目" class="headerlink" title="2.webrtc开源项目"></a>2.webrtc开源项目</h6><p>webrtc同样也是一个开源项目，当google第一次公布webrtc时,他只是一个在它自己网站上的开源项目。</p>
+<p>google明确表示他们将webrtc标准化并将其嵌入到浏览器中,最后，他们开源了代码并将置以最宽泛的开源协议。</p>
+<p>作为一个开源项目，webrtc是一个非常强大的项目使得任何人都可以在遵循webrtc协议规范的情形下来使用它。</p>
+<p>尽管有其他尝试提供完整的webrtc开源栈，但还是以google开源的项目作为最主要的选择。</p>
+<h5 id="免费"><a href="#免费" class="headerlink" title="免费"></a>免费</h5><h6 id="webrtc在每个方面都是免费的"><a href="#webrtc在每个方面都是免费的" class="headerlink" title="webrtc在每个方面都是免费的"></a>webrtc在每个方面都是免费的</h6><ol>
+<li>处于最宽泛的BSD开源协议的的开源项目包.在过去类似的技术是需要购买或者更严格的license协议,这对许多公司来来说都是不适用的</li>
+<li>它提供免费的编解码器并且不需要版权付费和专利许可证.编解码器通常都是需要付费使用,专利使用费和基于使用数量的版权费.每个季度的许可费和使用量费用的重新计算都需要花费一笔不菲的资金.</li>
+</ol>
+<p>允许开发者重新规划webrtc和其包含的组件:</p>
+<ul>
+<li>将其移植带有流媒体服务的操作系统或者环境中是可行的</li>
+<li>在设备数量多和性能低的机器上部署使用</li>
+<li>剥离webrtc的模块单独使用,特别是webrtc的回声消除和编解码实现。</li>
+</ul>
+<h5 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h5><p>最重要的是记住webrtc是免费的，它有很多商业的产品,服务和供需市场，这意味着可以减少风险，开发者的花费和从市场获得服务的时间。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2018-04-26/webrtc_business_1/" title="关于WebRtc">https://mrpastor.github.io/2018-04-26/webrtc_business_1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Business/" rel="tag"># Business</a>
+          
+            <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018-04-26/paddlepaddle/" rel="next" title="paddle练习">
+                <i class="fa fa-chevron-left"></i> paddle练习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018-04-28/webrtc_business_2/" rel="prev" title="webrtc的便利性">
+                webrtc的便利性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是webrtc"><span class="nav-number">1.</span> <span class="nav-text">什么是webrtc</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#webrtc是什么"><span class="nav-number">1.1.</span> <span class="nav-text">webrtc是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-webrtc协议规范"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. webrtc协议规范</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-webrtc开源项目"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.webrtc开源项目</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#免费"><span class="nav-number">1.2.</span> <span class="nav-text">免费</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#webrtc在每个方面都是免费的"><span class="nav-number">1.2.1.</span> <span class="nav-text">webrtc在每个方面都是免费的</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小结"><span class="nav-number">1.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

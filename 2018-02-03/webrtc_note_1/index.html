@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="视频流,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="分辨率/码率/帧率对视频流的影响在这几天的调试中降低码率和帧率后,将会减少延时和花屏的情况,主要是提高了解码的速度,但是对画质的影响,主要在于什么地方?  对帧率的修改,60fps降到25fps后,看到的显示效果没有变化,为什么?对用户体验的影响   用户体验: 只关系视频的画面质量,如果需要存储还需要关心视频文件的大小  流畅度: 主要受视频帧率(FPS)的影响 清晰度: 单位面积的画面所承载的">
+<meta name="keywords" content="视频流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分辨率&#x2F;码率&#x2F;帧率对视频流的影响">
+<meta property="og:url" content="https://mrpastor.github.io/2018-02-03/webrtc_note_1/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="分辨率/码率/帧率对视频流的影响在这几天的调试中降低码率和帧率后,将会减少延时和花屏的情况,主要是提高了解码的速度,但是对画质的影响,主要在于什么地方?  对帧率的修改,60fps降到25fps后,看到的显示效果没有变化,为什么?对用户体验的影响   用户体验: 只关系视频的画面质量,如果需要存储还需要关心视频文件的大小  流畅度: 主要受视频帧率(FPS)的影响 清晰度: 单位面积的画面所承载的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://winddoing.github.io/images/2018/11/video_bit_rate.png">
+<meta property="og:updated_time" content="2019-05-22T06:26:37.406Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分辨率&#x2F;码率&#x2F;帧率对视频流的影响">
+<meta name="twitter:description" content="分辨率/码率/帧率对视频流的影响在这几天的调试中降低码率和帧率后,将会减少延时和花屏的情况,主要是提高了解码的速度,但是对画质的影响,主要在于什么地方?  对帧率的修改,60fps降到25fps后,看到的显示效果没有变化,为什么?对用户体验的影响   用户体验: 只关系视频的画面质量,如果需要存储还需要关心视频文件的大小  流畅度: 主要受视频帧率(FPS)的影响 清晰度: 单位面积的画面所承载的">
+<meta name="twitter:image" content="https://winddoing.github.io/images/2018/11/video_bit_rate.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2018-02-03/webrtc_note_1/">
+
+
+
+
+
+  <title>分辨率/码率/帧率对视频流的影响 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-02-03/webrtc_note_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">分辨率/码率/帧率对视频流的影响</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-03T19:19:18+08:00">
+                2018-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="分辨率-码率-帧率对视频流的影响"><a href="#分辨率-码率-帧率对视频流的影响" class="headerlink" title="分辨率/码率/帧率对视频流的影响"></a>分辨率/码率/帧率对视频流的影响</h3><p>在这几天的调试中降低<code>码率</code>和<code>帧率</code>后,将会减少延时和花屏的情况,主要是提高了解码的速度,但是对画质的影响,主要在于什么地方?</p>
+<ul>
+<li>对帧率的修改,<code>60fps</code>降到<code>25fps</code>后,看到的显示效果没有变化,为什么?对用户体验的影响</li>
+</ul>
+<blockquote>
+<p>用户体验: 只关系视频的画面质量,如果需要存储还需要关心视频文件的大小</p>
+<ul>
+<li>流畅度: 主要受视频帧率(FPS)的影响</li>
+<li>清晰度: 单位面积的画面所承载的信息，在对视频进行评价是就是当FPS和分辨率固定时，考察视频的清晰度。码率</li>
+<li>分辨率: 视频画面的大小</li>
+</ul>
+</blockquote>
+<h2 id="码率"><a href="#码率" class="headerlink" title="码率"></a><a href="https://winddoing.github.io/post/60235.html#%E7%A0%81%E7%8E%87" title="码率" target="_blank" rel="noopener"></a>码率</h2><blockquote>
+<p>码率:比特率，英文为<code>Bit Rate</code>，是指每秒传送的比特(bit)数</p>
+</blockquote>
+<h3 id="码率影响视频清晰度"><a href="#码率影响视频清晰度" class="headerlink" title="码率影响视频清晰度"></a><a href="https://winddoing.github.io/post/60235.html#%E7%A0%81%E7%8E%87%E5%BD%B1%E5%93%8D%E8%A7%86%E9%A2%91%E6%B8%85%E6%99%B0%E5%BA%A6" title="码率影响视频清晰度" target="_blank" rel="noopener"></a>码率影响视频<code>清晰度</code></h3><p><a href="https://winddoing.github.io/images/2018/11/video_bit_rate.png" target="_blank" rel="noopener"><img src="https://winddoing.github.io/images/2018/11/video_bit_rate.png" alt="video_bit_rate"></a></p>
+<blockquote>
+<p>当比特率越大，视频清晰度就越高。其影响存在边际效应递减现象，并且存在上限（视频原始数据的画质）。</p>
+</blockquote>
+<h3 id="码率决定了视频大小"><a href="#码率决定了视频大小" class="headerlink" title="码率决定了视频大小"></a><a href="https://winddoing.github.io/post/60235.html#%E7%A0%81%E7%8E%87%E5%86%B3%E5%AE%9A%E4%BA%86%E8%A7%86%E9%A2%91%E5%A4%A7%E5%B0%8F" title="码率决定了视频大小" target="_blank" rel="noopener"></a>码率决定了视频<code>大小</code></h3><p>视频大小size和码率BitRate的关系：</p>
+<p>size = VideoDuration∗BitRate8VideoDuration∗BitRate8</p>
+<h2 id="帧率—FPS"><a href="#帧率—FPS" class="headerlink" title="帧率—FPS"></a><a href="https://winddoing.github.io/post/60235.html#%E5%B8%A7%E7%8E%87%E2%80%94FPS" title="帧率---FPS" target="_blank" rel="noopener"></a>帧率—FPS</h2><blockquote>
+<p>FPS是图像领域中的定义，是指画面每秒传输帧数，通俗来讲就是指动画或视频的画面数。FPS是测量用于保存、显示动态视频的信息数量。每秒钟帧数愈多，所显示的动作就会越流畅。</p>
+<blockquote>
+<p>在游戏过程中一般人不觉得卡顿的FPS频率大约是30Hz，想要达到流畅等级则需要60Hz。</p>
+</blockquote>
+</blockquote>
+<ol>
+<li><p>帧率对视频画质没有影响 帧率和视频大小正相关。视频大小和FPS/GOP_SIZE存在一定的线性相关性。</p>
+<blockquote>
+<p>GOP_SIZE是ffmpeg中的一个编码参数，表示的每GOP_SIZE个帧存在一个关键帧。</p>
+</blockquote>
+</li>
+<li><p>在显示”分辨率”不变的情况下，FPS越高，则对显卡的处理能力要求越高。</p>
+</li>
+</ol>
+<h2 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a><a href="https://winddoing.github.io/post/60235.html#%E5%88%86%E8%BE%A8%E7%8E%87" title="分辨率" target="_blank" rel="noopener"></a>分辨率</h2><p>分辨率对视频大小和画质有着非常重要的影响。</p>
+<p>如果清晰度和流畅度不变，分辨与视频画质，大小正相关。但是前提条件是清晰度不变，单纯的增加分辨并不能带来更好的画质.</p>
+<blockquote>
+<p>结果显示，同等分辨率的前提下，显示屏幕越大，主观感受越差。</p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><a href="https://winddoing.github.io/post/60235.html#%E5%8F%82%E8%80%83" title="参考" target="_blank" rel="noopener"></a>参考</h2><blockquote>
+<p>bandwidth参数</p>
+<ol>
+<li>Bandwidth的定义：</li>
+</ol>
+</blockquote>
+<p>SDP中的bandwidth参数用于在OfferSDP中告知对方本设备的解码器可以接受的最大会话流或媒体流的bit率</p>
+<ol start="2">
+<li>Bandwidth的格式：</li>
+</ol>
+<p>在SDP中的m行之前（关于会话的）或m行之后（关于对应媒体流的）都可以加bandwidth参数，具体格式为：b=:，其中不同的bwtype，对应不同的带宽限制的计算方法，</p>
+<ul>
+<li><a href="https://winddoing.github.io/post/60235.html" target="_blank" rel="noopener">码率,帧率,分辨率对视频画质的影响</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2018-02-03/webrtc_note_1/" title="分辨率/码率/帧率对视频流的影响">https://mrpastor.github.io/2018-02-03/webrtc_note_1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/视频流/" rel="tag"># 视频流</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018-01-13/reference/DeepLearning/note-blog-link/" rel="next" title="机器学习深度学习-文章收藏">
+                <i class="fa fa-chevron-left"></i> 机器学习深度学习-文章收藏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018-02-03/openvpn权限控制配置/" rel="prev" title="openvpn权限控制配置">
+                openvpn权限控制配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#分辨率-码率-帧率对视频流的影响"><span class="nav-number">1.</span> <span class="nav-text">分辨率/码率/帧率对视频流的影响</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#码率"><span class="nav-number"></span> <span class="nav-text">码率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#码率影响视频清晰度"><span class="nav-number">1.</span> <span class="nav-text">码率影响视频清晰度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#码率决定了视频大小"><span class="nav-number">2.</span> <span class="nav-text">码率决定了视频大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#帧率—FPS"><span class="nav-number"></span> <span class="nav-text">帧率—FPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分辨率"><span class="nav-number"></span> <span class="nav-text">分辨率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text">参考</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

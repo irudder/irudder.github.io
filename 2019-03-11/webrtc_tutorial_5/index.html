@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Tutorial,webrtc,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="demo内容12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010">
+<meta name="keywords" content="Tutorial,webrtc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webrtc使用RTCDataChannel交换数据">
+<meta property="og:url" content="https://mrpastor.github.io/2019-03-11/webrtc_tutorial_5/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="demo内容12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-15T09:01:34.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webrtc使用RTCDataChannel交换数据">
+<meta name="twitter:description" content="demo内容12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-03-11/webrtc_tutorial_5/">
+
+
+
+
+
+  <title>webrtc使用RTCDataChannel交换数据 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">哪里有草往哪走</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-03-11/webrtc_tutorial_5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">webrtc使用RTCDataChannel交换数据</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T19:19:18+08:00">
+                2019-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="demo内容"><a href="#demo内容" class="headerlink" title="demo内容"></a>demo内容</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;demo2&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;textarea id=&quot;dataChannelSend&quot; disabled</span><br><span class="line">    placeholder=&quot;Press Start, enter some text, then press Send.&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">&lt;textarea id=&quot;dataChannelReceive&quot; disabled&gt;&lt;/textarea&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;buttons&quot;&gt;</span><br><span class="line">  &lt;button id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</span><br><span class="line">  &lt;button id=&quot;sendButton&quot;&gt;Send&lt;/button&gt;</span><br><span class="line">  &lt;button id=&quot;closeButton&quot;&gt;Stop&lt;/button&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src=&quot;https://webrtc.github.io/adapter/adapter-latest.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">    &apos;use strict&apos;;</span><br><span class="line">    </span><br><span class="line">    let localConnection;</span><br><span class="line">    let remoteConnection;</span><br><span class="line">    let sendChannel;</span><br><span class="line">    let receiveChannel;</span><br><span class="line">    const dataChannelSend = document.querySelector(&apos;textarea#dataChannelSend&apos;);</span><br><span class="line">    const dataChannelReceive = document.querySelector(&apos;textarea#dataChannelReceive&apos;);</span><br><span class="line">    const startButton = document.querySelector(&apos;button#startButton&apos;);</span><br><span class="line">    const sendButton = document.querySelector(&apos;button#sendButton&apos;);</span><br><span class="line">    const closeButton = document.querySelector(&apos;button#closeButton&apos;);</span><br><span class="line"></span><br><span class="line">    startButton.onclick = createConnection;</span><br><span class="line">    sendButton.onclick = sendData;</span><br><span class="line">    closeButton.onclick = closeDataChannels;</span><br><span class="line"></span><br><span class="line">    function enableStartButton() &#123;</span><br><span class="line">      startButton.disabled = false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function disableSendButton() &#123;</span><br><span class="line">      sendButton.disabled = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function createConnection() &#123;</span><br><span class="line">      dataChannelSend.placeholder = &apos;&apos;;</span><br><span class="line">      const servers = null;</span><br><span class="line">      window.localConnection = localConnection = new RTCPeerConnection(servers);</span><br><span class="line">      console.log(&apos;Created local peer connection object localConnection&apos;);</span><br><span class="line"></span><br><span class="line">      sendChannel = localConnection.createDataChannel(&apos;sendDataChannel&apos;);</span><br><span class="line">      console.log(&apos;Created send data channel&apos;);</span><br><span class="line"></span><br><span class="line">      localConnection.onicecandidate = e =&gt; &#123;</span><br><span class="line">        onIceCandidate(localConnection, e);</span><br><span class="line">      &#125;;</span><br><span class="line">      sendChannel.onopen = onSendChannelStateChange;</span><br><span class="line">      sendChannel.onclose = onSendChannelStateChange;</span><br><span class="line"></span><br><span class="line">      window.remoteConnection = remoteConnection = new RTCPeerConnection(servers);</span><br><span class="line">      console.log(&apos;Created remote peer connection object remoteConnection&apos;);</span><br><span class="line"></span><br><span class="line">      remoteConnection.onicecandidate = e =&gt; &#123;</span><br><span class="line">        onIceCandidate(remoteConnection, e);</span><br><span class="line">      &#125;;</span><br><span class="line">      remoteConnection.ondatachannel = receiveChannelCallback;</span><br><span class="line"></span><br><span class="line">      localConnection.createOffer().then(</span><br><span class="line">        gotDescription1,</span><br><span class="line">        onCreateSessionDescriptionError</span><br><span class="line">      );</span><br><span class="line">      startButton.disabled = true;</span><br><span class="line">      closeButton.disabled = false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onCreateSessionDescriptionError(error) &#123;</span><br><span class="line">      console.log(&apos;Failed to create session description: &apos; + error.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function sendData() &#123;</span><br><span class="line">      const data = dataChannelSend.value;</span><br><span class="line">      sendChannel.send(data);</span><br><span class="line">      console.log(&apos;Sent Data: &apos; + data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function closeDataChannels() &#123;</span><br><span class="line">      console.log(&apos;Closing data channels&apos;);</span><br><span class="line">      sendChannel.close();</span><br><span class="line">      console.log(&apos;Closed data channel with label: &apos; + sendChannel.label);</span><br><span class="line">      receiveChannel.close();</span><br><span class="line">      console.log(&apos;Closed data channel with label: &apos; + receiveChannel.label);</span><br><span class="line">      localConnection.close();</span><br><span class="line">      remoteConnection.close();</span><br><span class="line">      localConnection = null;</span><br><span class="line">      remoteConnection = null;</span><br><span class="line">      console.log(&apos;Closed peer connections&apos;);</span><br><span class="line">      startButton.disabled = false;</span><br><span class="line">      sendButton.disabled = true;</span><br><span class="line">      closeButton.disabled = true;</span><br><span class="line">      dataChannelSend.value = &apos;&apos;;</span><br><span class="line">      dataChannelReceive.value = &apos;&apos;;</span><br><span class="line">      dataChannelSend.disabled = true;</span><br><span class="line">      disableSendButton();</span><br><span class="line">      enableStartButton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function gotDescription1(desc) &#123;</span><br><span class="line">      localConnection.setLocalDescription(desc);</span><br><span class="line">      console.log(`Offer from localConnection\n$&#123;desc.sdp&#125;`);</span><br><span class="line">      remoteConnection.setRemoteDescription(desc);</span><br><span class="line">      remoteConnection.createAnswer().then(</span><br><span class="line">        gotDescription2,</span><br><span class="line">        onCreateSessionDescriptionError</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function gotDescription2(desc) &#123;</span><br><span class="line">      remoteConnection.setLocalDescription(desc);</span><br><span class="line">      console.log(`Answer from remoteConnection\n$&#123;desc.sdp&#125;`);</span><br><span class="line">      localConnection.setRemoteDescription(desc);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function getOtherPc(pc) &#123;</span><br><span class="line">      return (pc === localConnection) ? remoteConnection : localConnection;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function getName(pc) &#123;</span><br><span class="line">      return (pc === localConnection) ? &apos;localPeerConnection&apos; : &apos;remotePeerConnection&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onIceCandidate(pc, event) &#123;</span><br><span class="line">      getOtherPc(pc)</span><br><span class="line">        .addIceCandidate(event.candidate)</span><br><span class="line">        .then(</span><br><span class="line">          () =&gt; onAddIceCandidateSuccess(pc),</span><br><span class="line">          err =&gt; onAddIceCandidateError(pc, err)</span><br><span class="line">        );</span><br><span class="line">      console.log(`$&#123;getName(pc)&#125; ICE candidate: $&#123;event.candidate ? event.candidate.candidate : &apos;(null)&apos;&#125;`);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onAddIceCandidateSuccess() &#123;</span><br><span class="line">      console.log(&apos;AddIceCandidate success.&apos;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onAddIceCandidateError(error) &#123;</span><br><span class="line">      console.log(`Failed to add Ice Candidate: $&#123;error.toString()&#125;`);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function receiveChannelCallback(event) &#123;</span><br><span class="line">      console.log(&apos;Receive Channel Callback&apos;);</span><br><span class="line">      receiveChannel = event.channel;</span><br><span class="line">      receiveChannel.onmessage = onReceiveMessageCallback;</span><br><span class="line">      receiveChannel.onopen = onReceiveChannelStateChange;</span><br><span class="line">      receiveChannel.onclose = onReceiveChannelStateChange;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onReceiveMessageCallback(event) &#123;</span><br><span class="line">      console.log(&apos;Received Message&apos;);</span><br><span class="line">      dataChannelReceive.value = event.data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onSendChannelStateChange() &#123;</span><br><span class="line">      const readyState = sendChannel.readyState;</span><br><span class="line">      console.log(&apos;Send channel state is: &apos; + readyState);</span><br><span class="line">      if (readyState === &apos;open&apos;) &#123;</span><br><span class="line">        dataChannelSend.disabled = false;</span><br><span class="line">        dataChannelSend.focus();</span><br><span class="line">        sendButton.disabled = false;</span><br><span class="line">        closeButton.disabled = false;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        dataChannelSend.disabled = true;</span><br><span class="line">        sendButton.disabled = true;</span><br><span class="line">        closeButton.disabled = true;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onReceiveChannelStateChange() &#123;</span><br><span class="line">      const readyState = receiveChannel.readyState;</span><br><span class="line">      console.log(`Receive channel state is: $&#123;readyState&#125;`);</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>此代码使用RTCPeerConnection和RTCDataChannel来启用文本消息的交换。</p>
+<p>此步骤中的大部分代码与RTCPeerConnection示例相同。</p>
+<p>RTCDataChannel的语法有意类似于WebSocket，带有send（）方法和消息事件。</p>
+<p>注意dataConstraint的使用。可以配置数据通道以实现不同类型的数据共享 - 例如，优先考虑可靠的交付而不是性能。您可以在<a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/createDataChannel" target="_blank" rel="noopener">Mozilla Developer Network</a>上找到有关选项的更多信息。</p>
+<h3 id="加分项"><a href="#加分项" class="headerlink" title="加分项"></a>加分项</h3><ol>
+<li>WebRTC数据通道使用的协议使用<a href="https://bloggeek.me/sctp-data-channel/" target="_blank" rel="noopener">SCTP</a>，默认使用可靠和有序的数据传输。在 RTCDataChannel 需要提供可靠的数据传输时或更重要的信息时使用它， 即使这可能意味着丢失一部分数据。<a href="https://bloggeek.me/sctp-data-channel/" target="_blank" rel="noopener">查阅为什么使用sctp传输?</a></li>
+<li>使用CSS改进页面布局，并将“占位符”属性添加到“dataChannelReceive”textarea。</li>
+<li>在移动设备上测试页面。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-03-11/webrtc_tutorial_5/" title="webrtc使用RTCDataChannel交换数据">https://mrpastor.github.io/2019-03-11/webrtc_tutorial_5/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tutorial/" rel="tag"># Tutorial</a>
+          
+            <a href="/tags/webrtc/" rel="tag"># webrtc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-03-09/webrtc_tutorial_4/" rel="next" title="webrtc使用RTCPeerConnection进行流传输">
+                <i class="fa fa-chevron-left"></i> webrtc使用RTCPeerConnection进行流传输
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-04-20/reference/FFmpeg/FFmpeg入门/" rel="prev" title="FFmpeg入门">
+                FFmpeg入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#demo内容"><span class="nav-number">1.</span> <span class="nav-text">demo内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作原理"><span class="nav-number">2.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加分项"><span class="nav-number">3.</span> <span class="nav-text">加分项</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
