@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day007：多实例下/SSL）@(MySQL学习) [TOC] 一. 多实例安装 – 多版本1. [mysqld_multi]标签 [mysqld_multi] 是否需要配置从操作演示来看，在my.cnf(老师给的模板配置)上直接配置[mysqld1]、[mysqld2]等实例标签，而不配置[mysqld_multi],使用mysqld_multi start 1也是可以启动">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL多实例下&#x2F;SSL">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day007：多实例下/SSL）@(MySQL学习) [TOC] 一. 多实例安装 – 多版本1. [mysqld_multi]标签 [mysqld_multi] 是否需要配置从操作演示来看，在my.cnf(老师给的模板配置)上直接配置[mysqld1]、[mysqld2]等实例标签，而不配置[mysqld_multi],使用mysqld_multi start 1也是可以启动">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-09T01:02:15.925Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL多实例下&#x2F;SSL">
+<meta name="twitter:description" content="MySQL学习笔记（Day007：多实例下/SSL）@(MySQL学习) [TOC] 一. 多实例安装 – 多版本1. [mysqld_multi]标签 [mysqld_multi] 是否需要配置从操作演示来看，在my.cnf(老师给的模板配置)上直接配置[mysqld1]、[mysqld2]等实例标签，而不配置[mysqld_multi],使用mysqld_multi start 1也是可以启动">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/">
+
+
+
+
+
+  <title>MySQL多实例下/SSL | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL多实例下/SSL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day007：多实例下-SSL）"><a href="#MySQL学习笔记（Day007：多实例下-SSL）" class="headerlink" title="MySQL学习笔记（Day007：多实例下/SSL）"></a>MySQL学习笔记（Day007：多实例下/SSL）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-多实例安装-–-多版本"><a href="#一-多实例安装-–-多版本" class="headerlink" title="一. 多实例安装 – 多版本"></a>一. 多实例安装 – 多版本</h2><h3 id="1-mysqld-multi-标签"><a href="#1-mysqld-multi-标签" class="headerlink" title="1. [mysqld_multi]标签"></a>1. [mysqld_multi]标签</h3><ul>
+<li><strong><code>[mysqld_multi]</code> 是否需要配置</strong><br>从操作演示来看，在<code>my.cnf</code>(<em>老师给的模板配置</em>)上直接配置<code>[mysqld1]</code>、<code>[mysqld2]</code>等实例标签，而<code>不配置[mysqld_multi]</code>,使用<code>mysqld_multi start 1</code>也是<code>可以启动</code>数据库实例的，但是没有<code>mysqld_safe</code>的守护进程。所以该标签<code>需要配置</code></li>
+</ul>
+<h3 id="2-停止mysql实例"><a href="#2-停止mysql实例" class="headerlink" title="2. 停止mysql实例"></a>2. 停止mysql实例</h3><ul>
+<li><p><strong><code>multi_admin用户</code>的作用</strong><br>通过<a href="http://dev.mysql.com/doc/refman/5.7/en/mysqld-multi.html" target="_blank" rel="noopener">官方文档</a>中我们看到，<code>&#39;multi_admin&#39;@&#39;localhost&#39;</code>这个用户主要的作用是用来<code>关闭</code>数据库实例，因为文档中只授权了<code>SHUTDOWN</code>权限。所以在<code>[mysqld_multi]</code>标签下，我们需要配置<code>user</code>和<code>password</code><strong>(注意<code>5.7.9</code>中是<code>pass</code>)</strong>来进行关闭数据库实例。</p>
+</li>
+<li><p><strong><code>[client]</code>标签</strong><br>从操作演示来看，老师并没有在<code>[mysqld_multi]</code>下配置<code>user</code>和<code>password</code>，但是仍然可以关闭数据库，原因是因为<code>/root/.my.cnf</code>中存在了<code>[client]</code>标签。该标签下的用户<code>user = root</code>有关闭数据库实例的权限，因此可以关闭数据库。</p>
+</li>
+</ul>
+<blockquote>
+<p>如果在<code>[client]</code>和<code>[mysqld_multi]</code>标签中同时存在<code>user</code>和<code>password</code>, 则在关闭数据库实例中会使用<code>[mysqld_multi]</code>中的<code>user</code>去关闭。<br><strong>(<code>存在精确匹配的标签，则优先使用精确匹配标签下的配置项</code>)</strong></p>
+</blockquote>
+<h3 id="3-多实例安装-–-多版本"><a href="#3-多实例安装-–-多版本" class="headerlink" title="3. 多实例安装 – 多版本"></a>3. 多实例安装 – 多版本</h3><ul>
+<li><p><strong>环境说明</strong></p>
+<ul>
+<li><code>mysqld1</code> – MySQL 5.7.9</li>
+<li><code>mysqld2</code> – MySQL 5.7.9</li>
+<li><code>mysqld3</code> – MySQL 5.6.27</li>
+<li><code>mysqld4</code> – MySQL 5.6.27</li>
+</ul>
+</li>
+<li><p><strong>配置文件</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">user = root</span><br><span class="line">password = 123</span><br><span class="line"></span><br><span class="line">[mysqld_multi]  <span class="comment"># 这里使用了client标签中的user，故这里不再定义user</span></span><br><span class="line">mysqld = /usr/<span class="built_in">local</span>/mysql/bin/mysqld_safe</span><br><span class="line"><span class="built_in">log</span> = /var/<span class="built_in">log</span>/mysqld_multi.log</span><br><span class="line"></span><br><span class="line">[mysqld1]</span><br><span class="line">server-id = 11</span><br><span class="line">datadir = /data1</span><br><span class="line">basedir = /usr/<span class="built_in">local</span>/mysql   <span class="comment"># basedir定义使用了5.7的mysql版本</span></span><br><span class="line">port = 3307</span><br><span class="line">socket = /tmp/mysql.sock1</span><br><span class="line"></span><br><span class="line">[mysqld2]</span><br><span class="line">server-id = 22</span><br><span class="line">datadir = /data2</span><br><span class="line">basedir = /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">port = 3308</span><br><span class="line">socket = /tmp/mysql.sock2</span><br><span class="line"></span><br><span class="line">[mysqld3]</span><br><span class="line">server-id = 33</span><br><span class="line">datadir = /data3</span><br><span class="line">basedir = /usr/<span class="built_in">local</span>/mysql56  <span class="comment"># basedir定义了使用5.6的mysql版本</span></span><br><span class="line">port = 3309</span><br><span class="line">socket = /tmp/mysql.sock3</span><br><span class="line">plugin_dir=/usr/<span class="built_in">local</span>/mysql56/lib/plugin  <span class="comment"># plugin 目录也变了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#这里无需特别配置mysqld, 可以继承使用[mysqld_multi]中的配置，然后根据basedir找到对应的mysqld</span></span><br><span class="line"></span><br><span class="line">[mysqld4]</span><br><span class="line">server-id = 44</span><br><span class="line">datadir = /data4</span><br><span class="line">basedir = /usr/<span class="built_in">local</span>/mysql56</span><br><span class="line">port = 3310</span><br><span class="line">socket = /tmp/mysql.sock4</span><br><span class="line">plugin_dir=/usr/<span class="built_in">local</span>/mysql56/lib/plugin</span><br><span class="line"></span><br><span class="line"><span class="comment">#--------------以下参数是老师的模板，只是将个别size调小-----------</span></span><br><span class="line">[mysqld]</span><br><span class="line"><span class="comment">########basic settings########</span></span><br><span class="line">server-id = 100</span><br><span class="line">port = 3306</span><br><span class="line">user = mysql</span><br><span class="line">bind_address = 0.0.0.0</span><br><span class="line"><span class="comment">#autocommit = 0</span></span><br><span class="line">character_set_server=utf8mb4</span><br><span class="line">skip_name_resolve = 1</span><br><span class="line">max_connections = 800</span><br><span class="line">max_connect_errors = 1000</span><br><span class="line">datadir = /data/mysql_data</span><br><span class="line">transaction_isolation = READ-COMMITTED</span><br><span class="line">explicit_defaults_for_timestamp = 1</span><br><span class="line">join_buffer_size = 134217728</span><br><span class="line">tmp_table_size = 67108864</span><br><span class="line">tmpdir = /tmp</span><br><span class="line">max_allowed_packet = 16777216</span><br><span class="line">sql_mode = <span class="string">"STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER"</span></span><br><span class="line">interactive_timeout = 1800</span><br><span class="line">wait_timeout = 1800</span><br><span class="line">read_buffer_size = 16777216</span><br><span class="line">read_rnd_buffer_size = 33554432</span><br><span class="line">sort_buffer_size = 33554432</span><br><span class="line"><span class="comment">########log settings########</span></span><br><span class="line">log_error = error.log</span><br><span class="line">slow_query_log = 1</span><br><span class="line">slow_query_log_file = slow.log</span><br><span class="line">log_queries_not_using_indexes = 1</span><br><span class="line">log_slow_admin_statements = 1</span><br><span class="line">log_slow_slave_statements = 1</span><br><span class="line">log_throttle_queries_not_using_indexes = 10</span><br><span class="line">expire_logs_days = 90</span><br><span class="line">long_query_time = 2</span><br><span class="line">min_examined_row_limit = 100</span><br><span class="line"><span class="comment">########replication settings########</span></span><br><span class="line">master_info_repository = TABLE</span><br><span class="line">relay_log_info_repository = TABLE</span><br><span class="line">log_bin = bin.log</span><br><span class="line">sync_binlog = 1</span><br><span class="line">gtid_mode = on</span><br><span class="line">enforce_gtid_consistency = 1</span><br><span class="line">log_slave_updates</span><br><span class="line">binlog_format = row </span><br><span class="line">relay_log = relay.log</span><br><span class="line">relay_log_recovery = 1</span><br><span class="line">binlog_gtid_simple_recovery = 1</span><br><span class="line">slave_skip_errors = ddl_exist_errors</span><br><span class="line"><span class="comment">########innodb settings########</span></span><br><span class="line">innodb_page_size = 8192</span><br><span class="line">innodb_buffer_pool_size = 1G    <span class="comment"># 该参数减小到1G</span></span><br><span class="line">innodb_buffer_pool_instances = 8</span><br><span class="line">innodb_buffer_pool_load_at_startup = 1</span><br><span class="line">innodb_buffer_pool_dump_at_shutdown = 1</span><br><span class="line">innodb_lru_scan_depth = 2000</span><br><span class="line">innodb_lock_wait_timeout = 5</span><br><span class="line">innodb_io_capacity = 4000</span><br><span class="line">innodb_io_capacity_max = 8000</span><br><span class="line">innodb_flush_method = O_DIRECT</span><br><span class="line">innodb_file_format = Barracuda</span><br><span class="line">innodb_file_format_max = Barracuda</span><br><span class="line"><span class="comment">#innodb_log_group_home_dir = /redolog/</span></span><br><span class="line"><span class="comment">#innodb_undo_directory = /undolog/</span></span><br><span class="line">innodb_undo_logs = 128</span><br><span class="line">innodb_undo_tablespaces = 3</span><br><span class="line">innodb_flush_neighbors = 1</span><br><span class="line">innodb_log_file_size = 128M  <span class="comment"># 该参数减小到 128M</span></span><br><span class="line">innodb_log_buffer_size = 16777216</span><br><span class="line">innodb_purge_threads = 4</span><br><span class="line">innodb_large_prefix = 1</span><br><span class="line">innodb_thread_concurrency = 64</span><br><span class="line">innodb_print_all_deadlocks = 1</span><br><span class="line">innodb_strict_mode = 1</span><br><span class="line">innodb_sort_buffer_size = 67108864 </span><br><span class="line"><span class="comment">########semi sync replication settings########</span></span><br><span class="line">plugin_dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin</span><br><span class="line"><span class="comment">#plugin_load = "rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"</span></span><br><span class="line">loose_rpl_semi_sync_master_enabled = 1</span><br><span class="line">loose_rpl_semi_sync_slave_enabled = 1</span><br><span class="line">loose_rpl_semi_sync_master_timeout = 5000</span><br><span class="line"></span><br><span class="line">[mysqld-5.7]</span><br><span class="line">innodb_buffer_pool_dump_pct = 40</span><br><span class="line">innodb_page_cleaners = 4</span><br><span class="line">innodb_undo_log_truncate = 1</span><br><span class="line">innodb_max_undo_log_size = 1G   <span class="comment"># 该参数减小到1G</span></span><br><span class="line">innodb_purge_rseg_truncate_frequency = 128</span><br><span class="line">binlog_gtid_simple_recovery=1</span><br><span class="line">log_timestamps=system</span><br><span class="line">transaction_write_set_extraction=MURMUR32</span><br><span class="line">show_compatibility_56=on</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p><strong>注意MySQL5.6.27的<code>plugin_dir</code>的路径</strong></p>
+</blockquote>
+<blockquote>
+<p>配置说明：<br>1：配置的标签顺序没有关系，不会影响最终配置的有效性。<br>2：同类型标签中的配置项会合并，形成一个大的配置项<br>2：<code>匹配度高</code>的标签中的配置项的<code>值</code>，会<code>覆盖</code>掉<code>匹配度低</code>的标签中的配置项的<code>值</code></p>
+</blockquote>
+<blockquote>
+<p><strong>[mysqld<code>N</code>]中的配置项会和[mysqld]中的配置项进行合并，并且[mysqld<code>N</code>]中已有的配置项的值，会覆盖掉[mysqld]中的配置项的值,如<code>datadir</code>, <code>port</code>等</strong></p>
+</blockquote>
+<ul>
+<li><strong>安装操作</strong><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 准备好数据目录，并初始化安装</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer ~]&gt; mkdir /data1</span><br><span class="line">[root@MyServer ~]&gt; mkdir /data2</span><br><span class="line">[root@MyServer ~]&gt; mkdir /data3</span><br><span class="line">[root@MyServer ~]&gt; mkdir /data4</span><br><span class="line">[root@MyServer ~]&gt; chown mysql.mysql /data&#123;1..4&#125;</span><br><span class="line">[root@MyServer ~]&gt; mysqld --initialize --user=mysql --datadir=/data1</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 这里无输出，临时密码见 /data1/error.log</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer ~]&gt; mysqld --initialize --user=mysql --datadir=/data2</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 这里无输出，临时密码见 /data1/error.log</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer mysql56]&gt; <span class="built_in">pwd</span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql56</span><br><span class="line">[root@MyServer mysql56]&gt; scripts/mysql_install_db  --user=mysql --datadir=/data3</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 这里有部分信息输出</span></span><br><span class="line"><span class="comment"># 安装后，需要检查error.log 确保没有错误出现</span></span><br><span class="line"><span class="comment"># 注意使用空密码登录后，修改密码</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer mysql56]&gt; scripts/mysql_install_db  --user=mysql --datadir=/data4</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 这里有部分信息输出</span></span><br><span class="line"><span class="comment"># 安装后，需要检查error.log 确保没有错误出现</span></span><br><span class="line"><span class="comment"># 注意使用空密码登录后，修改密码</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer ~]&gt; cp /usr/<span class="built_in">local</span>/mysql/support-files/mysqld_multi.server  /etc/init.d/mysqld_multid </span><br><span class="line"><span class="comment"># 拷贝启动脚本，方便自启</span></span><br><span class="line">[root@MyServer ~]&gt; chkconfig mysqld_multid on</span><br><span class="line"></span><br><span class="line">[root@MyServer ~]&gt; mysqld_multi report                       </span><br><span class="line">Reporting MySQL servers</span><br><span class="line">MySQL server from group: mysqld1 is not running</span><br><span class="line">MySQL server from group: mysqld2 is not running</span><br><span class="line">MySQL server from group: mysqld3 is not running</span><br><span class="line">MySQL server from group: mysqld4 is not running</span><br><span class="line"></span><br><span class="line">[root@MyServer ~]&gt; mysqld_multi  report</span><br><span class="line">Reporting MySQL servers</span><br><span class="line">MySQL server from group: mysqld1 is running</span><br><span class="line">MySQL server from group: mysqld2 is running</span><br><span class="line">MySQL server from group: mysqld3 is running</span><br><span class="line">MySQL server from group: mysqld4 is running</span><br><span class="line"></span><br><span class="line">[root@MyServer ~]&gt; ps -ef | grep mysqld</span><br><span class="line">root     13859     1  0 22:35 pts/1    00:00:00 /bin/sh /usr/<span class="built_in">local</span>/mysql/bin/mysqld_safe --server-id=11 --datadir=/data1 --basedir=/usr/<span class="built_in">local</span>/mysql --port=3307 --socket=/tmp/mysql.sock1</span><br><span class="line">root     13865     1  0 22:35 pts/1    00:00:00 /bin/sh /usr/<span class="built_in">local</span>/mysql/bin/mysqld_safe --server-id=22 --datadir=/data2 --basedir=/usr/<span class="built_in">local</span>/mysql --port=3308 --socket=/tmp/mysql.sock2</span><br><span class="line">root     13872     1  0 22:35 pts/1    00:00:00 /bin/sh /usr/<span class="built_in">local</span>/mysql/bin/mysqld_safe --server-id=33 --datadir=/data3 --basedir=/usr/<span class="built_in">local</span>/mysql56 --port=3309 --socket=/tmp/mysql.sock3 --plugin_dir=/usr/<span class="built_in">local</span>/mysql56/lib/plugin</span><br><span class="line">root     13886     1  0 22:35 pts/1    00:00:00 /bin/sh /usr/<span class="built_in">local</span>/mysql/bin/mysqld_safe --server-id=44 --datadir=/data4 --basedir=/usr/<span class="built_in">local</span>/mysql56 --port=3310 --socket=/tmp/mysql.sock4 --plugin_dir=/usr/<span class="built_in">local</span>/mysql56/lib/plugin</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 上面是mysqld_safe的守护进程</span></span><br><span class="line"><span class="comment"># 下面是实际的mysqld的进程，观察mysqld的路径</span></span><br><span class="line"><span class="comment"># 因为指定了basedir，所以会自动识别mysqld的路径</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">mysql    17783 13859  0 22:35 pts/1    00:00:00 /usr/<span class="built_in">local</span>/mysql-5.7.9-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/data1 --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --user=mysql --server-id=11 --<span class="built_in">log</span>-error=/data1/error.log --pid-file=/data1/MyServer.pid --socket=/tmp/mysql.sock1 --port=3307</span><br><span class="line">mysql    17784 13865  0 22:35 pts/1    00:00:00 /usr/<span class="built_in">local</span>/mysql-5.7.9-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/data2 --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --user=mysql --server-id=22 --<span class="built_in">log</span>-error=/data2/error.log --pid-file=/data2/MyServer.pid --socket=/tmp/mysql.sock2 --port=3308</span><br><span class="line">mysql    17819 13872  0 22:35 pts/1    00:00:00 /usr/<span class="built_in">local</span>/mysql-5.6.27-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql56 --datadir=/data3 --plugin-dir=/usr/<span class="built_in">local</span>/mysql56/lib/plugin --user=mysql --server-id=33 --<span class="built_in">log</span>-error=/data3/error.log --pid-file=/data3/MyServer.pid --socket=/tmp/mysql.sock3 --port=3309</span><br><span class="line">mysql    17824 13886  0 22:35 pts/1    00:00:00 /usr/<span class="built_in">local</span>/mysql-5.6.27-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql56 --datadir=/data4 --plugin-dir=/usr/<span class="built_in">local</span>/mysql56/lib/plugin --user=mysql --server-id=44 --<span class="built_in">log</span>-error=/data4/error.log --pid-file=/data4/MyServer.pid --socket=/tmp/mysql.sock4 --port=3310</span><br><span class="line">root     17988  2657  0 22:44 pts/1    00:00:00 grep mysqld</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@MyServer ~]&gt; ps -ef | grep mysqld |  grep -v mysqld_safe | grep -v grep | awk <span class="string">'&#123;print $8" "$9&#125;'</span>  </span><br><span class="line">/usr/<span class="built_in">local</span>/mysql-5.7.9-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">/usr/<span class="built_in">local</span>/mysql-5.7.9-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">/usr/<span class="built_in">local</span>/mysql-5.6.27-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql56</span><br><span class="line">/usr/<span class="built_in">local</span>/mysql-5.6.27-linux-glibc2.5-x86_64/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql56</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p><code>mysql3</code> 和 <code>mysql4</code>初始状态没有密码，以前可以直接使用<code>mysql -S  mysql.sock</code>登录，而现在登录的时候特别注意，因为我们使用了<code>[client]</code>标签,登录的时候如果不加<code>-p</code>参数会默认使用标签下的<code>user</code>和<code>password</code>, 然后导致登录不进去，所以需要使用如下登录方式：</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql -u root -P3309 -S /tmp/mysql.sock3 -p</span><br><span class="line">Enter password: [直接回车]</span><br><span class="line">elcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 3</span><br><span class="line">Server version: 5.6.27-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="built_in">set</span> password = password(<span class="string">"123"</span>); <span class="comment">#进行修改密码</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>设置login-path</strong><br>设置<code>login-path</code>主要为了能够简化登录，同时还可以让每个数据库的密码都不同，避免使用[client]下的统一用户名密码<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@MyServer ~]&gt; mysql_config_editor  <span class="built_in">set</span> -G mysql1 -u root -p -S /tmp/mysql.sock1</span><br><span class="line">[root@MyServer ~]&gt; mysql_config_editor  <span class="built_in">set</span> -G mysql2 -u root -p -S /tmp/mysql.sock2</span><br><span class="line">[root@MyServer ~]&gt; mysql_config_editor  <span class="built_in">set</span> -G mysql3 -u root -p -S /tmp/mysql.sock3</span><br><span class="line">[root@MyServer ~]&gt; mysql_config_editor  <span class="built_in">set</span> -G mysql4 -u root -p -S /tmp/mysql.sock4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后可以使用mysql --login-path=mysql1 这种方式登录</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- mysql1 </span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select version();</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| version() |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| 5.7.9-log |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"port"</span>; </span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3307  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- mysql2</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">version</span>();</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| version() |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| 5.7.9-log |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"port"</span>;</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3308  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- mysql3</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">version</span>();</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| version()  |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| 5.6.27-log |  <span class="comment">-- mysql 5.6.27 </span></span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"port"</span>;</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3309  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- mysql4</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">version</span>();</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| version()  |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| 5.6.27-log |  <span class="comment">-- mysql 5.6.27</span></span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"port"</span>;</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3310  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h2 id="二-SSL安装"><a href="#二-SSL安装" class="headerlink" title="二. SSL安装"></a>二. SSL安装</h2><p>SSL（Secure Socket Layer）是维护Client - Server之间加密通讯的一套安全协议；</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like "port";</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3307  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"%ssl%"</span>;</span><br><span class="line">+<span class="comment">---------------+----------+</span></span><br><span class="line">| Variable_name | Value    |</span><br><span class="line">+<span class="comment">---------------+----------+</span></span><br><span class="line">| have_openssl  | DISABLED |  <span class="comment">--  SSL被禁止了</span></span><br><span class="line">| have_ssl      | DISABLED |</span><br><span class="line">| ssl_ca        |          |</span><br><span class="line">| ssl_capath    |          |</span><br><span class="line">| ssl_cert      |          |</span><br><span class="line">| ssl_cipher    |          |</span><br><span class="line">| ssl_crl       |          |</span><br><span class="line">| ssl_crlpath   |          |</span><br><span class="line">| ssl_key       |          |</span><br><span class="line">+<span class="comment">---------------+----------+</span></span><br><span class="line">9 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>经过之前的多实例安装，是没有开启SSL配置的</p>
+</blockquote>
+<h3 id="1-开启SSL-5-7-9"><a href="#1-开启SSL-5-7-9" class="headerlink" title="1. 开启SSL (5.7.9)"></a>1. 开启SSL (5.7.9)</h3><ul>
+<li>环境说明<ul>
+<li>虚拟机1：MyServer； IP：172.18.14.68, MySQL实例1 - mysql1</li>
+<li>虚拟机2：MyServer； IP：172.18.14.41, MySQL客户端<blockquote>
+<p>操作过程中看到的192.168.115.223 是宿主机IP，因为使用KVM虚拟机的NAT功能，所以会被转换</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机1 MyServer</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer mysql]&gt; <span class="built_in">pwd</span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">[root@MyServer mysql]&gt; bin/mysql_ssl_rsa_setup  --datadir=/data1 --user=mysql --uid=mysql </span><br><span class="line"><span class="comment"># 使用--uid后，就不需要chown mysql.mysql *.pem</span></span><br><span class="line"></span><br><span class="line">[root@MyServer data1]<span class="comment"># pwd</span></span><br><span class="line">/data1</span><br><span class="line">[root@MyServer data1]<span class="comment"># ll | grep pem</span></span><br><span class="line">-rw-------. 1 mysql mysql      1675 Nov 25 23:55 ca-key.pem</span><br><span class="line">-rw-r--r--. 1 mysql mysql      1070 Nov 25 23:55 ca.pem</span><br><span class="line">-rw-r--r--. 1 mysql mysql      1078 Nov 25 23:55 client-cert.pem <span class="comment">#客户端证书文件</span></span><br><span class="line">-rw-------. 1 mysql mysql      1679 Nov 25 23:55 client-key.pem  <span class="comment">#客户端私钥文件</span></span><br><span class="line">-rw-------. 1 mysql mysql      1675 Nov 25 23:55 private_key.pem <span class="comment">#用于密钥交换的公钥</span></span><br><span class="line">-rw-r--r--. 1 mysql mysql       451 Nov 25 23:55 public_key.pem <span class="comment">#用户密钥交换的私钥</span></span><br><span class="line">-rw-r--r--. 1 mysql mysql      1078 Nov 25 23:55 server-cert.pem <span class="comment">#服务器端证书文件</span></span><br><span class="line">-rw-------. 1 mysql mysql      1679 Nov 25 23:55 server-key.pem <span class="comment">#服务器端私钥文件</span></span><br><span class="line">[root@MyServer data1]&gt; mysqld_multi  stop 1</span><br><span class="line">[root@MyServer data1]&gt; mysqld_multi  start 1</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>关于几个pem文件的用途说面，见<a href="http://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html" target="_blank" rel="noopener">官方文档</a>，并搜索关键字<code>private/public key-pair</code></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 当前虚拟机1 MyServer ,当前实例为 mysql1</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; show variables like "port";</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3307  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"%ssl%"</span>;</span><br><span class="line">+<span class="comment">---------------+-----------------+</span></span><br><span class="line">| Variable_name | Value           |</span><br><span class="line">+<span class="comment">---------------+-----------------+</span></span><br><span class="line">| have_openssl  | YES             |  <span class="comment">-- 已经支持SSL</span></span><br><span class="line">| have_ssl      | YES             |</span><br><span class="line">| ssl_ca        | ca.pem          |</span><br><span class="line">| ssl_capath    |                 |</span><br><span class="line">| ssl_cert      | server-cert.pem |  <span class="comment">-- 公钥文件</span></span><br><span class="line">| ssl_cipher    |                 |</span><br><span class="line">| ssl_crl       |                 |</span><br><span class="line">| ssl_crlpath   |                 |</span><br><span class="line">| ssl_key       | server-key.pem  |  <span class="comment">-- 私钥文件</span></span><br><span class="line">+<span class="comment">---------------+-----------------+</span></span><br><span class="line">9 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; \s  <span class="comment">-- status</span></span><br><span class="line"><span class="comment">--------------</span></span><br><span class="line">mysql  Ver <span class="number">14.14</span> Distrib <span class="number">5.7</span><span class="number">.9</span>, <span class="keyword">for</span> linux-glibc2<span class="number">.5</span> (x86_64) <span class="keyword">using</span>  EditLine wrapper</span><br><span class="line"></span><br><span class="line"><span class="keyword">Connection</span> <span class="keyword">id</span>:          <span class="number">2</span></span><br><span class="line"><span class="keyword">Current</span> <span class="keyword">database</span>:</span><br><span class="line"><span class="keyword">Current</span> <span class="keyword">user</span>:           root@localhost</span><br><span class="line">SSL:                    <span class="keyword">Not</span> <span class="keyword">in</span> <span class="keyword">use</span>  <span class="comment">-- 此时本地socket登录，不用SSL</span></span><br><span class="line"><span class="keyword">Current</span> pager:          stdout</span><br><span class="line"><span class="keyword">Using</span> <span class="keyword">outfile</span>:          <span class="string">''</span></span><br><span class="line"><span class="keyword">Using</span> delimiter:        ;</span><br><span class="line">Server version:         5.7.9-log MySQL Community Server (GPL)</span><br><span class="line">Protocol version:       10</span><br><span class="line">Connection:             Localhost via UNIX socket</span><br><span class="line">Server characterset:    utf8mb4</span><br><span class="line">Db     characterset:    utf8mb4</span><br><span class="line">Client characterset:    utf8</span><br><span class="line">Conn.  characterset:    utf8</span><br><span class="line">UNIX socket:            /tmp/mysql.sock1</span><br><span class="line">Uptime:                 6 min 16 sec</span><br><span class="line"></span><br><span class="line">Threads: 1  Questions: 7  Slow queries: 0  Opens: 108  <span class="keyword">Flush</span> <span class="keyword">tables</span>: <span class="number">1</span>  <span class="keyword">Open</span> <span class="keyword">tables</span>: <span class="number">101</span>  Queries per <span class="keyword">second</span> <span class="keyword">avg</span>: <span class="number">0.018</span></span><br><span class="line"><span class="comment">--------------</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">user</span> <span class="string">'burn'</span>@<span class="string">'%'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'123'</span>; <span class="comment">-- 创建一个burn@%用户，先不require ssl</span></span><br><span class="line">Query OK, 0 rows affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; grant all on *.* to 'burn'@'%';</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from mysql.user where user='burn'\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">                  Host: %</span><br><span class="line">                  User: burn</span><br><span class="line">           Select_priv: Y</span><br><span class="line">           Insert_priv: Y</span><br><span class="line">           Update_priv: Y</span><br><span class="line">           Delete_priv: Y</span><br><span class="line">           Create_priv: Y</span><br><span class="line">             Drop_priv: Y</span><br><span class="line">           Reload_priv: Y</span><br><span class="line">         Shutdown_priv: Y</span><br><span class="line">          Process_priv: Y</span><br><span class="line">             File_priv: Y</span><br><span class="line">            Grant_priv: N</span><br><span class="line">       References_priv: Y</span><br><span class="line">            Index_priv: Y</span><br><span class="line">            Alter_priv: Y</span><br><span class="line">          Show_db_priv: Y</span><br><span class="line">            Super_priv: Y</span><br><span class="line"> Create_tmp_table_priv: Y</span><br><span class="line">      Lock_tables_priv: Y</span><br><span class="line">          Execute_priv: Y</span><br><span class="line">       Repl_slave_priv: Y</span><br><span class="line">      Repl_client_priv: Y</span><br><span class="line">      Create_view_priv: Y</span><br><span class="line">        Show_view_priv: Y</span><br><span class="line">   Create_routine_priv: Y</span><br><span class="line">    Alter_routine_priv: Y</span><br><span class="line">      Create_user_priv: Y</span><br><span class="line">            Event_priv: Y</span><br><span class="line">          Trigger_priv: Y</span><br><span class="line">Create_tablespace_priv: Y</span><br><span class="line">              ssl_type:         <span class="comment">--  此处为空</span></span><br><span class="line">            ssl_cipher: </span><br><span class="line">           x509_issuer: </span><br><span class="line">          x509_subject: </span><br><span class="line">         max_questions: 0</span><br><span class="line">           max_updates: 0</span><br><span class="line">       max_connections: 0</span><br><span class="line">  max_user_connections: 0</span><br><span class="line">                plugin: mysql_native_password</span><br><span class="line"> authentication_string: *23AE809DDACAF96AF0FD78ED04B6A265E05AA257</span><br><span class="line">      password_expired: N</span><br><span class="line"> password_last_changed: 2015-11-26 09:55:31</span><br><span class="line">     password_lifetime: NULL</span><br><span class="line">        account_locked: N</span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机2  MyServer2</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer2 bin]&gt; ./mysql -u burn -h 172.18.14.68 -P3307 -p</span><br><span class="line">Enter password: </span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 6</span><br><span class="line">Server version: 5.7.9-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; \s</span><br><span class="line">--------------</span><br><span class="line">./mysql  Ver 14.14 Distrib 5.7.9, <span class="keyword">for</span> linux-glibc2.5 (x86_64) using  EditLine wrapper</span><br><span class="line"></span><br><span class="line">Connection id:          6</span><br><span class="line">Current database:</span><br><span class="line">Current user:           burn@192.168.115.223</span><br><span class="line">SSL:                    Cipher <span class="keyword">in</span> use is DHE-RSA-AES256-SHA  <span class="comment">#已经使用了ssl登录了</span></span><br><span class="line">Current pager:          stdout</span><br><span class="line">Using outfile:          <span class="string">''</span></span><br><span class="line">Using delimiter:        ;</span><br><span class="line">Server version:         5.7.9-log MySQL Community Server (GPL)</span><br><span class="line">Protocol version:       10</span><br><span class="line">Connection:             172.18.14.68 via TCP/IP</span><br><span class="line">Server characterset:    utf8mb4</span><br><span class="line">Db     characterset:    utf8mb4</span><br><span class="line">Client characterset:    utf8</span><br><span class="line">Conn.  characterset:    utf8</span><br><span class="line">TCP port:               3307</span><br><span class="line">Uptime:                 3 min 6 sec</span><br><span class="line"></span><br><span class="line">Threads: 2  Questions: 19  Slow queries: 0  Opens: 109  Flush tables: 1  Open tables: 102  Queries per second avg: 0.102</span><br><span class="line">--------</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机2 MyServer2</span></span><br><span class="line"><span class="comment"># 上面测试中我们没有使用--ssl参数，也是用了ssl登录的，原因如下</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer2 bin]&gt; ./mysql --<span class="built_in">help</span> | grep ssl                </span><br><span class="line">  --ssl               If <span class="built_in">set</span> to ON, this option enforces that SSL is</span><br><span class="line">                      server. To <span class="built_in">disable</span> client SSL capabilities use --ssl=OFF.</span><br><span class="line">                      (Defaults to on; use --skip-ssl to <span class="built_in">disable</span>.)</span><br><span class="line">                      <span class="comment"># 这里说，默认是开启的，可以用--skip-ssl 禁用</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机2 MyServer2 </span></span><br><span class="line"><span class="comment"># 禁用ssl登录测试</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer2 bin]&gt; ./mysql -u burn -h 172.18.14.68 -P3307 -p --skip-ssl  <span class="comment">#这里跳过了ssl</span></span><br><span class="line">Enter password: </span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 7</span><br><span class="line">Server version: 5.7.9-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; \s</span><br><span class="line">--------------</span><br><span class="line">./mysql  Ver 14.14 Distrib 5.7.9, <span class="keyword">for</span> linux-glibc2.5 (x86_64) using  EditLine wrapper</span><br><span class="line"></span><br><span class="line">Connection id:          7</span><br><span class="line">Current database:</span><br><span class="line">Current user:           burn@192.168.115.223</span><br><span class="line">SSL:                    Not <span class="keyword">in</span> use    <span class="comment"># 果然就禁用了ssl</span></span><br><span class="line">Current pager:          stdout</span><br><span class="line">Using outfile:          <span class="string">''</span></span><br><span class="line">Using delimiter:        ;</span><br><span class="line">Server version:         5.7.9-log MySQL Community Server (GPL)</span><br><span class="line">Protocol version:       10</span><br><span class="line">Connection:             172.18.14.68 via TCP/IP</span><br><span class="line">Server characterset:    utf8mb4</span><br><span class="line">Db     characterset:    utf8mb4</span><br><span class="line">Client characterset:    utf8</span><br><span class="line">Conn.  characterset:    utf8</span><br><span class="line">TCP port:               3307</span><br><span class="line">Uptime:                 5 min 50 sec</span><br><span class="line"></span><br><span class="line">Threads: 2  Questions: 24  Slow queries: 0  Opens: 109  Flush tables: 1  Open tables: 102  Queries per second avg: 0.068</span><br><span class="line">--------------</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 当前虚拟机1 MyServer, 当前实例mysql1</span></span><br><span class="line"><span class="comment">-- 让用户必须使用ssl</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; show variables like "port";</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3307  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">alter</span> <span class="keyword">user</span> <span class="string">'burn'</span>@<span class="string">'%'</span> require ssl;</span><br><span class="line">Query OK, 0 rows affected (0.02 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机2 MyServer2</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer2 bin]&gt; ./mysql -u burn -h 172.18.14.68 -P3307 -p --skip-ssl</span><br><span class="line">Enter password: </span><br><span class="line">ERROR 1045 (28000): Access denied <span class="keyword">for</span> user <span class="string">'burn'</span>@<span class="string">'192.168.115.223'</span> (using password: YES) <span class="comment">## 禁用了SSL就无法登录了</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line">[root@MyServer2 bin]&gt; ./mysql -u burn -h 172.18.14.68 -P3307 -p <span class="comment"># 默认就启用ssl</span></span><br><span class="line">Enter password: </span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 9</span><br><span class="line">Server version: 5.7.9-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; \s</span><br><span class="line">--------------</span><br><span class="line">./mysql  Ver 14.14 Distrib 5.7.9, <span class="keyword">for</span> linux-glibc2.5 (x86_64) using  EditLine wrapper</span><br><span class="line"></span><br><span class="line">Connection id:          9</span><br><span class="line">Current database:</span><br><span class="line">Current user:           burn@192.168.115.223</span><br><span class="line">SSL:                    Cipher <span class="keyword">in</span> use is DHE-RSA-AES256-SHA  <span class="comment"># 确实启用了</span></span><br><span class="line">Current pager:          stdout</span><br><span class="line">Using outfile:          <span class="string">''</span></span><br><span class="line">Using delimiter:        ;</span><br><span class="line">Server version:         5.7.9-log MySQL Community Server (GPL)</span><br><span class="line">Protocol version:       10</span><br><span class="line">Connection:             172.18.14.68 via TCP/IP</span><br><span class="line">Server characterset:    utf8mb4</span><br><span class="line">Db     characterset:    utf8mb4</span><br><span class="line">Client characterset:    utf8</span><br><span class="line">Conn.  characterset:    utf8</span><br><span class="line">TCP port:               3307</span><br><span class="line">Uptime:                 14 min 25 sec</span><br><span class="line"></span><br><span class="line">Threads: 2  Questions: 32  Slow queries: 0  Opens: 109  Flush tables: 1  Open tables: 102  Queries per second avg: 0.036</span><br><span class="line">--------------</span><br></pre></td></tr></table></figure>
+<h3 id="2-开启证书认证-5-7-9"><a href="#2-开启证书认证-5-7-9" class="headerlink" title="2. 开启证书认证(5.7.9)"></a>2. 开启证书认证(5.7.9)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 当前虚拟机1 MyServer， 当前实例 msyql1</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; show variables like "port";</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| port          | 3307  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">user</span> <span class="string">'burn_x509'</span>@<span class="string">'%'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'123'</span> require x509; <span class="comment">-- 启用证书认证</span></span><br><span class="line">Query OK, 0 rows affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; grant all on *.* to 'burn'@'%';</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from mysql.user where user='burn_x509'\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">                  Host: %</span><br><span class="line">                  User: burn_x509</span><br><span class="line">           Select_priv: N</span><br><span class="line">           Insert_priv: N</span><br><span class="line">           Update_priv: N</span><br><span class="line">           Delete_priv: N</span><br><span class="line">           Create_priv: N</span><br><span class="line">             Drop_priv: N</span><br><span class="line">           Reload_priv: N</span><br><span class="line">         Shutdown_priv: N</span><br><span class="line">          Process_priv: N</span><br><span class="line">             File_priv: N</span><br><span class="line">            Grant_priv: N</span><br><span class="line">       References_priv: N</span><br><span class="line">            Index_priv: N</span><br><span class="line">            Alter_priv: N</span><br><span class="line">          Show_db_priv: N</span><br><span class="line">            Super_priv: N</span><br><span class="line"> Create_tmp_table_priv: N</span><br><span class="line">      Lock_tables_priv: N</span><br><span class="line">          Execute_priv: N</span><br><span class="line">       Repl_slave_priv: N</span><br><span class="line">      Repl_client_priv: N</span><br><span class="line">      Create_view_priv: N</span><br><span class="line">        Show_view_priv: N</span><br><span class="line">   Create_routine_priv: N</span><br><span class="line">    Alter_routine_priv: N</span><br><span class="line">      Create_user_priv: N</span><br><span class="line">            Event_priv: N</span><br><span class="line">          Trigger_priv: N</span><br><span class="line">Create_tablespace_priv: N</span><br><span class="line">              ssl_type: X509    <span class="comment">-- 使用X509登录</span></span><br><span class="line">            ssl_cipher: </span><br><span class="line">           x509_issuer: </span><br><span class="line">          x509_subject: </span><br><span class="line">         max_questions: 0</span><br><span class="line">           max_updates: 0</span><br><span class="line">       max_connections: 0</span><br><span class="line">  max_user_connections: 0</span><br><span class="line">                plugin: mysql_native_password</span><br><span class="line"> authentication_string: *23AE809DDACAF96AF0FD78ED04B6A265E05AA257</span><br><span class="line">      password_expired: N</span><br><span class="line"> password_last_changed: 2015-11-26 10:14:43</span><br><span class="line">     password_lifetime: NULL</span><br><span class="line">        account_locked: N</span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机2 MyServer2 </span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer2 bin]&gt; ./mysql -u burn_x509 -h 172.18.14.68 -P3307 -p</span><br><span class="line">Enter password: </span><br><span class="line">ERROR 1045 (28000): Access denied <span class="keyword">for</span> user <span class="string">'burn_x509'</span>@<span class="string">'192.168.115.223'</span> (using password: YES)  <span class="comment"># 即使默认开启了ssl，也是无法登录的</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机1 MyServer</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer data1]&gt; <span class="built_in">pwd</span></span><br><span class="line">/data1</span><br><span class="line">[root@MyServer data1]&gt; ll | grep pem</span><br><span class="line">-rw-------. 1 mysql mysql      1675 Nov 25 23:55 ca-key.pem</span><br><span class="line">-rw-r--r--. 1 mysql mysql      1070 Nov 25 23:55 ca.pem</span><br><span class="line">-rw-r--r--. 1 mysql mysql      1078 Nov 25 23:55 client-cert.pem</span><br><span class="line">-rw-------. 1 mysql mysql      1679 Nov 25 23:55 client-key.pem</span><br><span class="line">-rw-------. 1 mysql mysql      1675 Nov 25 23:55 private_key.pem</span><br><span class="line">-rw-r--r--. 1 mysql mysql       451 Nov 25 23:55 public_key.pem</span><br><span class="line">-rw-r--r--. 1 mysql mysql      1078 Nov 25 23:55 server-cert.pem</span><br><span class="line">-rw-------. 1 mysql mysql      1679 Nov 25 23:55 server-key.pem</span><br><span class="line">[root@MyServer data1]&gt; scp client-cert.pem  client-key.pem  root@172.18.14.41:~/</span><br><span class="line">The authenticity of host <span class="string">'172.18.14.41 (172.18.14.41)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is 5f:f5:3c:b0:57:79:8d:50:c6:c8:69:b0:90:6e:98:3b.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>172.18.14.41<span class="string">' (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">root@172.18.14.41'</span>s password: </span><br><span class="line">client-cert.pem                                                                                           100% 1078     1.1KB/s   00:00    </span><br><span class="line">client-key.pem                                                                                            100% 1679     1.6KB/s   00:00</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 当前虚拟机2 MyServer2</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer2 ~]&gt; ll | grep pem</span><br><span class="line">-rw-r--r--.  1 root root       1078 Nov 26 10:22 client-cert.pem</span><br><span class="line">-rw-------.  1 root root       1679 Nov 26 10:22 client-key.pem</span><br><span class="line"></span><br><span class="line">[root@MyServer2 ~]&gt; mysql -u burn_x509 -h 172.18.14.68 -P 3307 -p --ssl-cert=./client-cert.pem  --ssl-key=./client-key.pem </span><br><span class="line">Enter password: </span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 12</span><br><span class="line">Server version: 5.7.9-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; \s</span><br><span class="line">--------------</span><br><span class="line">mysql  Ver 14.14 Distrib 5.6.27, <span class="keyword">for</span> linux-glibc2.5 (x86_64) using  EditLine wrapper</span><br><span class="line"></span><br><span class="line">Connection id:          12</span><br><span class="line">Current database:</span><br><span class="line">Current user:           burn_x509@192.168.115.223</span><br><span class="line">SSL:                    Cipher <span class="keyword">in</span> use is DHE-RSA-AES256-SHA <span class="comment"># 使用加密方式登录，且通过证书，因为这个用户 require X509</span></span><br><span class="line">Current pager:          stdout</span><br><span class="line">Using outfile:          <span class="string">''</span></span><br><span class="line">Using delimiter:        ;</span><br><span class="line">Server version:         5.7.9-log MySQL Community Server (GPL)</span><br><span class="line">Protocol version:       10</span><br><span class="line">Connection:             172.18.14.68 via TCP/IP</span><br><span class="line">Server characterset:    utf8mb4</span><br><span class="line">Db     characterset:    utf8mb4</span><br><span class="line">Client characterset:    utf8</span><br><span class="line">Conn.  characterset:    utf8</span><br><span class="line">TCP port:               3307</span><br><span class="line">Uptime:                 32 min 15 sec</span><br><span class="line"></span><br><span class="line">Threads: 2  Questions: 41  Slow queries: 0  Opens: 114  Flush tables: 1  Open tables: 107  Queries per second avg: 0.021</span><br><span class="line">--------------</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/" title="MySQL多实例下/SSL">https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day012)/" rel="next" title="子查询/INSERT/UPDATE/DELETE/REPLACE">
+                <i class="fa fa-chevron-left"></i> 子查询/INSERT/UPDATE/DELETE/REPLACE
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day019)/" rel="prev" title="磁盘测试">
+                磁盘测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day007：多实例下-SSL）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day007：多实例下/SSL）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-多实例安装-–-多版本"><span class="nav-number">1.1.</span> <span class="nav-text">一. 多实例安装 – 多版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-mysqld-multi-标签"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. [mysqld_multi]标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-停止mysql实例"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 停止mysql实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-多实例安装-–-多版本"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 多实例安装 – 多版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-SSL安装"><span class="nav-number">1.2.</span> <span class="nav-text">二. SSL安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-开启SSL-5-7-9"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 开启SSL (5.7.9)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-开启证书认证-5-7-9"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 开启证书认证(5.7.9)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

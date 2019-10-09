@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-19/reference/WebRTC/webrtc-专题-02/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -282,7 +282,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-19/reference/WebRTC/webrtc-专题-02/" itemprop="url">webrtc-专题-02-WebRTC应用</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day013)/" itemprop="url">作业讲解一/Rank/视图/UNION/触发器</a></h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-19T19:17:23+08:00">
-                2019-06-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -317,8 +317,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebRTC/" itemprop="url" rel="index">
-                    <span itemprop="name">WebRTC</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -356,19 +356,26 @@
       
         
           
-          WebRTC浏览器APIWebRTC实现了多个Web API接口，其中三个重要的Web API分别是:
+          MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）@(MySQL学习)
+[TOC]
+一. 作业讲解
+查询employees表中非基层用户的最近详细信息
 
-MediaStream：通过 MediaStream 的 API 能够通过设备的摄像头及话筒获得视频、音频的同步流。
-RTCPeerConnection：RTCPeerConnection 是 WebRTC 用于构建点对点之间稳定、高效的流传输的组件。
-RTCDataChannel：RTCDataChannel 使得浏览器之间（点对点）建立一个高吞吐量、低延时的信道，用于传输任意数据。
+老师的讲解的版本中存在问题，重新作为作业
 
-这里大致介绍一下这三个API：
-MediaStream (aka getUserMedia)MediaStream API为WebRTC提供了从设备的摄像头、话筒获取视频、音频流数据的功能.
-W3C标准详见：https://w3c.github.io/media
+
+统计dbt3库下orders每周每个客户的订单数量
+
+
+
+思路
+
+找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了1970-01-05作为周一标记，作为起始(start)
+12345678[root@MyServer ~]&gt; cal 1 1970    January 1970    Su Mo Tu We Th Fr Sa             1  2  3 4  5  6  7  8  9 10  # 1970-01-05 刚好是周一，用1月12号，19号，26号等也是可以的11 12 1
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-19/reference/WebRTC/webrtc-专题-02/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day013)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -419,7 +426,7 @@ W3C标准详见：https://w3c.github.io/media
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-16/reference/WebRTC/webrtc-专题-01/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -438,7 +445,7 @@ W3C标准详见：https://w3c.github.io/media
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-16/reference/WebRTC/webrtc-专题-01/" itemprop="url">webrtc-专题-01-WebRTC框架介绍</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/" itemprop="url">存储引擎二/多实例安装</a></h1>
         
 
         <div class="post-meta">
@@ -450,8 +457,8 @@ W3C标准详见：https://w3c.github.io/media
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-16T19:17:23+08:00">
-                2019-06-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -473,165 +480,8 @@ W3C标准详见：https://w3c.github.io/media
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebRTC/" itemprop="url" rel="index">
-                    <span itemprop="name">WebRTC</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="什么是WebRTC？"><a href="#什么是WebRTC？" class="headerlink" title="什么是WebRTC？"></a>什么是WebRTC？</h2><p>众所周知，浏览器本身不支持相互之间直接建立信道进行通信，都是通过服务器进行中转。比如现在有两个客户端，甲和乙，他们俩想要通信，首先需要甲和服务器、乙和服务器之间建立信道。甲给乙发送消息时，甲先将消息发送到服务器上，服务器对甲的消息进行中转，发送到乙处，反过来也是一样。这样甲与乙之间的一次消息要通过两段信道，通信的效率同时受制于这两段信道的带宽。同时这样的信道并不适合数据流的传输，如何建立浏览器之间的点对点传输，一直困扰着开发者。WebRTC应运而生。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-06-16/reference/WebRTC/webrtc-专题-01/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-16/三大系统，让学习不靠意志力/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-06-16/三大系统，让学习不靠意志力/" itemprop="url">三大系统，让学习不靠意志力</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-16T09:45:08+08:00">
-                2019-06-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -669,16 +519,32 @@ W3C标准详见：https://w3c.github.io/media
       
         
           
-          本节学习收获：学会掌控自己的三类方法，让你不靠意志力，也能坚持学习
-我们经常会听到诸如此类：如果坚持每天背20个单词，一年词汇量就接近8000了，基本是托福的词汇量；如果坚持每天写2000字，两个月就12万字了，就可以出一本书。
-我们都知道这个积少成多、长期坚持的道理，但是，有多少人真正坚持得了呢？
-上节课我们提到，能力提升比知识学习更难，当然，因为难所以才有价值，如果非常简单，就没什么竞争力了。但是，这么难的事情，要怎么才能坚持呢？
-靠意志力吗？我们都是这么想的，所以经常会说“xx很自律”“xx意志力惊人”。
-但实际上，因为人的意志力是有限的，任何让自己坚持的事情，都会消耗它，从而让你感觉非常累。比如你会发现，如果我们一段时间工作压力很大，就会更容易放弃健身等等良好习惯，因为我们的意志力在坚持工作这方面已经耗费光了，所以就没有多余的意志力用在坚持健
+          MySQL学习笔记（Day001-002：介绍和安装）@(MySQL学习)
+[TOC]
+##一.MySQL版本选择
+
+MySQL5.6以后的版本，推荐使用官方版本。
+Percona：在5.6版本以后，MySQL将Percon之前优化集成到官方版本中;
+MariaDB：无INNODB;且核心代码较老
+MySQL在5.6以后不断重构源码，安装包越来越大，功能和性能在持续改进
+
+
+二. MySQL官方网站介绍官方网站：http://www.mysql.com
+
+Developer Zone： MySQL开发工程师板块
+
+Articles： Oracle工程师自己的博客
+Plant MySQL： 和MySQL相关从业人员的博客
+Bugs：MySQL BugList
+Worklog：开发记录
+Labs：MySQL实验性项目
+
+
+Downloads：MySQL下
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-16/三大系统，让学习不靠意志力/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -729,7 +595,7 @@ W3C标准详见：https://w3c.github.io/media
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-16/三个建议，让你不做“定制化人才”/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day006)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -748,7 +614,7 @@ W3C标准详见：https://w3c.github.io/media
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-16/三个建议，让你不做“定制化人才”/" itemprop="url">三个建议，让你不做“定制化人才”</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day006)/" itemprop="url">存储引擎二/多实例安装</a></h1>
         
 
         <div class="post-meta">
@@ -760,8 +626,8 @@ W3C标准详见：https://w3c.github.io/media
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-16T09:45:08+08:00">
-                2019-06-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -783,19 +649,8 @@ W3C标准详见：https://w3c.github.io/media
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -833,16 +688,33 @@ W3C标准详见：https://w3c.github.io/media
       
         
           
-          本节学习收获：学会3个“不变应万变”的方法，避免成为“企业定制化人才”。
-我的一位中学同学，在某个耳熟能详的大外企做工程师。工作10年，接受了很多公司培训，还经常有国外出差的机会，自己的表现也一直都属于中上游。3年前，他所在的业务开始缩减人员，最近一个关系好的同事也离开公司去创业了，他也觉得自己要做些改变，打算转行。
-但是，信心满满地投了几十份简历，几乎没什么回音。唯一拿到的一个offer，对方公司开出的薪酬只有现在的70%。
-照理说，我这位同学也算是大公司的优秀人才，怎么出了公司，竟然找不到合适的工作呢？
-《国富论》里亚当·斯密提到的一个扣针工厂的例子：一个工人无论如何努力，一天也生产不了20枚扣针，但有了分工之后，经过前后十几道工序，每人每天平均可以生产48000枚扣针。这就是专业化分工的高效性！
-任何一家公司，从老板的角度肯定是要提高效率、多赚
+          MySQL学习笔记（Day006：存储引擎二/多实例安装）@(MySQL学习)
+[TOC]
+一. MyISAM存储引擎(下)1. MyISAM还在使用的原因
+历史原因，需要逐步替换
+部分如User，DB等系统表(MyISAM引擎)，可以直接拷贝，比较方便
+性能好，或者存储小不是MyISAM的优点，也不是存在的原因
+
+2. MyISAM文件组成
+frm 表结构文件
+MYI 索引文件
+MYD 数据文件
+数据文件是堆表数据结构，堆是无序数据的集合
+MYI中的叶子节点，指向MYD中的数据页
+当数据移动到页外时，需要修改对应指针
+
+
+
+3. myisamchkmyisamchk通过扫描MYD文件来重建MYI文件；如果MYD文件中某条记录有问题，将跳过该记录
+
+二. Memory存储引擎1. Memory介绍
+全内存存储的引擎
+数据库重启后数据丢失
+支持哈希索引
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-16/三个建议，让你不做“定制化人才”/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day006)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -893,7 +765,7 @@ W3C标准详见：https://w3c.github.io/media
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-14/三种方法，将知识内化成能力/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -912,7 +784,7 @@ W3C标准详见：https://w3c.github.io/media
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-14/三种方法，将知识内化成能力/" itemprop="url">三种方法，将知识内化成能力</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/" itemprop="url">MySQL JSON格式</a></h1>
         
 
         <div class="post-meta">
@@ -924,8 +796,8 @@ W3C标准详见：https://w3c.github.io/media
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-14T09:45:08+08:00">
-                2019-06-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -947,19 +819,8 @@ W3C标准详见：https://w3c.github.io/media
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -997,17 +858,21 @@ W3C标准详见：https://w3c.github.io/media
       
         
           
-           本节学习收获：掌握将所学知识内化成能力的3个方法，盘活你脑中的知识
-在课程正式开始之前，我先提个问题，我们第一节课介绍了冰山模型，在这几天里，你有没有用它来解决过问题呢？
-如果没有的话，那么冰山模型对你来说，就是没有用的“惰性知识”，它只是待在你的脑海里，在一些明明可以发挥作用的场合，却不能及时被调取出来，白白占据了你大脑的内存。
+          MySQL学习笔记（Day009：JSON）@(MySQL学习)
+[TOC]
+一. MySQL JSON类型1. JSON介绍
+JSON（JavaScript Object Notation）是一种轻量级的数据交换语言，并且是独立于语言的文本格式。
+一些NoSQL数据库选择JSON作为其数据存储格式，比如：MongoDB、CouchDB等。
+MySQL5.7.x开始支持JSON数据类型。
 
-陈铭在《奇葩说》中举过一个例子，很好地解释了知识和能力的关系。他说：
-水在零度的时候会结冰，这是一个知识，是对外部客观规律的归纳和总结。在未来的时间中，我在什么时候、把什么味道的水、变成什么味道的冰棒、卖给谁，叫做智慧和能力，它是指对知识的处理和运用。  
-我在咨询公司的时候，很多客户都在自己所在的行业里摸爬滚打了几十年，行业知识和经验肯定比工作几年的咨询顾问丰富，但为什么我们能帮他解决问题、收取那么高的咨询费呢？这也
+
+官方文档(JSON类型)
+
+2. JSON格式示例12345678910111213141516171819202122232425262728---- 摘自 维基百科--&#123;     "firstName": "John",    -- Key : Value 格式     "lastName": "Smith",     "sex": "male",
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-14/三种方法，将知识内化成能力/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1058,7 +923,7 @@ W3C标准详见：https://w3c.github.io/media
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-13/四类迹象，发现你的隐藏能力/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day014)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1077,7 +942,7 @@ W3C标准详见：https://w3c.github.io/media
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-13/四类迹象，发现你的隐藏能力/" itemprop="url">四类迹象，发现你的隐藏能力</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day014)/" itemprop="url">触发器下/存储过程/自定义函数</a></h1>
         
 
         <div class="post-meta">
@@ -1089,8 +954,8 @@ W3C标准详见：https://w3c.github.io/media
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-13T09:45:08+08:00">
-                2019-06-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -1112,19 +977,8 @@ W3C标准详见：https://w3c.github.io/media
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -1162,18 +1016,24 @@ W3C标准详见：https://w3c.github.io/media
       
         
           
-          本节学习收获：掌握SIGN模型，从而找到自己的天赋，并借此进入发展快车道
-我还在咨询公司的时候，带过两个相似起点、但结局完全不同的顾问。
-A顾问大学是学行政管理的，实习期间执行力很强，自己做实习生团队的小头目，但有个很大的问题，她总是点状思考，没有框架。虽然后来我还是争取破格留下了她，但是，我一直担心她未来上升会有瓶颈。
-入职不到一年的时候，我有次让她写份报告，做好了大量修改的心理准备，但我惊讶地发现，结构竟然非常清晰，丝毫不比其他人差。
-后来我问她：你为什么一下子进步了呢？她说：我不知道，好像某天突然顿悟了。
-另一个是T顾问，她之前在甲方工作过很短时间。转行过来以后，她的表现跟A顾问很像，执行力不错，但常常找不到思路。
-本来以为她也能像A顾问一样成长起来，所以我经常带她讨论，一起复盘。
-经过一段时间，她的思维能力有所进步，但是，涉及到新问题，还是不
+          MySQL学习笔记（Day014：触发器下/存储过程/自定义函数）@(MySQL学习)
+[TOC]
+一. 作业讲解
+查询employees表中非基层用户的最近详细信息
+
+关于Group By在《SQL必知必会》中提及的部分规定：
+
+GROUP BY子句中列出的每一列都必须是检索列或有效的表达式（但不能是聚集函数）。如果在SELECT中使用表达式，则必须在GROUP BY子句中指定相同的表达式。不能使用别名。
+除聚集计算语句外，SELECT语句中的每一列都必须在GROUP BY子句中给出。
+
+
+
+
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647SELECT     e.emp_no,    CONCAT(last_name, ' 
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-13/四类迹象，发现你的隐藏能力/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day014)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1224,7 +1084,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-11/四大要素，决定了你的市场价值/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day019)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1243,7 +1103,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-11/四大要素，决定了你的市场价值/" itemprop="url">四大要素，决定了你的市场价值</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day019)/" itemprop="url">磁盘测试</a></h1>
         
 
         <div class="post-meta">
@@ -1255,8 +1115,8 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-11T09:45:08+08:00">
-                2019-06-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -1278,19 +1138,8 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -1328,14 +1177,17 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
       
         
           
-          本节学习收获：明确冰山模型各个要素的投入产出比，从而更好地分配自己的时间，让自己变得更值钱；同时，理解不同类型的岗位所对应的门槛和天花板，帮助择业
-我们都会发现，同样学校、同样专业的两个人，在毕业几年之后，薪资差异可能非常大。大家起点差不多、毕业时间差不多、每天投入的工作时间也差不多，但最后产出却不一样，到底是什么原因呢？我们自己的时间应该要投入在哪里，才能最大化我们的市场价值也就是薪资呢？今天我们用科学的方法做个分析。
-首先，薪资，也就是一个人的市场价值，无非是跟内部和外部两类因素相关。外部就是机遇、运气、选择等等；而内部，其实就是我们在冰山模型各个要素上的表现，我们的知识技能越多、能力越强、价值观/性格特质/动机跟所做的事情越匹配，你的市场价值就越高。
-所以，抛开运气、选择这些很难掌控的因素不谈，我们今天从内部角度，也就是冰山模型的各个要素，来聊
+          MySQL学习笔记（Day019：磁盘测试）@(MySQL学习)
+[TOC]
+一. 磁盘调度算法介绍1. CFQ
+CFQ把I/O请求按照进程分别放入进程对应的队列中，所以A进程和B进程发出的I/O请求会在两个队列中。而各个队列内部仍然采用合并和排序的方法，区别仅在于，每一个提交I/O请求的进程都有自己的I/O队列。CFQ的“公平”是针对进程而言的，它以时间片算法为前提，轮转调度队列，默认从当前队列中取4个请求处理，然后处理下一个队列的4个请求。这样就可以确保每个进程享有的I/O资源是均衡的。CFQ的缺点是先来的IO请求不一定能被及时满足，可能出现饥饿的情况。CFQ Wiki
+
+2. Deadline
+同CFQ一样，除了维护一个拥有合并和排序功能的请求队列以外，还额外维护了两个队列，分别是读请求队列和写请求队列，它们都是带有超时的FIFO队列。当新来一
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-11/四大要素，决定了你的市场价值/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day019)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1386,7 +1238,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-10/一个模型，帮你找到真正热爱的工作/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1405,7 +1257,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-10/一个模型，帮你找到真正热爱的工作/" itemprop="url">一个模型，帮你找到真正热爱的工作</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day007)/" itemprop="url">MySQL多实例下/SSL</a></h1>
         
 
         <div class="post-meta">
@@ -1417,8 +1269,8 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-10T09:45:08+08:00">
-                2019-06-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -1440,19 +1292,8 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -1490,16 +1331,17 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
       
         
           
-          本节学习收获：掌握冰山模型的用法，能够用它来分析自己跟工作的匹配度，从而做出正确的职业选择，并能精准找到自己喜欢并有成就感的工作。
-“我感觉目前的工作状态不是我最想要的，做得也还行，但没有太多成就感，也不知道未来发展会怎么样……想有一份真正热爱并且有前途的工作，但不知道应该做什么，感觉很迷茫。”
-这段话，要么是我们当下的状态，要么是曾经有过的状态。
-刚工作发现不喜欢想转行、到了新岗位发现不胜任想提升、人到中年发现这个工作的天花板等等，都是常态。因为我们对自己的事业有期许，但当下的工作可能无法承载这样的期许，所以会觉得“不喜欢”“很迷茫”。
-可是，“不喜欢”“很迷茫”只是一种情绪，情绪背后的原因是什么呢？我们喜欢、又有前途的工作到底在哪里呢？这节课，我给你介绍一个模型，然后用它来帮你做好职业选择和定位，让你不再迷茫。
-这个模型称为冰山模型，你可能听过，
+          MySQL学习笔记（Day007：多实例下/SSL）@(MySQL学习)
+[TOC]
+一. 多实例安装 – 多版本1. [mysqld_multi]标签
+[mysqld_multi] 是否需要配置从操作演示来看，在my.cnf(老师给的模板配置)上直接配置[mysqld1]、[mysqld2]等实例标签，而不配置[mysqld_multi],使用mysqld_multi start 1也是可以启动数据库实例的，但是没有mysqld_safe的守护进程。所以该标签需要配置
+
+2. 停止mysql实例
+multi_admin用户的作用通过官方文档中我们看到，&#39;multi_admin&#39;@&#39;localhost&#39;这个用户主要的作用是用来关闭数据库实例，因为文档中只授权了SHUTDOWN权限。所以在[mysqld_multi]标签
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-10/一个模型，帮你找到真正热爱的工作/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day007)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1550,7 +1392,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-09/reference/WebRTC/01-实时音视频互动系列/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1569,7 +1411,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-09/reference/WebRTC/01-实时音视频互动系列/" itemprop="url">实时音视频互动系列</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day012)/" itemprop="url">子查询/INSERT/UPDATE/DELETE/REPLACE</a></h1>
         
 
         <div class="post-meta">
@@ -1581,8 +1423,8 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-09T19:14:50+08:00">
-                2019-06-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
               </time>
             
 
@@ -1604,166 +1446,8 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebRTC/" itemprop="url" rel="index">
-                    <span itemprop="name">WebRTC</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="又拍云UTUN网络详解"><a href="#又拍云UTUN网络详解" class="headerlink" title="又拍云UTUN网络详解"></a>又拍云UTUN网络详解</h2><h3 id="如何定义实时音视频互动-延迟-400ms-内才能无异步感"><a href="#如何定义实时音视频互动-延迟-400ms-内才能无异步感" class="headerlink" title="如何定义实时音视频互动, 延迟 400ms 内才能无异步感"></a>如何定义实时音视频互动, 延迟 400ms 内才能无异步感</h3><p>实时音视频互动如果存在1秒左右的延时会给交流者带来异步感，必须将视频播放延迟限制在 400ms 以内，才能给用户较好的交互体验。</p>
-<p>当延迟控制在 400ms 以内时，两个人音视频互动是实时的，不会有异步感存在，即实时音视频互动。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-06-09/reference/WebRTC/01-实时音视频互动系列/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-08/个人提升课程简介/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-06-08/个人提升课程简介/" itemprop="url">个人提升课程简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-08T09:45:08+08:00">
-                2019-06-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/" itemprop="url" rel="index">
-                    <span itemprop="name">职业规划</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/职业规划/个人提升/" itemprop="url" rel="index">
-                    <span itemprop="name">个人提升</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -1801,25 +1485,377 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
       
         
           
-          
-我对现在的工作没什么热情，应该是因为我不够擅长
-我认同“以大多数人的努力程度之低，根本达不到拼天赋”
-做技术的，应该专注在做技术上，其他能力不重要
-时代变化太快，我需要紧密关注和学习应对所有变化，避免被淘汰
-我觉得自己好像没什么天赋
-学习一个领域的知识，应该从概念开始，全面地学习
-多学点知识，一定会有用的
-工作让我感觉很心累，肯定是工作量太大了
-很难坚持学习、阅读、健身这类事情，是因为不够自律
+          MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）@(MySQL学习)
+[TOC]
+一. 子查询
+子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。MySQL 5.6.x 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。
 
-现在，我来公布答案了，你先记录下来，再看答案。
-答案是以上说法全部错误。
-实际上，这些问题，都是我经常碰到的，无论是我的读者、用户还是团队的年轻人，在这些问题上都有很大的认识误区。很多人在职业发展和个人提升方面的无策略、无方法程度，让我感到惊讶。
-但跟很多人聊过之后，我发现，我之所以认识到这些，其实是因为我自身职业的优势，使我具备企业、管理者、咨询顾问、教
+1select a from t1 where a &gt; any(select a from t2);
+
+select a from t1 是外部查询(outer query)
+(select a from t2) 是子查询
+
+一般说来，子查询嵌套于外部查询中，可以将两个或两个以上的子查询进行嵌套
+1. 子查询的使用1.1.  ANY / SOME如果外部查询的列的结果和子查询的列的结果比较得到为True的话，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-06-08/个人提升课程简介/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day012)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day005)/" itemprop="url">slow_log/generic_log/audit/存储引擎一</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）@(MySQL学习)
+[TOC]
+一. 慢查询日志进阶1. 相关参数：
+slow_query_log
+
+是否开启慢查询日志                
+
+
+slow_query_log_file
+
+慢查询日志文件名, 在my.cnf我们已经定义为slow.log，默认是 机器名-slow.log          
+
+
+long_query_time
+
+制定慢查询阈值, 单位是秒，且当版本 &gt;=5.5.X，支持毫秒。例如0.5即为500ms
+大于该值，不包括值本身。例如该值为2，则执行时间正好等于2的SQL语句不会记录
+
+
+log_queries_not_using_indexes
+
+将没有使用索引的SQL记录到慢查询日志 
+如果一开始因为数
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day005)/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/" itemprop="url">数据类型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          MySQL学习笔记（Day008：数据类型）@(MySQL学习)
+[TOC]
+一. INT类型1. INT类型的分类
+TINYINT
+
+存储空间 ： 1 字节
+取值范围 
+有符号(signed) ：  [-128, 127]
+无符号(unsigned) ：[0, 255]
+
+
+
+
+SMALLINT
+
+存储空间 ： 2 字节
+取值范围 
+有符号(signed) ：  [-32768, 32767]
+无符号(unsigned) ：[0, 65535]
+
+
+
+
+MEDIUMINT
+
+存储空间 ： 3 字节
+取值范围 
+有符号(signed) ：  [-8388608, 8388607]
+无符号(unsigned) ：[0, 16777215]
+
+
+
+
+INT
+
+存储空间 ： 4 字节
+取值范围 
+有符号(signed) ：  [-2147483648, 2
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1861,7 +1897,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1909,7 +1945,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1920,7 +1956,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1931,7 +1967,7 @@ A顾问大学是学行政管理的，实习期间执行力很强，自己做实�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

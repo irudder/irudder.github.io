@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-02-27/reference/Git/git-guide/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-03-09/webrtc_tutorial_4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -282,7 +282,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018-02-27/reference/Git/git-guide/" itemprop="url">Git操作手册|命令速查表</a></h1>
+                <a class="post-title-link" href="/2019-03-09/webrtc_tutorial_4/" itemprop="url">webrtc使用RTCPeerConnection进行流传输</a></h1>
         
 
         <div class="post-meta">
@@ -294,159 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-27T18:02:52+08:00">
-                2018-02-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这篇文章主要介绍Git分布式版本管理与集中式管理的一些差异，总结下Git常用命令作为日后的速查表，最后介绍Git进阶的一些案例。<br>本文分为以下几个部分：</p>
-<ol>
-<li>Git与SVN差异</li>
-<li>Git常用命令</li>
-<li>Git进阶指南</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018-02-27/reference/Git/git-guide/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-02-03/webrtc_note_1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018-02-03/webrtc_note_1/" itemprop="url">分辨率/码率/帧率对视频流的影响</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-03T19:19:18+08:00">
-                2018-02-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T19:19:18+08:00">
+                2019-03-09
               </time>
             
 
@@ -507,30 +356,17 @@
       
         
           
-          分辨率/码率/帧率对视频流的影响在这几天的调试中降低码率和帧率后,将会减少延时和花屏的情况,主要是提高了解码的速度,但是对画质的影响,主要在于什么地方?
+          视频流与RTCPeerConnection学习提纲
+各浏览器质检webrtc的差异,adapter.js
+使用RTCPeerConnection API 传输视频流.
+流的控制与捕捉
 
-对帧率的修改,60fps降到25fps后,看到的显示效果没有变化,为什么?对用户体验的影响
-
-
-用户体验: 只关系视频的画面质量,如果需要存储还需要关心视频文件的大小
-
-流畅度: 主要受视频帧率(FPS)的影响
-清晰度: 单位面积的画面所承载的信息，在对视频进行评价是就是当FPS和分辨率固定时，考察视频的清晰度。码率
-分辨率: 视频画面的大小
-
-
-码率
-码率:比特率，英文为Bit Rate，是指每秒传送的比特(bit)数
-
-码率影响视频清晰度
-
-当比特率越大，视频清晰度就越高。其影响存在边际效应递减现象，并且存在上限（视频原始数据的画质）。
-
-码率决定了视频大小视频大小size和码率BitRate
+RTCPeerConnection简介RTCPeerConnection是一个是得webrtc之间视频与音频数据交换的api协议.本案例是在同一个页面上使用RTCPeerConnection建立一个P2P连接.没有太大实用性只是为了方便理解.
+在页面添加视频控制按钮一个视频元素将显示来自getUserMedia()的流,另一个将显示通过RTCPeerconnection流式传输的相同视频. (在实际应用程序中,一个视频元素将显示本地流,另一个视频元素将显示远程流.)12345678&lt;video id=&quot;localVideo&quot; autoplay
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018-02-03/webrtc_note_1/#more" rel="contents">
+            <a class="btn" href="/2019-03-09/webrtc_tutorial_4/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -581,7 +417,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-02-03/openvpn权限控制配置/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-03-08/webrtc_tutorial_3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -600,7 +436,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018-02-03/openvpn权限控制配置/" itemprop="url">openvpn权限控制配置</a></h1>
+                <a class="post-title-link" href="/2019-03-08/webrtc_tutorial_3/" itemprop="url">webrtc从摄像头获取视频流</a></h1>
         
 
         <div class="post-meta">
@@ -612,8 +448,482 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-03T19:19:18+08:00">
-                2018-02-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-08T19:19:18+08:00">
+                2019-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          从摄像头获取视频流学习提纲
+从摄像头获取视频流 
+操纵流的回播
+使用css和svg来操作视频
+
+简短的HTML在你的项目文件夹下的index.html文件中添加video和script元素12345678910111213141516171819202122232425262728293031323334353637383940&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;demo1&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;video autoplay playsinline&gt;&lt;/video&gt;&lt;/body&gt;&lt;script type=&quot;text/javascript&quot;&gt; 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-03-08/webrtc_tutorial_3/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-03-06/webrtc_tutorial_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-03-06/webrtc_tutorial_2/" itemprop="url">webrtc简介</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-06T19:19:18+08:00">
+                2019-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          概括构建应用程序以获取视频并使用网络摄像头拍摄快照，并通过WebRTC进行点对点共享。在此过程中，你将学习如何使用WebRTC 核心 API 并使用 Node.js 设置消息传递服务器。
+能学到什么
+ 从摄像头获取视频
+ 通过RTCPeerConnection获取视频流
+ 通过RTCDataChannel传输流数据
+ 建立信令服务交换消息
+ 和信令服务建立peer连接
+ 拍照并通过数据通道分享
+
+环境背景
+chrome 47 及以上
+适用于Chrome的Web Server，或使用自己选择的Web服务器。
+案例代码
+文本编辑器[notpad++/subline]
+基本的前端知识[html/css/js]
+
+
+运行demo案例下载从git上获取1git clone https://github.com/googlecodelabs/webrtc-web
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-03-06/webrtc_tutorial_2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-03-03/webrtc_tutorial_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-03-03/webrtc_tutorial_1/" itemprop="url">webrtc简介</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-03T19:19:18+08:00">
+                2019-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          简介webrtc是一个再web端和移动app端实时交流与数据传输的开源项目。webrtc有一些js接口 - 点击下面的案例链接即可看demo。
+
+getUserMedia(): 获取本地音频和视频.
+MediaRecorder: 录制本地音频和视频.
+RTCPeerConnection: 用户间建立点对点通讯传输传输音频和视频.
+RTCDataChannel: 用户间数据传输.
+
+在哪使用webrtc在Firefox，Opera和桌面和Android上的Chrome中。WebRTC也可用于iOS和Android上的原生应用程序。
+信令服务WebRTC使用RTCPeerConnection在浏览器之间传递流数据，但也需要一种协调通信和发送控制消息的机制，这一过程称为信令.WebRTC未指定信令方法和协议。在这个代码框中，您将使用Socket.IO进行消
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-03-03/webrtc_tutorial_1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-06-24/解决简书等图床防盗链的问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018-06-24/解决简书等图床防盗链的问题/" itemprop="url">解决简书等图床防盗链的问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T09:45:08+08:00">
+                2018-06-24
               </time>
             
 
@@ -674,13 +984,14 @@
       
         
           
-          需求定义针对不同用户的身份分配不同的路由
-配置文件说明
-openvpn配置文件12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210310410510610710810911011111211311411511611711811912012112212312412512612712812913013113213313413513613713813914014114214314414514614714814915
+          尝试清除来源引用在静态网页的 头部 代码中【即 head 标记】添加如下配置项：
+它的作用就是阻止浏览器发送 Referer 信息，对整个页面的所有链接生效【当然也有针对单个链接设置的方法：，这里不采用】，这样一来微博图床就不知道请求的引用来源了，可以达到和直接在浏览器中访问一样的效果。 但是要注意，不是每种浏览器都支持这种语法的，此设置对有的浏览器来说无效。
+那么在 Hexo 框架中怎么增加呢，显然不会有相关配置项，只能更改源代码，而且使用了 Next 主题，应该要更改主题的源代码，以保证 Hexo 在渲染静态页面为每个页面都增加这个配置。查阅文档，了解了渲染模板所在位置，打开 themes/next/layout/_partials/head.swig 文件，在里面添加 meta 标记就行。
+修改完成后查看页面的源代码，已经有这个属性了，并且所有
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018-02-03/openvpn权限控制配置/#more" rel="contents">
+            <a class="btn" href="/2018-06-24/解决简书等图床防盗链的问题/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -731,7 +1042,7 @@ openvpn配置文件1234567891011121314151617181920212223242526272829303132333435
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-01-13/reference/DeepLearning/note-blog-link/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-06-15/reference/RPC机制及原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -750,7 +1061,7 @@ openvpn配置文件1234567891011121314151617181920212223242526272829303132333435
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018-01-13/reference/DeepLearning/note-blog-link/" itemprop="url">机器学习深度学习-文章收藏</a></h1>
+                <a class="post-title-link" href="/2018-06-15/reference/RPC机制及原理/" itemprop="url">RPC机制以及原理</a></h1>
         
 
         <div class="post-meta">
@@ -762,8 +1073,8 @@ openvpn配置文件1234567891011121314151617181920212223242526272829303132333435
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T10:14:50+08:00">
-                2018-01-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-15T15:40:41+08:00">
+                2018-06-15
               </time>
             
 
@@ -785,8 +1096,8 @@ openvpn配置文件1234567891011121314151617181920212223242526272829303132333435
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DeepLearning/" itemprop="url" rel="index">
-                    <span itemprop="name">DeepLearning</span>
+                  <a href="/categories/RPC/" itemprop="url" rel="index">
+                    <span itemprop="name">RPC</span>
                   </a>
                 </span>
 
@@ -825,14 +1136,18 @@ openvpn配置文件1234567891011121314151617181920212223242526272829303132333435
         
           
           
-沁原的硅谷创新课
-Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfakes_faceswap
+RPC详解
+远程过程调用(RPC)详解
+RPC原理详解
+RPC入门总结（一）RPC定义和原理
+RPC框架设计和调用详解
 
+TODO
 
           
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018-01-13/reference/DeepLearning/note-blog-link/#more" rel="contents">
+            <a class="btn" href="/2018-06-15/reference/RPC机制及原理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -883,7 +1198,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-01-03/reference/DeepLearning/DogsVsCats/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-05-13/reference/practical-programming-books/README/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -902,7 +1217,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018-01-03/reference/DeepLearning/DogsVsCats/" itemprop="url">Dogs vs Cats (猫狗大战)</a></h1>
+                <a class="post-title-link" href="/2018-05-13/reference/practical-programming-books/README/" itemprop="url">计算机相关技术资料整理</a></h1>
         
 
         <div class="post-meta">
@@ -914,8 +1229,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T10:14:50+08:00">
-                2018-01-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-13T10:14:50+08:00">
+                2018-05-13
               </time>
             
 
@@ -937,8 +1252,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DeepLearning/" itemprop="url" rel="index">
-                    <span itemprop="name">DeepLearning</span>
+                  <a href="/categories/计算机相关技术资料整理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机相关技术资料整理</span>
                   </a>
                 </span>
 
@@ -976,16 +1291,15 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
       
         
           <blockquote>
-<p>GitHub 项目地址：<a href="https://github.com/miaopei/cat_vs_dog" target="_blank" rel="noopener">Dogs vs Cats (猫狗大战)</a></p>
+<p><a href="https://github.com/EZLippi/practical-programming-books" target="_blank" rel="noopener">文章来源</a></p>
 </blockquote>
-<h2 id="项目说明"><a href="#项目说明" class="headerlink" title="项目说明"></a>项目说明</h2><p>本项目是优达学城的一个毕业项目。项目要求使用深度学习方法识别一张图片是猫还是狗</p>
+<p>这里收录比较实用的计算机相关技术书籍，可以在短期之内入门的简单实用教程、一些技术网站以及一些写的比较好的博文，欢迎Fork，你也可以通过Pull Request参与编辑。</p>
 <ul>
-<li>输入：一张彩色图片</li>
-<li>输出：是猫还是狗</li>
+<li><a href="http://www.ezlippi.com/blog/2014/07/qualified-programmer-should-read-what-books.html" target="_blank" rel="noopener">程序员必读书籍</a></li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018-01-03/reference/DeepLearning/DogsVsCats/#more" rel="contents">
+            <a class="btn" href="/2018-05-13/reference/practical-programming-books/README/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1036,7 +1350,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2017-05-16/reference/WebSocket教程/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-05-06/decisionTree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1055,7 +1369,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017-05-16/reference/WebSocket教程/" itemprop="url">WebSocket教程</a></h1>
+                <a class="post-title-link" href="/2018-05-06/decisionTree/" itemprop="url">决策树算法</a></h1>
         
 
         <div class="post-meta">
@@ -1067,8 +1381,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-16T14:15:08+08:00">
-                2017-05-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-06T19:19:18+08:00">
+                2018-05-06
               </time>
             
 
@@ -1090,8 +1404,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
+                  <a href="/categories/MachineLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">MachineLearning</span>
                   </a>
                 </span>
 
@@ -1128,12 +1442,12 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
 
       
         
-          <p>转自<a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="noopener">阮一峰网络编程</a></p>
-<p><a href="http://websocket.org/" target="_blank" rel="noopener">WebSocket</a> 是一种网络通信协议，很多高级功能都需要它。</p>
-<h2 id="为什么需要-WebSocker"><a href="#为什么需要-WebSocker" class="headerlink" title="为什么需要 WebSocker"></a>为什么需要 WebSocker</h2><p>初次接触 WebSocket 的人，都会问同样的问题：我们已经有了 HTTP 协议，为什么还需要另一个协议？它能带来什么好处？</p>
+          
+          使用决策树预测隐形眼镜类型123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133#!/usr/bin/python# -*- coding: UTF-8 -*-import operatorfrom math import logi
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017-05-16/reference/WebSocket教程/#more" rel="contents">
+            <a class="btn" href="/2018-05-06/decisionTree/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1184,7 +1498,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2017-05-15/reference/定制支持串口安装的ubuntu系统镜像/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-05-04/webrtc_business_3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1203,7 +1517,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017-05-15/reference/定制支持串口安装的ubuntu系统镜像/" itemprop="url">定制支持串口安装的ubuntu系统镜像</a></h1>
+                <a class="post-title-link" href="/2018-05-04/webrtc_business_3/" itemprop="url">浏览器支持情况</a></h1>
         
 
         <div class="post-meta">
@@ -1215,8 +1529,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T15:48:06+08:00">
-                2017-05-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T19:19:18+08:00">
+                2018-05-04
               </time>
             
 
@@ -1238,8 +1552,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Ubuntu/" itemprop="url" rel="index">
-                    <span itemprop="name">Ubuntu</span>
+                  <a href="/categories/webrtc/" itemprop="url" rel="index">
+                    <span itemprop="name">webrtc</span>
                   </a>
                 </span>
 
@@ -1276,18 +1590,26 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
 
       
         
-          <h2 id="1、所需环境："><a href="#1、所需环境：" class="headerlink" title="1、所需环境："></a>1、所需环境：</h2><p><strong>硬件环境：</strong></p>
-<ul>
-<li>笔记本</li>
-<li>串口调试线缆</li>
-<li>光盘</li>
-<li>显示器</li>
-<li>FWA产品的任一机型（此次使用的是FWA-4210）</li>
-<li>SATA或者USB光驱×1</li>
-</ul>
+          
+          浏览器支持关于webrtc人们关注的主要问题是浏览器的支持情况,据最新的报告表示,下面这些浏览器分别有不同的支持程度。
+webrtc应用的几个重要方面：
+
+最主要的支持者谷歌和火狐
+微软ie旧版本不支持,到2018年11月,微软宣布采用Chromium(google内核)作为其心浏览器Edge的发展方向
+苹果 Safar从2017年开始支持webrtc,但ios系统的非safari浏览器暂不提供兼容
+
+处理不支持的浏览器你无法控制浏览器供应商何时添加对webrtc的支持,这里提供了一些替代方案:
+
+只试用chrome和/或firefox浏览器.
+使用全部有webrtc支持的浏览器(Chrome, Firefox, Edge and Safari)
+使用桌面应用程序.
+不适用webrtc。
+
+处理移动设备在移动设备上有两种调用方式:apps 和 web
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017-05-15/reference/定制支持串口安装的ubuntu系统镜像/#more" rel="contents">
+            <a class="btn" href="/2018-05-04/webrtc_business_3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1338,7 +1660,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2017-05-15/reference/Shell脚本攻略笔记/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2018-05-03/knn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1357,7 +1679,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017-05-15/reference/Shell脚本攻略笔记/" itemprop="url">Shell脚本攻略笔记</a></h1>
+                <a class="post-title-link" href="/2018-05-03/knn/" itemprop="url">knn算法预测约会对象是否符合条件</a></h1>
         
 
         <div class="post-meta">
@@ -1369,8 +1691,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T15:40:41+08:00">
-                2017-05-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-03T19:19:18+08:00">
+                2018-05-03
               </time>
             
 
@@ -1392,8 +1714,8 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Shell/" itemprop="url" rel="index">
-                    <span itemprop="name">Shell</span>
+                  <a href="/categories/MachineLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">MachineLearning</span>
                   </a>
                 </span>
 
@@ -1430,306 +1752,12 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
 
       
         
-          <h2 id="1-基本命令"><a href="#1-基本命令" class="headerlink" title="1. 基本命令"></a>1. 基本命令</h2><h3 id="1-1-shell-格式输出"><a href="#1-1-shell-格式输出" class="headerlink" title="1.1 shell 格式输出"></a>1.1 shell 格式输出</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">'Hello world !'</span></span><br><span class="line">-n	<span class="comment"># 忽略结尾的换行符</span></span><br><span class="line">-e	<span class="comment"># 激活转义字符</span></span><br><span class="line">-E	<span class="comment"># disable转义字符</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># echo会将一个换行符追加到输出文本的尾部。可以使用选项-n来忽略结尾的换行符。</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">echo</span> -e <span class="string">"1\t2\t3"</span></span><br></pre></td></tr></table></figure>
+          
+          使用knn算法进行分类预测123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105from numpy import *import operator # 运算符操作模块import osfrom collections import Counter # 快速计数工具# inx 自定义用于分类的输入向量 - 标准向量 即计算数据集到标准向量的&quot;距离&quot;# dataset 训练数据集
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017-05-15/reference/Shell脚本攻略笔记/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2017-04-13/reference/Linux命令eval的用法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017-04-13/reference/Linux命令eval的用法/" itemprop="url">Linux命令eval的用法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-13T19:50:19+08:00">
-                2017-04-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Shell/" itemprop="url" rel="index">
-                    <span itemprop="name">Shell</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="eval-command-line"><a href="#eval-command-line" class="headerlink" title="eval command-line"></a>eval command-line</h2><p>其中command－line是在终端上键入的一条普通命令行。<strong>然而当在它前面放上eval时，其结果是shell在执行命令行之前扫描它两次</strong>。如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ pipe=<span class="string">"|"</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">eval</span> ls <span class="variable">$pipe</span> wc -l</span><br></pre></td></tr></table></figure>
-<p>shell第1次扫描命令行时，它替换出pipe的值｜，接着eval使它再次扫描命令行，这时shell把｜作为管道符号了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017-04-13/reference/Linux命令eval的用法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2017-04-12/reference/HTTP/HTTP思维导图/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017-04-12/reference/HTTP/HTTP思维导图/" itemprop="url">HTTP思维导图</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-12T15:41:58+08:00">
-                2017-04-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/http/" itemprop="url" rel="index">
-                    <span itemprop="name">http</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>文章来自<a href="http://yrq110.me/2017/03/04/20170304-http-mindmap/" target="_blank" rel="noopener">HTTP思维导图</a>。</p>
-<p>HTTP mindmap整理</p>
-<p>source from 《HTTP权威指南》</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017-04-12/reference/HTTP/HTTP思维导图/#more" rel="contents">
+            <a class="btn" href="/2018-05-03/knn/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1771,7 +1799,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1819,7 +1847,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1830,7 +1858,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1841,7 +1869,7 @@ Github项目推荐 | 基于 deepfakes（视频换脸）的非官方项目deepfak
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

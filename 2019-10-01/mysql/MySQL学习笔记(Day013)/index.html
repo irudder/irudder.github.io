@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）@(MySQL学习) [TOC] 一. 作业讲解 查询employees表中非基层用户的最近详细信息  老师的讲解的版本中存在问题，重新作为作业   统计dbt3库下orders每周每个客户的订单数量    思路  找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了1970-01-05作为周一标记，">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="作业讲解一&#x2F;Rank&#x2F;视图&#x2F;UNION&#x2F;触发器">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）@(MySQL学习) [TOC] 一. 作业讲解 查询employees表中非基层用户的最近详细信息  老师的讲解的版本中存在问题，重新作为作业   统计dbt3库下orders每周每个客户的订单数量    思路  找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了1970-01-05作为周一标记，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-09T01:01:11.350Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="作业讲解一&#x2F;Rank&#x2F;视图&#x2F;UNION&#x2F;触发器">
+<meta name="twitter:description" content="MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）@(MySQL学习) [TOC] 一. 作业讲解 查询employees表中非基层用户的最近详细信息  老师的讲解的版本中存在问题，重新作为作业   统计dbt3库下orders每周每个客户的订单数量    思路  找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了1970-01-05作为周一标记，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/">
+
+
+
+
+
+  <title>作业讲解一/Rank/视图/UNION/触发器 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">作业讲解一/Rank/视图/UNION/触发器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day013：作业讲解一-Rank-视图-UNION-触发器）"><a href="#MySQL学习笔记（Day013：作业讲解一-Rank-视图-UNION-触发器）" class="headerlink" title="MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）"></a>MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-作业讲解"><a href="#一-作业讲解" class="headerlink" title="一. 作业讲解"></a>一. 作业讲解</h2><ul>
+<li><p><strong>查询employees表中非基层用户的最近详细信息</strong></p>
+<blockquote>
+<p>老师的讲解的版本中存在问题，重新作为作业</p>
+</blockquote>
+</li>
+<li><p><strong>统计dbt3库下orders每周每个客户的订单数量</strong></p>
+</li>
+</ul>
+<ol>
+<li><p>思路</p>
+<ul>
+<li><p>找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了<code>1970-01-05</code>作为周一标记，作为起始(<code>start</code>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@MyServer ~]&gt; cal 1 1970</span><br><span class="line">    January 1970    </span><br><span class="line">Su Mo Tu We Th Fr Sa</span><br><span class="line">             1  2  3</span><br><span class="line"> 4  5  6  7  8  9 10  <span class="comment"># 1970-01-05 刚好是周一，用1月12号，19号，26号等也是可以的</span></span><br><span class="line">11 12 13 14 15 16 17</span><br><span class="line">18 19 20 21 22 23 24</span><br><span class="line">25 26 27 28 29 30 31</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在起始条件周一（<code>start</code>)的基础上 <code>增加6天</code>时间，就是周日，即为一周的结束标记(<code>end</code>)</p>
+</li>
+<li>通过对<code>start</code>（周一）、<code>end</code>（周日）以及<code>o_custkey</code>进行<code>分组</code>，使用<code>count(o_orderkey)</code>得到对应的数量</li>
+</ul>
+</li>
+<li><p>SQL语句</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 最终结果</span></span><br><span class="line"><span class="keyword">select</span> o_custkey,</span><br><span class="line">ADDDATE(<span class="string">'1970-01-05'</span>, <span class="built_in">INTERVAL</span> <span class="keyword">FLOOR</span>(<span class="keyword">DATEDIFF</span>(o_orderdate, <span class="string">'1970-01-05'</span>)/<span class="number">7</span>)*<span class="number">7</span> <span class="keyword">Day</span>) <span class="keyword">as</span> <span class="keyword">start</span>,</span><br><span class="line">ADDDATE(<span class="string">'1970-01-05'</span>, <span class="built_in">INTERVAL</span> <span class="keyword">FLOOR</span>(<span class="keyword">DATEDIFF</span>(o_orderdate, <span class="string">'1970-01-05'</span>)/<span class="number">7</span>)*<span class="number">7</span> + <span class="number">6</span> <span class="keyword">Day</span>) <span class="keyword">as</span> <span class="keyword">end</span>,</span><br><span class="line"><span class="keyword">count</span>(o_orderkey) <span class="keyword">as</span> total </span><br><span class="line"><span class="keyword">from</span> dbt3.orders <span class="keyword">group</span> <span class="keyword">by</span> o_custkey, <span class="keyword">start</span>, <span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- DATEDIFF(o_orderdate, '1970-01-05')</span></span><br><span class="line">mysql&gt; select datediff('1971-01-01', '1970-01-05');  -- 随意取一个1971-01-01，作为演示</span><br><span class="line">+<span class="comment">--------------------------------------+</span></span><br><span class="line">| datediff('1971-01-01', '1970-01-05') |</span><br><span class="line">+<span class="comment">--------------------------------------+</span></span><br><span class="line">|                                  361 |  <span class="comment">-- 1971-01-01 减去 1970-01-5 为361天</span></span><br><span class="line">+<span class="comment">--------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line">    </span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">datediff</span>(<span class="string">'1971-01-01'</span>, <span class="string">'1970-01-05'</span>) / <span class="number">7</span>;  <span class="comment">-- 求周数</span></span><br><span class="line">+<span class="comment">------------------------------------------+</span></span><br><span class="line">| datediff('1971-01-01', '1970-01-05') / 7 |</span><br><span class="line">+<span class="comment">------------------------------------------+</span></span><br><span class="line">|                                  51.5714 |  <span class="comment">-- 相隔51.5714周</span></span><br><span class="line">+<span class="comment">------------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- FLOOR 和 ROUND函数</span></span><br><span class="line"><span class="comment">-- FLOOR(arg)是返回一个不大于arg的最大整数，其实就是取整</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">5.4</span>);</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| floor(5.4) |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">|          5 |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">5.5</span>);</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| floor(5.5) |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">|          5 |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">5.6</span>);</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| floor(5.6) |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">|          5 |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ROUND(X, D) 返回值是对数字X保留到小數点后D位，D默认为0，结果符合四舍五入原则；如果D为负数，则保留小数点左边（整数）的位数</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">5.4</span>);  <span class="comment">-- 默认D为0，四舍五入</span></span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| round(5.4) |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">|          5 |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">5.5</span>);  <span class="comment">-- 默认D为0，四舍五入</span></span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| round(5.5) |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">|          6 |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">5.123</span>, <span class="number">1</span>); <span class="comment">-- 设D为1，保留小数点右边1为，四舍五入，不进位</span></span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">| round(5.123, 1) |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">|             5.1 |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">5.163</span>, <span class="number">1</span>); <span class="comment">-- 设D为1，保留小数点右边1为，四舍五入，进位</span></span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">| round(5.163, 1) |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">|             5.2 |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line">        </span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">524.163</span>, <span class="number">-1</span>);  <span class="comment">-- 保留小数点左边1位，不进位</span></span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| round(524.163, -1) |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">|                520 |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">524.163</span>, <span class="number">-2</span>);  <span class="comment">-- 保留小数点左边2位, 不进位</span></span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| round(524.163, -2) |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">|                500 |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">554.163</span>, <span class="number">-2</span>);  <span class="comment">-- 保留小数点左边2位, 进位</span></span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| round(554.163, -2) |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">|                600 |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 所以这里使用floor函数取整， 超过一周且不满一周的则落在start 和 end 中间</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">floor</span>(<span class="keyword">datediff</span>(<span class="string">'1971-01-01'</span>, <span class="string">'1970-01-05'</span>) / <span class="number">7</span>);</span><br><span class="line">+<span class="comment">-------------------------------------------------+</span></span><br><span class="line">| floor(datediff('1971-01-01', '1970-01-05') / 7) |</span><br><span class="line">+<span class="comment">-------------------------------------------------+</span></span><br><span class="line">|                                              51 |  <span class="comment">-- 取整为51周</span></span><br><span class="line">+<span class="comment">-------------------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">floor</span>(<span class="keyword">datediff</span>(<span class="string">'1971-01-01'</span>, <span class="string">'1970-01-05'</span>) / <span class="number">7</span>) * <span class="number">7</span>;</span><br><span class="line">+<span class="comment">-----------------------------------------------------+</span></span><br><span class="line">| floor(datediff('1971-01-01', '1970-01-05') / 7) * 7 |</span><br><span class="line">+<span class="comment">-----------------------------------------------------+</span></span><br><span class="line">|                                                 357 |  <span class="comment">-- 乘以7，得出357天差值</span></span><br><span class="line">+<span class="comment">-----------------------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> adddate(<span class="string">'1970-01-05'</span>, <span class="built_in">interval</span> <span class="keyword">floor</span>(<span class="keyword">datediff</span>(<span class="string">'1971-01-01'</span>, <span class="string">'1970-01-05'</span>)/<span class="number">7</span>)*<span class="number">7</span> <span class="keyword">day</span>) <span class="keyword">as</span> Monday_start;    </span><br><span class="line"><span class="comment">-- 使用adddate函数，在1970-01-05(周一)的基础上，增加357天（51周），得到的值1970-12-28也是周一，标记为start</span></span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">| Monday_start |</span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">| 1970-12-28   |  <span class="comment">-- 1970-12-28（周一），而传入的值1971-01-01是该周的周五</span></span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 以同样的方法得到周日</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> adddate(<span class="string">'1970-01-05'</span>, <span class="built_in">interval</span> <span class="keyword">floor</span>(<span class="keyword">datediff</span>(<span class="string">'1971-01-01'</span>, <span class="string">'1970-01-05'</span>)/<span class="number">7</span>)*<span class="number">7</span> + <span class="number">6</span> <span class="keyword">day</span>) <span class="keyword">as</span> Sunday_end;</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| Sunday_end |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| 1971-01-03 |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 通过以上的周一和周日的计算，即可求出1971-01-01这天所在的一周，得出start（周一）和end（周日）</span></span><br><span class="line"><span class="comment">-- 然后对start和end以及o_custkey做分组操作，并通过count(o_orderkey)得到分组的定单量</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li><strong>使用子查询实现RowNumber</strong></li>
+</ul>
+<ol>
+<li><p>思路</p>
+<ul>
+<li>假设当前在第N行记录，通过主键emp_no遍历有多少行的记录<code>小于等于</code>当前行,即为当前行的行数</li>
+</ul>
+</li>
+<li><p>SQL语句</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">(<span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(<span class="number">1</span>) <span class="keyword">FROM</span> employees b <span class="keyword">WHERE</span> b.emp_no &lt;= a.emp_no ) <span class="keyword">AS</span> row_number,</span><br><span class="line">emp_no,<span class="keyword">CONCAT</span>(last_name,<span class="string">" "</span>,first_name) <span class="keyword">name</span>,gender,hire_date</span><br><span class="line"><span class="keyword">FROM</span> employees a <span class="keyword">ORDER</span> <span class="keyword">BY</span> emp_no <span class="keyword">LIMIT</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 假设当前在第5行</span></span><br><span class="line">mysql&gt; select  b.emp_no  from employees.employees as b order by b.emp_no limit 5;</span><br><span class="line">+<span class="comment">--------+</span></span><br><span class="line">| emp_no |</span><br><span class="line">+<span class="comment">--------+</span></span><br><span class="line">|  10001 |</span><br><span class="line">|  10002 |</span><br><span class="line">|  10003 |</span><br><span class="line">|  10004 |</span><br><span class="line">|  10005 |  <span class="comment">-- 第5行的emp_no是10005</span></span><br><span class="line">+<span class="comment">--------+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span>  <span class="keyword">count</span>(*)  <span class="keyword">from</span> employees.employees <span class="keyword">as</span> b <span class="keyword">where</span> b.emp_no &lt;= <span class="number">10005</span> <span class="keyword">order</span> <span class="keyword">by</span> b.emp_no;</span><br><span class="line">查找小于等于5的行数有几行</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">| count(*) |</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">|        5 |  <span class="comment">-- 小于等于10005的记录有5行，则5就是10005该行记录的行号</span></span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 将该子查询的结果即可作为RowNumber</span></span><br><span class="line"><span class="comment">-- 但是该子查询的效率较低。不推荐使用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 推荐Day012中提及的自定义变量方式</span></span><br><span class="line"><span class="keyword">SELECT</span> @a:=@a+<span class="number">1</span> <span class="keyword">AS</span> row_number,</span><br><span class="line">    emp_no,<span class="keyword">CONCAT</span>(last_name,<span class="string">" "</span>,first_name) <span class="keyword">name</span>,gender,hire_date</span><br><span class="line">    <span class="keyword">FROM</span> employees,(<span class="keyword">SELECT</span> @a:=<span class="number">0</span>) <span class="keyword">AS</span> a <span class="keyword">LIMIT</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="二-Rank"><a href="#二-Rank" class="headerlink" title="二. Rank"></a>二. Rank</h2><blockquote>
+<p>给出不同的用户的分数，然后根据分数计算排名<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_rank(id int, score int);</span><br><span class="line">Query OK, 0 rows affected (0.16 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_rank values(1, 10), (2, 20), (3, 30), (4, 30), (5, 40), (6, 40);</span><br><span class="line">Query OK, 6 rows affected (0.05 sec)</span><br><span class="line">Records: 6  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_rank;</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| id   | score |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">|    1 |    10 |</span><br><span class="line">|    2 |    20 |</span><br><span class="line">|    3 |    30 |</span><br><span class="line">|    4 |    30 |</span><br><span class="line">|    5 |    40 |</span><br><span class="line">|    6 |    40 |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> @prev_value := <span class="literal">NULL</span>;  <span class="comment">-- 假设比较到第N行，设置一个变量prev_value用于存放第N-1行score的分数</span></span><br><span class="line">                                 <span class="comment">-- 用于比较第N行的score和第N-1行的score</span></span><br><span class="line">                                 <span class="comment">-- prev_value可以理解为 是临时保存第N-1行的score的变量</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; set @rank_count := 0;     -- 用于存放当前的排名</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select  id, score, </span><br><span class="line">    -&gt; case</span><br><span class="line">    -&gt;     when @prev_value = score then @rank_count  </span><br><span class="line">           <span class="comment">-- 相等则prev_value不变， 并返回rank_count（第一次为NULL，不会相等，所以跳转到下一个when语句）</span></span><br><span class="line">    -&gt;     when @prev_value := score then @rank_count := @rank_count + 1 </span><br><span class="line">           <span class="comment">-- 不等，则第N行的score赋值(:=)给prev_value。且rank_count增加1</span></span><br><span class="line">    -&gt; end as rank_column   -- case 开始的，end结尾</span><br><span class="line">    -&gt; from test_rank</span><br><span class="line">    -&gt; order by score desc;</span><br><span class="line">+<span class="comment">------+-------+-------------+</span></span><br><span class="line">| id   | score | rank_column |</span><br><span class="line">+<span class="comment">------+-------+-------------+</span></span><br><span class="line">|    5 |    40 |           1 |</span><br><span class="line">|    6 |    40 |           1 |</span><br><span class="line">|    3 |    30 |           2 |</span><br><span class="line">|    4 |    30 |           2 |</span><br><span class="line">|    2 |    20 |           3 |</span><br><span class="line">|    1 |    10 |           4 |</span><br><span class="line">+<span class="comment">------+-------+-------------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- case  </span></span><br><span class="line"><span class="comment">--   when [condition_1] then [do_something_1] </span></span><br><span class="line"><span class="comment">--   when [condition_2] then [do_something_2] </span></span><br><span class="line"><span class="comment">--   end</span></span><br><span class="line"><span class="comment">-- 语法：如果 condition_1条件满足，则执行 do_something_1 然后就跳出,不会执行condition_2;</span></span><br><span class="line"><span class="comment">--       如果 condition_1条件不满足，则继续执行到 condition_2。以此类推。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 作业：使用一条语句写出Rank</span></span><br><span class="line"><span class="comment">--</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<hr>
+<h2 id="三-视图"><a href="#三-视图" class="headerlink" title="三. 视图"></a>三. 视图</h2><blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/create-view.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<ul>
+<li><strong>创建视图</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 创建视图</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; create view view_rank as select * from test_rank;  -- 针对上面的test_rank创建一个视图</span><br><span class="line">Query OK, 0 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 也可以对select结果增加条件进行过滤后，再创建视图</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; show create table test_rank\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">       Table: test_rank</span><br><span class="line"><span class="keyword">Create</span> <span class="keyword">Table</span>: <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test_rank`</span> (    <span class="comment">-- 得到的是表结构</span></span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`score`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">create</span> <span class="keyword">table</span> view_rank\G  <span class="comment">-- 他是以一张表的形式存在的，可通过show tables看到</span></span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">                <span class="keyword">View</span>: view_rank</span><br><span class="line">         <span class="keyword">Create</span> <span class="keyword">View</span>: <span class="keyword">CREATE</span> ALGORITHM=UNDEFINED DEFINER=<span class="string">`root`</span>@<span class="string">`localhost`</span> <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER <span class="keyword">VIEW</span> <span class="string">`view_rank`</span> <span class="keyword">AS</span> <span class="keyword">select</span> <span class="string">`test_rank`</span>.<span class="string">`id`</span> <span class="keyword">AS</span> <span class="string">`id`</span>,<span class="string">`test_rank`</span>.<span class="string">`score`</span> <span class="keyword">AS</span> <span class="string">`score`</span> <span class="keyword">from</span> <span class="string">`test_rank`</span></span><br><span class="line">                      <span class="comment">-- 和真正的表不同的是，这里show出来的是视图的定义</span></span><br><span class="line">character_set_client: utf8</span><br><span class="line">collation_connection: utf8_general_ci</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> view_rank;  <span class="comment">-- 可以直接查询该视图得结果</span></span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| id   | score |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">|    1 |    10 |</span><br><span class="line">|    2 |    20 |</span><br><span class="line">|    3 |    30 |</span><br><span class="line">|    4 |    30 |</span><br><span class="line">|    5 |    40 |</span><br><span class="line">|    6 |    40 |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 视图的作用是，可以对开发人员是透明的，可以隐藏部分关键的列</span></span><br><span class="line"><span class="comment">-- 视图在mysql是虚拟表。根据视图的定义，还是取执行定义中的select语句。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 只开放部分列</span></span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">view</span> view_rank_1 <span class="keyword">as</span> <span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> test_rank; <span class="comment">-- 只开放id列</span></span><br><span class="line">Query OK, 0 rows affected (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from view_rank_1;  -- 即使 select * ，也只能看到id列，具有隐藏原来表中部分列的功能                        </span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| id   |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    1 |</span><br><span class="line">|    2 |</span><br><span class="line">|    3 |</span><br><span class="line">|    4 |</span><br><span class="line">|    5 |</span><br><span class="line">|    6 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 不要取用select * from 去创建视图，因为mysql会把*逐个解析成列。</span></span><br><span class="line"><span class="comment">-- 当原来的表结构发生变化时，视图的表结构是不会发生变化的，视图在创建的瞬间，便确定了结构。</span></span><br><span class="line"><span class="comment">-- 比如，当你alter原来的表 增加列(add columns)时,再去查询该视图,新增加的列是不存在的。</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">alter</span> <span class="keyword">table</span> test_rank <span class="keyword">add</span> <span class="keyword">column</span>  c <span class="built_in">int</span> <span class="keyword">default</span> <span class="number">0</span>; <span class="comment">-- 增加一列名字为c，默认值为0</span></span><br><span class="line">Query OK, 0 rows affected (0.30 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_rank;  -- 查询原表，新的列c出现了</span><br><span class="line">+<span class="comment">------+-------+------+</span></span><br><span class="line">| id   | score | c    |</span><br><span class="line">+<span class="comment">------+-------+------+</span></span><br><span class="line">|    1 |    10 |    0 |</span><br><span class="line">|    2 |    20 |    0 |</span><br><span class="line">|    3 |    30 |    0 |</span><br><span class="line">|    4 |    30 |    0 |</span><br><span class="line">|    5 |    40 |    0 |</span><br><span class="line">|    6 |    40 |    0 |</span><br><span class="line">+<span class="comment">------+-------+------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> view_rank; <span class="comment">-- 尽管view_rank用select * 创建，但当时没有列c，所以无法得到c列的值</span></span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| id   | score |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">|    1 |    10 |</span><br><span class="line">|    2 |    20 |</span><br><span class="line">|    3 |    30 |</span><br><span class="line">|    4 |    30 |</span><br><span class="line">|    5 |    40 |</span><br><span class="line">|    6 |    40 |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 注意：mysql中的视图都是虚拟表。不像Oracle可以物化成真实存在的表。</span></span><br><span class="line"><span class="comment">--      每次查询视图，实际上还是去查询的原来的表，只是查询的规则是在视图创建时经过定义的。</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>视图的算法</strong><br>视图的算法(<code>ALGORITHM</code>)有三种方式：</p>
+<ul>
+<li><code>UNDEFINED</code> 默认方式，由MySQL来判断使用下面的哪种算法</li>
+<li><code>MERGE</code> ： <code>每次</code>通过<code>物理表</code>查询得到结果，把结果merge(合并)起来返回</li>
+<li><p><code>TEMPTABLE</code> ： 产生一张<code>临时表</code>，把数据放入临时表后，客户端再去临时表取数据（<code>不会缓存</code>）</p>
+<blockquote>
+<p><code>TEMPTABLE 特点</code>：即使访问条件一样，第二次查询还是会去读取物理表中的内容，并重新生成一张临时表,并不会取缓存之前的表。<em>（临时表是Memory存储引擎，默认放内存，超过配置大小放磁盘）</em></p>
+</blockquote>
+<blockquote>
+<p>当查询有一个较大的结果集时，使用<code>TEMPTABLE</code>可以快速的结束对该物理表的访问，从而可以快速释放这张物理表上占用的资源。然后客户端可以对临时表上的数据做一些耗时的操作，而不影响原来的物理表。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>**所以一般我们使用`UNDEFINED`，由MySQL自己去判断**
+</code></pre><hr>
+<h2 id="四-UNION"><a href="#四-UNION" class="headerlink" title="四. UNION"></a>四. UNION</h2><ol>
+<li><code>UNION</code> 的作用是将两个查询的结果集进行合并。</li>
+<li>UNION必须由<code>两条或两条以上</code>的SELECT语句组成，语句之间用关键字<code>UNION</code>分隔。</li>
+<li>UNION中的每个查询必须包含相同的列（<code>类型相同或可以隐式转换</code>）、表达式或聚集函数。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_union_1(a int, b int);</span><br><span class="line">Query OK, 0 rows affected (0.18 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; create table test_union_2(a int, c int);  </span><br><span class="line">Query OK, 0 rows affected (0.15 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_union_1 values(1, 2), (3, 4), (5, 6), (10, 20);</span><br><span class="line">Query OK, 4 rows affected (0.06 sec)</span><br><span class="line">Records: 4  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_union_2 values(10, 20), (30, 40), (50, 60);  </span><br><span class="line">Query OK, 3 rows affected (0.03 sec)</span><br><span class="line">Records: 3  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_union_1;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    1 |    2 |</span><br><span class="line">|    3 |    4 |</span><br><span class="line">|    5 |    6 |</span><br><span class="line">|   10 |   20 |  <span class="comment">-- test_union_1 中的10, 20</span></span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_union_2;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | c    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|   10 |   20 | <span class="comment">-- test_union_2 中的10, 20</span></span><br><span class="line">|   30 |   40 |</span><br><span class="line">|   50 |   60 |  </span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, b <span class="keyword">as</span> t <span class="keyword">from</span> test_union_1</span><br><span class="line">    -&gt; <span class="keyword">union</span></span><br><span class="line">    -&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_union_2;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | t    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    1 |    2 |</span><br><span class="line">|    3 |    4 |</span><br><span class="line">|    5 |    6 |</span><br><span class="line">|   10 |   20 | <span class="comment">-- 只出现了一次 10, 20，union会去重</span></span><br><span class="line">|   30 |   40 |</span><br><span class="line">|   50 |   60 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, b <span class="keyword">as</span> t <span class="keyword">from</span> test_union_1</span><br><span class="line">    -&gt; <span class="keyword">union</span> all   <span class="comment">-- 使用 union all 可以不去重</span></span><br><span class="line">    -&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_union_2;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | t    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    1 |    2 |</span><br><span class="line">|    3 |    4 |</span><br><span class="line">|    5 |    6 |</span><br><span class="line">|   10 |   20 | <span class="comment">-- test_union_1 中的10, 20</span></span><br><span class="line">|   10 |   20 | <span class="comment">-- test_union_2 中的10, 20</span></span><br><span class="line">|   30 |   40 |</span><br><span class="line">|   50 |   60 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">7 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, b <span class="keyword">as</span> t <span class="keyword">from</span> test_union_1 <span class="keyword">where</span> a &gt; <span class="number">2</span> </span><br><span class="line">    -&gt; <span class="keyword">union</span></span><br><span class="line">    -&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_union_2 <span class="keyword">where</span> c &gt; <span class="number">50</span>;  <span class="comment">-- 使用where过滤也可以 </span></span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | t    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    3 |    4 |</span><br><span class="line">|    5 |    6 |</span><br><span class="line">|   10 |   20 |</span><br><span class="line">|   50 |   60 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果知道数据本身具有唯一性，没有重复，则建议使用<code>union all</code>，因为<code>union</code>会做<code>去重操作</code>，性能会比<code>union all</code>要低</p>
+</blockquote>
+<hr>
+<h2 id="五-触发器"><a href="#五-触发器" class="headerlink" title="五. 触发器"></a>五. 触发器</h2><blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/create-trigger.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<ul>
+<li><p><strong>定义</strong></p>
+<ul>
+<li>触发器的对象是<code>表</code>，当表上出现<code>特定的事件</code>时<code>触发</code>该程序的执行</li>
+</ul>
+</li>
+<li><p><strong>触发器的类型</strong></p>
+<ul>
+<li><p><strong><code>UPDATE</code></strong></p>
+<ul>
+<li>update 操作</li>
+</ul>
+</li>
+<li><p><strong><code>DELETE</code></strong></p>
+<ul>
+<li>delete 操作</li>
+<li>replace 操作<ul>
+<li><strong>注意：</strong>drop，truncate等DDL操作<code>不会触发</code>DELETE</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>INSERT</code></strong></p>
+<ul>
+<li>insert 操作</li>
+<li>load data 操作</li>
+<li>replace 操作</li>
+</ul>
+<blockquote>
+<p>注意，<code>replace</code>操作会<strong><code>触发两次</code></strong>，一次是<code>UPDATE</code>类型的触发器，一次是<code>INSERT</code>类型的触发器<br>MySQL 5.6版本同一个类型的触发器只能有一个<em>(针对一个表)</em><br>MySQL 5.7允许多个同一类型的触发器</p>
+</blockquote>
+<blockquote>
+<p><strong>注意：触发器只触发DML(Data Manipulation Language)操作，不会触发DDL(Data Definition Language)操作<em>（create,drop等操作）</em> </strong></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>创建触发器</strong></p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span></span><br><span class="line">    [DEFINER = &#123; <span class="keyword">user</span> | <span class="keyword">CURRENT_USER</span> &#125;]</span><br><span class="line">    <span class="keyword">TRIGGER</span> trigger_name  <span class="comment">-- 触发器名字</span></span><br><span class="line">    trigger_time trigger_event  <span class="comment">-- 触发时间和事件</span></span><br><span class="line">    <span class="keyword">ON</span> tbl_name <span class="keyword">FOR</span> <span class="keyword">EACH</span> <span class="keyword">ROW</span>    </span><br><span class="line">    [trigger_order]</span><br><span class="line">    trigger_body</span><br><span class="line"></span><br><span class="line">trigger_time: &#123; <span class="keyword">BEFORE</span> | <span class="keyword">AFTER</span> &#125;   <span class="comment">-- 事件之前还是之后触发</span></span><br><span class="line"></span><br><span class="line">trigger_event: &#123; <span class="keyword">INSERT</span> | <span class="keyword">UPDATE</span> | <span class="keyword">DELETE</span> &#125;  <span class="comment">-- 三个类型</span></span><br><span class="line"></span><br><span class="line">trigger_order: &#123; <span class="keyword">FOLLOWS</span> | <span class="keyword">PRECEDES</span> &#125; other_trigger_name</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_trigger_1 (</span><br><span class="line">    -&gt;     name varchar(10),</span><br><span class="line">    -&gt;     score int(10),</span><br><span class="line">    -&gt; primary key (name));</span><br><span class="line">Query OK, 0 rows affected (0.14 sec)</span><br><span class="line">    </span><br><span class="line">    mysql&gt; delimiter //  -- 将语句分隔符定义成 // （原来是';'）</span><br><span class="line">    mysql&gt; create trigger  trg_upd_score  -- 定义触发器名字</span><br><span class="line">        -&gt; before update on test_trigger_1  -- 作用在test_trigger_1 更新(update)之前(before)</span><br><span class="line">        -&gt; for each row  -- 每行</span><br><span class="line">        -&gt; begin  -- 开始定义</span><br><span class="line">        -&gt; if new.score &lt; 0 then   -- 如果新值小于0</span><br><span class="line">        -&gt;     set new.score=0;        -- 则设置成0</span><br><span class="line">        -&gt; elseif new.score &gt; 100 then  -- 如果新值大于100</span><br><span class="line">        -&gt;     set new.score = 100;  -- 则设置成100</span><br><span class="line">        -&gt; end if;  -- begin对应的 结束 </span><br><span class="line">        -&gt; end;//   -- 结束，使用新定义的 '//' 结尾</span><br><span class="line">    Query OK, 0 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; delimiter ;  -- 恢复 ';' 结束符</span><br><span class="line"></span><br><span class="line"><span class="comment">-- new.col : 表示更新以后的值</span></span><br><span class="line"><span class="comment">-- old.col : 表示更新以前的值(只读)</span></span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_trigger_1 values ("tom", 200);  -- 插入新值</span><br><span class="line">Query OK, 1 row affected (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_trigger_1;</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| name | score |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| tom  |   200 |  <span class="comment">-- 没改成100，因为定义的是update，而执行的是insert</span></span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">update</span> test_trigger_1 </span><br><span class="line">    -&gt; <span class="keyword">set</span> score=<span class="number">300</span> <span class="keyword">where</span> <span class="keyword">name</span>=<span class="string">'tom'</span>; <span class="comment">-- 改成300</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">Rows matched: 1  Changed: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_trigger_1;</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| name | score |</span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">| tom  |   100 | <span class="comment">-- 通过触发器的设置，大于100的值被修改成100</span></span><br><span class="line">+<span class="comment">------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/" title="作业讲解一/Rank/视图/UNION/触发器">https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/" rel="next" title="存储引擎二/多实例安装">
+                <i class="fa fa-chevron-left"></i> 存储引擎二/多实例安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-02/mysql/MySQL学习笔记(Day003)/" rel="prev" title="Mysql升级/参数/连接/权限">
+                Mysql升级/参数/连接/权限 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day013：作业讲解一-Rank-视图-UNION-触发器）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-作业讲解"><span class="nav-number">1.1.</span> <span class="nav-text">一. 作业讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-Rank"><span class="nav-number">1.2.</span> <span class="nav-text">二. Rank</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-视图"><span class="nav-number">1.3.</span> <span class="nav-text">三. 视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-UNION"><span class="nav-number">1.4.</span> <span class="nav-text">四. UNION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-触发器"><span class="nav-number">1.5.</span> <span class="nav-text">五. 触发器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

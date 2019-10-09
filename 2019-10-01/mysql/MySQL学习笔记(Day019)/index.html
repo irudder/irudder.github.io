@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day019：磁盘测试）@(MySQL学习) [TOC] 一. 磁盘调度算法介绍1. CFQ CFQ把I/O请求按照进程分别放入进程对应的队列中，所以A进程和B进程发出的I/O请求会在两个队列中。而各个队列内部仍然采用合并和排序的方法，区别仅在于，每一个提交I/O请求的进程都有自己的I/O队列。CFQ的“公平”是针对进程而言的，它以时间片算法为前提，轮转调度队列，默认从当前队列">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="磁盘测试">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day019)/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day019：磁盘测试）@(MySQL学习) [TOC] 一. 磁盘调度算法介绍1. CFQ CFQ把I/O请求按照进程分别放入进程对应的队列中，所以A进程和B进程发出的I/O请求会在两个队列中。而各个队列内部仍然采用合并和排序的方法，区别仅在于，每一个提交I/O请求的进程都有自己的I/O队列。CFQ的“公平”是针对进程而言的，它以时间片算法为前提，轮转调度队列，默认从当前队列">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-09T01:00:59.942Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="磁盘测试">
+<meta name="twitter:description" content="MySQL学习笔记（Day019：磁盘测试）@(MySQL学习) [TOC] 一. 磁盘调度算法介绍1. CFQ CFQ把I/O请求按照进程分别放入进程对应的队列中，所以A进程和B进程发出的I/O请求会在两个队列中。而各个队列内部仍然采用合并和排序的方法，区别仅在于，每一个提交I/O请求的进程都有自己的I/O队列。CFQ的“公平”是针对进程而言的，它以时间片算法为前提，轮转调度队列，默认从当前队列">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day019)/">
+
+
+
+
+
+  <title>磁盘测试 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day019)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">磁盘测试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day019：磁盘测试）"><a href="#MySQL学习笔记（Day019：磁盘测试）" class="headerlink" title="MySQL学习笔记（Day019：磁盘测试）"></a>MySQL学习笔记（Day019：磁盘测试）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-磁盘调度算法介绍"><a href="#一-磁盘调度算法介绍" class="headerlink" title="一. 磁盘调度算法介绍"></a>一. 磁盘调度算法介绍</h2><h3 id="1-CFQ"><a href="#1-CFQ" class="headerlink" title="1. CFQ"></a>1. CFQ</h3><blockquote>
+<p>CFQ把I/O请求<code>按照进程</code>分别放入进程对应的队列中，所以A进程和B进程发出的I/O请求会在两个队列中。而各个队列内部仍然采用<code>合并和排序</code>的方法，区别仅在于，每一个提交I/O请求的进程都有自己的I/O队列。<br>CFQ的“公平”是针对进程而言的，它以时间片算法为前提，轮转调度队列，默认从当前队列中取4个请求处理，然后处理下一个队列的4个请求。这样就可以确保每个进程享有的I/O资源是均衡的。<br>CFQ的缺点是先来的IO请求不一定能被及时满足，可能出现<code>饥饿</code>的情况。<br><a href="https://en.wikipedia.org/wiki/CFQ" target="_blank" rel="noopener">CFQ Wiki</a></p>
+</blockquote>
+<h3 id="2-Deadline"><a href="#2-Deadline" class="headerlink" title="2. Deadline"></a>2. Deadline</h3><blockquote>
+<p>同CFQ一样，除了维护一个拥有合并和排序功能的请求队列以外，还额外维护了两个队列，分别是<code>读请求队列</code>和<code>写请求队列</code>，它们都是<code>带有超时的FIFO队列</code>。当新来一个I/O请求时，会被同时插入普通队列和读/写队列，然后处理普通队列中的请求。当调度器发现读/写请求队列中的请求超时的时候，会优先处理这些请求，保证尽可能不产生请求饥饿<br>在DeadLine算法中，每个I/O请求都有一个超时时间，默认<code>读请求是500ms</code>，<code>写请求是5s</code>。<br><a href="https://en.wikipedia.org/wiki/Deadline_scheduler" target="_blank" rel="noopener">Deadline Wiki</a></p>
+</blockquote>
+<h3 id="3-Noop"><a href="#3-Noop" class="headerlink" title="3. Noop"></a>3. Noop</h3><blockquote>
+<p>Noop做的事情非常简单，它不会对I/O请求排序也不会进行任何其它优化（除了合并）。Noop除了对请求合并以外，不再进行任何处理，直接以类似FIFO的顺序提交I/O请求。<br>Noop面向的不是普通的块设备，而是随机访问设备（例如SSD），对于这种设备，不存在传统的寻道时间，那么就没有必要去做那些多余的为了减少寻道时间而采取的事情了。<br><a href="https://en.wikipedia.org/wiki/Noop_scheduler" target="_blank" rel="noopener">Noop Wiki</a></p>
+</blockquote>
+<hr>
+<h2 id="二-iostat（下）"><a href="#二-iostat（下）" class="headerlink" title="二. iostat（下）"></a>二. iostat（下）</h2><ul>
+<li><p><strong>rrqm/s 和 wrqm/s</strong></p>
+<ul>
+<li><code>Merge</code>将若干个连续地址的IO请求进行合并。来提高IO的效率</li>
+<li><code>rrqm/s</code>是每秒读（read）请求合并的次数</li>
+<li><code>wrqm/s</code>是每秒写（write）请求合并的次数</li>
+</ul>
+</li>
+<li><p><strong>r/s和w/s</strong></p>
+<ul>
+<li>在<code>合并之后（after merge）</code> IO请求的次数</li>
+<li><code>r/s</code>合并之后每秒读IO的次数</li>
+<li><code>w/s</code>合并之后每秒写IO的次数</li>
+<li><strong><code>r/s + w/s = IOPS</code></strong></li>
+</ul>
+</li>
+<li><p><strong>rsec/s（rKB/s、rMB/s）和 wsec/s（wKB/s、wMB/s）</strong></p>
+<ul>
+<li><code>sec</code>是<code>Sector（扇区）</code>，为<code>512Byte</code></li>
+<li><code>KB</code> 和 <code>MB</code> 是通过扇区的<code>512Byte</code>进行的换算</li>
+</ul>
+</li>
+<li><p><strong>avgrq-sz</strong></p>
+<ul>
+<li>一块磁盘可能存储数据的同时还存储日志，所以请求的IO大小是不一样的</li>
+<li>该参数就是平均的请求数，注意，该值需要 * 512Byte 才是最终的结果，因为该值是以扇区为单位的</li>
+</ul>
+</li>
+<li><p><strong>avgqu-sz</strong></p>
+<ul>
+<li>请求的IO队列的平均长度<code>（比较重要）</code></li>
+<li>HDD可能在4左右，SSD可以达到30左右</li>
+</ul>
+</li>
+<li><p><strong>await、r_await、w_await</strong></p>
+<ul>
+<li>IO请求平均等待的时间，单位是ms</li>
+<li><code>r_await</code>和<code>w_await</code>分别对应<code>读IO请求的等待</code>和<code>写IO请求的等待</code></li>
+</ul>
+</li>
+<li><p><strong>svctm</strong></p>
+<ul>
+<li>服务于IO请求的平均时间</li>
+<li>man文档中提示不要相信该值，以后会被移除</li>
+</ul>
+</li>
+<li><p><strong>%util</strong></p>
+<ul>
+<li>磁盘是否空闲；不能简单的等同于IO的使用率；该值可以解释为磁盘是否繁忙</li>
+<li>如果该值100% 不能简单的等同于磁盘的负载满了，达到了瓶颈</li>
+<li>需要综合<code>avgqu-sz</code>、<code>await</code>等其他指标进行综合判断磁盘是否达到瓶颈</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三-MySQL的IO使用情况"><a href="#三-MySQL的IO使用情况" class="headerlink" title="三. MySQL的IO使用情况"></a>三. MySQL的IO使用情况</h2><h3 id="1-iotop"><a href="#1-iotop" class="headerlink" title="1. iotop"></a>1. iotop</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; iotop -u mysql  <span class="comment"># -u 表示监控哪个user的进程，所以前提是你的mysql服务是用mysql用户启动的</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong><br>上述命令只能看到MySQL的线程ID（Thread ID）</p>
+</blockquote>
+<h3 id="2-performance-schema-threads"><a href="#2-performance-schema-threads" class="headerlink" title="2. performance_schema.threads"></a>2. performance_schema.threads</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use performance_schema;</span><br><span class="line">Database changed</span><br><span class="line"></span><br><span class="line">mysql&gt; desc threads;</span><br><span class="line">+<span class="comment">---------------------+---------------------+------+-----+---------+-------+</span></span><br><span class="line">| Field               | Type                | Null | Key | Default | Extra |</span><br><span class="line">+<span class="comment">---------------------+---------------------+------+-----+---------+-------+</span></span><br><span class="line">| THREAD_ID           | bigint(20) unsigned | NO   |     | NULL    |       | <span class="comment">-- MySQL内部线程ID</span></span><br><span class="line">| NAME                | varchar(128)        | NO   |     | NULL    |       |</span><br><span class="line">| TYPE                | varchar(10)         | NO   |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_ID      | bigint(20) unsigned | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_USER    | varchar(32)         | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_HOST    | varchar(60)         | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_DB      | varchar(64)         | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_COMMAND | varchar(16)         | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_TIME    | bigint(20)          | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_STATE   | varchar(64)         | YES  |     | NULL    |       |</span><br><span class="line">| PROCESSLIST_INFO    | longtext            | YES  |     | NULL    |       |</span><br><span class="line">| PARENT_THREAD_ID    | bigint(20) unsigned | YES  |     | NULL    |       |</span><br><span class="line">| ROLE                | varchar(64)         | YES  |     | NULL    |       |</span><br><span class="line">| INSTRUMENTED        | enum('YES','NO')    | NO   |     | NULL    |       |</span><br><span class="line">| HISTORY             | enum('YES','NO')    | NO   |     | NULL    |       |</span><br><span class="line">| CONNECTION_TYPE     | varchar(16)         | YES  |     | NULL    |       |</span><br><span class="line">| THREAD_OS_ID        | bigint(20) unsigned | YES  |     | NULL    |       | <span class="comment">-- 操作系统的线程ID</span></span><br><span class="line">+<span class="comment">---------------------+---------------------+------+-----+---------+-------+</span></span><br><span class="line">17 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">name</span>,<span class="keyword">type</span>,thread_id,thread_os_id <span class="keyword">from</span> threads;</span><br><span class="line">+<span class="comment">----------------------------------------+------------+-----------+--------------+</span></span><br><span class="line">| name                                   | type       | thread_id | thread_os_id |</span><br><span class="line">+<span class="comment">----------------------------------------+------------+-----------+--------------+</span></span><br><span class="line">| thread/sql/main                        | BACKGROUND |         1 |         2481 |</span><br><span class="line">| thread/sql/thread_timer_notifier       | BACKGROUND |         2 |         2482 |</span><br><span class="line">| thread/innodb/io_read_thread           | BACKGROUND |         3 |         2486 |</span><br><span class="line">| thread/innodb/io_read_thread           | BACKGROUND |         4 |         2487 |</span><br><span class="line">| thread/innodb/io_read_thread           | BACKGROUND |         5 |         2488 |</span><br><span class="line">| thread/innodb/io_write_thread          | BACKGROUND |         6 |         2489 |</span><br><span class="line">| thread/innodb/io_write_thread          | BACKGROUND |         7 |         2490 |</span><br><span class="line">| thread/innodb/io_write_thread          | BACKGROUND |         8 |         2491 |</span><br><span class="line">| thread/innodb/io_write_thread          | BACKGROUND |         9 |         2492 |</span><br><span class="line">| thread/innodb/page_cleaner_thread      | BACKGROUND |        10 |         2493 |</span><br><span class="line">| thread/innodb/io_read_thread           | BACKGROUND |        11 |         2485 |</span><br><span class="line">| thread/innodb/io_log_thread            | BACKGROUND |        12 |         2484 |</span><br><span class="line">| thread/innodb/io_ibuf_thread           | BACKGROUND |        13 |         2483 |</span><br><span class="line">| thread/innodb/srv_master_thread        | BACKGROUND |        15 |         2501 |  <span class="comment">-- 主线程</span></span><br><span class="line">| thread/sql/background                  | BACKGROUND |        16 |         2502 |</span><br><span class="line">| thread/innodb/srv_purge_thread         | BACKGROUND |        17 |         2502 |</span><br><span class="line">| thread/sql/background                  | BACKGROUND |        18 |         2503 |</span><br><span class="line">| thread/innodb/srv_monitor_thread       | BACKGROUND |        19 |         2500 |</span><br><span class="line">| thread/innodb/srv_error_monitor_thread | BACKGROUND |        20 |         2499 |</span><br><span class="line">| thread/sql/background                  | BACKGROUND |        21 |         2504 |</span><br><span class="line">| thread/sql/background                  | BACKGROUND |        22 |         2505 |</span><br><span class="line">| thread/innodb/srv_lock_timeout_thread  | BACKGROUND |        23 |         2498 |</span><br><span class="line">| thread/innodb/dict_stats_thread        | BACKGROUND |        24 |         2507 |</span><br><span class="line">| thread/innodb/buf_dump_thread          | BACKGROUND |        25 |         2506 |</span><br><span class="line">| thread/sql/signal_handler              | BACKGROUND |        26 |         2510 |</span><br><span class="line">| thread/sql/compress_gtid_table         | FOREGROUND |        27 |         2511 |</span><br><span class="line">| thread/sql/one_connection              | FOREGROUND |        28 |         2514 |  <span class="comment">-- FOREGROUND前台线程</span></span><br><span class="line">+<span class="comment">----------------------------------------+------------+-----------+--------------+</span></span><br><span class="line">27 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- thread/sql/one_connection 就是我连接的线程</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">name</span>,thread_id,thread_os_id,processlist_id <span class="keyword">from</span> threads;  <span class="comment">-- 查看processlist_id</span></span><br><span class="line">+<span class="comment">----------------------------------------+-----------+--------------+----------------+</span></span><br><span class="line">| name                                   | thread_id | thread_os_id | processlist_id |</span><br><span class="line">+<span class="comment">----------------------------------------+-----------+--------------+----------------+</span></span><br><span class="line">| thread/sql/main                        |         1 |         2481 |           NULL |</span><br><span class="line">| thread/sql/thread_timer_notifier       |         2 |         2482 |           NULL |</span><br><span class="line">| thread/innodb/io_read_thread           |         3 |         2486 |           NULL |</span><br><span class="line">| thread/innodb/io_read_thread           |         4 |         2487 |           NULL |</span><br><span class="line">| thread/innodb/io_read_thread           |         5 |         2488 |           NULL |</span><br><span class="line">| thread/innodb/io_write_thread          |         6 |         2489 |           NULL |</span><br><span class="line">| thread/innodb/io_write_thread          |         7 |         2490 |           NULL |</span><br><span class="line">| thread/innodb/io_write_thread          |         8 |         2491 |           NULL |</span><br><span class="line">| thread/innodb/io_write_thread          |         9 |         2492 |           NULL |</span><br><span class="line">| thread/innodb/page_cleaner_thread      |        10 |         2493 |           NULL |</span><br><span class="line">| thread/innodb/io_read_thread           |        11 |         2485 |           NULL |</span><br><span class="line">| thread/innodb/io_log_thread            |        12 |         2484 |           NULL |</span><br><span class="line">| thread/innodb/io_ibuf_thread           |        13 |         2483 |           NULL |</span><br><span class="line">| thread/innodb/srv_master_thread        |        15 |         2501 |           NULL |</span><br><span class="line">| thread/sql/background                  |        16 |         2502 |           NULL |</span><br><span class="line">| thread/innodb/srv_purge_thread         |        17 |         2502 |           NULL |</span><br><span class="line">| thread/sql/background                  |        18 |         2503 |           NULL |</span><br><span class="line">| thread/innodb/srv_monitor_thread       |        19 |         2500 |           NULL |</span><br><span class="line">| thread/innodb/srv_error_monitor_thread |        20 |         2499 |           NULL |</span><br><span class="line">| thread/sql/background                  |        21 |         2504 |           NULL |</span><br><span class="line">| thread/sql/background                  |        22 |         2505 |           NULL |</span><br><span class="line">| thread/innodb/srv_lock_timeout_thread  |        23 |         2498 |           NULL |</span><br><span class="line">| thread/innodb/dict_stats_thread        |        24 |         2507 |           NULL |</span><br><span class="line">| thread/innodb/buf_dump_thread          |        25 |         2506 |           NULL |</span><br><span class="line">| thread/sql/signal_handler              |        26 |         2510 |           NULL |</span><br><span class="line">| thread/sql/compress_gtid_table         |        27 |         2511 |              1 |</span><br><span class="line">| thread/sql/one_connection              |        28 |         2514 |              2 |</span><br><span class="line">+<span class="comment">----------------------------------------+-----------+--------------+----------------+</span></span><br><span class="line">27 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- processlist_id 对应的就是 show processlist中的id</span></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">processlist</span>; </span><br><span class="line">+<span class="comment">----+------+-----------+--------------------+---------+------+----------+------------------+</span></span><br><span class="line">| Id | User | Host      | db                 | Command | Time | State    | Info             |</span><br><span class="line">+<span class="comment">----+------+-----------+--------------------+---------+------+----------+------------------+</span></span><br><span class="line">|  2 | root | localhost | performance_schema | Query   |    0 | starting | <span class="keyword">show</span> <span class="keyword">processlist</span> |</span><br><span class="line">+<span class="comment">----+------+-----------+--------------------+---------+------+----------+------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> connection_id();   <span class="comment">-- 查看当前connection的id</span></span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">| connection_id() |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">|               2 |</span><br><span class="line">+<span class="comment">-----------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>通过<code>threads表</code>中的信息，结合<code>iotop -u mysql</code>的输出，就可以知道某个线程的io使用情况</strong></p>
+</blockquote>
+<blockquote>
+<p>MySQL 5.6 版本中没有<code>thread_os_id</code>这个列。<br>作业一：如何将iotop中的Thread ID和MySQL5.6中的threads表中的信息对应起来。</p>
+</blockquote>
+<h3 id="3-存储结构对应关系"><a href="#3-存储结构对应关系" class="headerlink" title="3. 存储结构对应关系"></a>3. 存储结构对应关系</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">                  +-------------+-------------+-------------+</span><br><span class="line">      Database    |     16K     |     16K     |     16K     |</span><br><span class="line">                  +------+------+-------------+-------------+</span><br><span class="line">                         |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">                         |</span><br><span class="line">                         +------+</span><br><span class="line">                                |</span><br><span class="line">                  +------+------v------+------+</span><br><span class="line">     Filesystem   |  4K  |  4K  |  4K  |  4K  |</span><br><span class="line">                  +---+--+------+------+------+</span><br><span class="line">                      |</span><br><span class="line">+------------------------------------------------------------------------+</span><br><span class="line">                      |</span><br><span class="line">                      +--+</span><br><span class="line">                         |</span><br><span class="line">                         v</span><br><span class="line">                  +------+------+          +------+</span><br><span class="line">        Disk      | 512B | 512B | ...  ... | 512B |</span><br><span class="line">                  +------+------+          +------+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>SSD扇区的大小一般为4K或者8K。但是为了兼容HDD，SSD通过Flash Translation Layer (FTL)的方式转换成512B</strong></p>
+</blockquote>
+<h3 id="4-O-DIRECT"><a href="#4-O-DIRECT" class="headerlink" title="4. O_DIRECT"></a>4. O_DIRECT</h3><ul>
+<li><p><strong>fwrite / fsync</strong></p>
+<ul>
+<li><code>fwrite</code>是把数据写入文件系统层（Filesystem）（可能有cache），并不能保证写入Disk</li>
+<li><p><code>fsync</code>可以保证把数据写入到Disk（数据落盘）</p>
+<blockquote>
+<p>只通过<code>fwrite</code>写入数据特别快（因为有缓存），但随后调用<code>fsync</code>就会很慢，这个速度取决于磁盘的<code>IOPS</code><br>如果不手工执行<code>fysnc</code>，当Filesystem的<code>cache</code>小于<code>10%</code>时，操作系统才会将数据刷入磁盘。所以可能存在数据丢失的风险，比如掉电</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>O_DIRECT</strong></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+-------------------+               +-------------------+              +-------------------+</span><br><span class="line">|                   |    fwrite     |                   |    fsync     |                   |</span><br><span class="line">|    Buffer Pool    +---------------&gt; Filesystem Cache  +--------------&gt;       Disk        |</span><br><span class="line">|                   |               |                   |              |                   |</span><br><span class="line">+--------+----------+               +-------------------+              +---------+---------+</span><br><span class="line">         |                                                                       ^</span><br><span class="line">         |                                                                       |</span><br><span class="line">         |                   innodb_flush_method = O_DIRECT                      |</span><br><span class="line">         +-----------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>&gt; **`O_DIRECT`的设置参数是告诉系统`直接将数据写入磁盘`，跳过文件系统的缓存。等同于使用`裸设备`的效果**
+</code></pre><hr>
+<h2 id="四-sysbench"><a href="#四-sysbench" class="headerlink" title="四. sysbench"></a>四. sysbench</h2><h3 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h3><p>建议安装<code>sysbenh-0.5</code>的版本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; https://github.com/akopytov/sysbench.git <span class="comment"># 通过git clone得到源码</span></span><br><span class="line">shell&gt; <span class="built_in">cd</span> sysbench</span><br><span class="line">shell&gt; ./autogen.sh</span><br><span class="line">shell&gt; ./configure  --with-mysql-includes=/usr/<span class="built_in">local</span>/mysql56/include/  --with-mysql-libs=/usr/<span class="built_in">local</span>/mysql56/lib/  <span class="comment"># 关联mysql的头文件和库</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## 注意，如果我这里使用mysql5.7.9 的include和lib ，提示我 /usr/bin/ld: cannot find -lmysqlclient_r</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line">shell&gt; make -j 2 <span class="comment"># -j 2 表示用几个cpu核心进行编译</span></span><br><span class="line">shell&gt; make install <span class="comment"># 默认安装到 /usr/local/bin , 如果有自定义目录，configure增加参数 --prefix=自定义目录</span></span><br><span class="line">shell&gt; <span class="built_in">echo</span> <span class="string">"export LD_LIBRARY_PATH=/usr/local/mysql56/lib/:<span class="variable">$LD_LIBRARY_PATH</span>"</span> &gt;&gt; ~/.bashrc <span class="comment"># 添加LD_LIBRARY_PATH</span></span><br><span class="line">shell&gt; <span class="built_in">source</span> ~/.bashrc</span><br><span class="line">shell&gt; sysbench --version</span><br><span class="line">sysbench 0.5</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-测试"><a href="#3-测试" class="headerlink" title="3. 测试"></a>3. 测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 生成测试文件</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">shell&gt; sysbench --<span class="built_in">test</span>=fileio \               <span class="comment"># File IO测试</span></span><br><span class="line">                --file-num=4 \                <span class="comment"># 测试文件数是4个</span></span><br><span class="line">                --file-block-size=8K \        <span class="comment"># block size是8K</span></span><br><span class="line">                --file-total-size=1G \        <span class="comment"># 4个文件的总大小是1G</span></span><br><span class="line">                --file-test-mode=rndrd \       <span class="comment"># 测试方法是随机读</span></span><br><span class="line">                --file-extra-flags=direct \   <span class="comment"># direct io，跳过缓存</span></span><br><span class="line">                --max-requests=0 \            <span class="comment"># 一共发起多少请求，0表示任意</span></span><br><span class="line">                --max-time=3600 \             <span class="comment"># 测试3600s </span></span><br><span class="line">                --num-threads=4 \             <span class="comment"># 使用4个线程</span></span><br><span class="line">                prepare <span class="comment">#  run or cleanup     # prepare：生成文件</span></span><br><span class="line">                                              <span class="comment"># run：开始测试</span></span><br><span class="line">                                              <span class="comment"># cleanup：删除测试文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 其他说明  sysbench --test=fileio help</span></span><br><span class="line"><span class="comment"># --file-num=N                  创建文件数</span></span><br><span class="line">  <span class="comment"># --file-block-size=N           block size大小</span></span><br><span class="line">  <span class="comment"># --file-total-size=SIZE        文件数的大小总和</span></span><br><span class="line">  <span class="comment"># --file-test-mode=STRING       测试模式 &#123;seqwr, seqrewr, seqrd, rndrd, rndwr, rndrw&#125; （顺序写，顺序读写，顺序读，随机读，随机写，随机读写）</span></span><br><span class="line">  <span class="comment"># --file-io-mode=STRING         文件操作方式 &#123;sync,async,mmap&#125; </span></span><br><span class="line">  <span class="comment"># --file-extra-flags=STRING     打开文件的额外标志 &#123;sync,dsync,direct&#125; []</span></span><br><span class="line">  <span class="comment"># --file-fsync-freq=N           多少请求后执行fsync。默认是0，不执行</span></span><br><span class="line">  <span class="comment"># --file-fsync-all=[on|off]     是否每次操作后都执行fsync</span></span><br><span class="line">  <span class="comment"># --file-fsync-end=[on|off]     测完成后执行fsync，默认是on</span></span><br><span class="line">  <span class="comment"># --file-fsync-mode=STRING      同步的方法 &#123;fsync, fdatasync&#125;默认是 [fsync]</span></span><br><span class="line">  <span class="comment"># --file-merged-requests=N      最多多少IO请求被合并，默认为0，不合并</span></span><br><span class="line">  <span class="comment"># --file-rw-ratio=N             读写比例默认是 [1.5]，即 3:2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 开始测试</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">shell&gt; sysbench --<span class="built_in">test</span>=fileio \               </span><br><span class="line">                --file-num=4 \               </span><br><span class="line">                --file-block-size=8K \       </span><br><span class="line">                --file-total-size=1G \        </span><br><span class="line">                --file-test-mode=rndrd \    </span><br><span class="line">                --file-extra-flags=direct \   </span><br><span class="line">                --max-requests=0 \            </span><br><span class="line">                --max-time=30 \             <span class="comment"># 简单测试，测试30秒</span></span><br><span class="line">                --num-threads=4 \             </span><br><span class="line">                --report-interval=3 \       <span class="comment"># 每3秒产生报告</span></span><br><span class="line">                run</span><br><span class="line">sysbench 0.5:  multi-threaded system evaluation benchmark</span><br><span class="line"></span><br><span class="line">Running the <span class="built_in">test</span> with following options:</span><br><span class="line">Number of threads: 4</span><br><span class="line">Report intermediate results every 3 second(s)</span><br><span class="line">Random number generator seed is 0 and will be ignored</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Extra file open flags: 3</span><br><span class="line">4 files, 256Mb each</span><br><span class="line">1Gb total file size</span><br><span class="line">Block size 8Kb</span><br><span class="line">Number of IO requests: 0</span><br><span class="line">Read/Write ratio <span class="keyword">for</span> combined random IO <span class="built_in">test</span>: 1.50</span><br><span class="line">Periodic FSYNC enabled, calling fsync() each 100 requests.</span><br><span class="line">Calling fsync() at the end of <span class="built_in">test</span>, Enabled.</span><br><span class="line">Using synchronous I/O mode</span><br><span class="line">Doing random <span class="built_in">read</span> <span class="built_in">test</span></span><br><span class="line">Threads started!</span><br><span class="line"></span><br><span class="line">[   3s] reads: 1.70 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 54.416ms (95%)</span><br><span class="line">[   6s] reads: 1.78 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 55.469ms (95%)</span><br><span class="line">[   9s] reads: 1.75 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 55.253ms (95%)</span><br><span class="line">[  12s] reads: 1.66 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 52.120ms (95%)</span><br><span class="line">[  15s] reads: 1.76 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 51.840ms (95%)</span><br><span class="line">[  18s] reads: 1.79 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 50.933ms (95%)</span><br><span class="line">[  21s] reads: 1.78 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 54.858ms (95%)</span><br><span class="line">[  24s] reads: 1.88 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 50.857ms (95%)</span><br><span class="line">[  27s] reads: 1.75 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 56.238ms (95%)</span><br><span class="line">[  30s] reads: 1.61 MB/s writes: 0.00 MB/s fsyncs: 0.00/s response time: 64.097ms (95%)</span><br><span class="line">Operations performed:  6709 reads, 0 writes, 0 Other = 6709 Total</span><br><span class="line">Read 52.414Mb  Written 0b  Total transferred 52.414Mb  (1.7462Mb/sec)</span><br><span class="line">  223.51 Requests/sec executed  <span class="comment"># 这个就是IOPS</span></span><br><span class="line"></span><br><span class="line">General statistics:</span><br><span class="line">    total time:                          30.0160s</span><br><span class="line">    total number of events:              6709</span><br><span class="line">    total time taken by event execution: 120.0223s</span><br><span class="line">    response time:</span><br><span class="line">         min:                                  0.13ms</span><br><span class="line">         avg:                                 17.89ms</span><br><span class="line">         max:                                254.62ms</span><br><span class="line">         approx.  95 percentile:              54.97ms</span><br><span class="line"></span><br><span class="line">Threads fairness:</span><br><span class="line">    events (avg/stddev):           1677.2500/28.16</span><br><span class="line">    execution time (avg/stddev):   30.0056/0.01</span><br><span class="line"></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment">## 上述测试随机读的速度在1.7MB/s左右， </span></span><br><span class="line"><span class="comment">## （1.7MB/s * 1024 / 8KB =217）换算后得到的值就是IOPS，约等于上面的223。</span></span><br><span class="line"><span class="comment">##</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>测试完成后执行<code>cleanup</code><br><strong>如果是真实的测试 <code>max-time</code>设置成一周的时间</strong><br><code>run</code>期间可以使用<code>iotop</code>或者<code>iostat</code>进行观察</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day019)/" title="磁盘测试">https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day019)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day007)/" rel="next" title="MySQL多实例下/SSL">
+                <i class="fa fa-chevron-left"></i> MySQL多实例下/SSL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day014)/" rel="prev" title="触发器下/存储过程/自定义函数">
+                触发器下/存储过程/自定义函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day019：磁盘测试）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day019：磁盘测试）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-磁盘调度算法介绍"><span class="nav-number">1.1.</span> <span class="nav-text">一. 磁盘调度算法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-CFQ"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. CFQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Deadline"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. Deadline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Noop"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. Noop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-iostat（下）"><span class="nav-number">1.2.</span> <span class="nav-text">二. iostat（下）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-MySQL的IO使用情况"><span class="nav-number">1.3.</span> <span class="nav-text">三. MySQL的IO使用情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-iotop"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. iotop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-performance-schema-threads"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. performance_schema.threads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-存储结构对应关系"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 存储结构对应关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-O-DIRECT"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. O_DIRECT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-sysbench"><span class="nav-number">1.4.</span> <span class="nav-text">四. sysbench</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安装"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-测试"><span class="nav-number">1.4.2.</span> <span class="nav-text">3. 测试</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

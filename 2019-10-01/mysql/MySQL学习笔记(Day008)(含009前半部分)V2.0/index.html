@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day008：数据类型）@(MySQL学习) [TOC] 一. INT类型1. INT类型的分类 TINYINT  存储空间 ： 1 字节 取值范围  有符号(signed) ：  [-128, 127] 无符号(unsigned) ：[0, 255]     SMALLINT  存储空间 ： 2 字节 取值范围  有符号(signed) ：  [-32768, 32767]">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据类型">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day008：数据类型）@(MySQL学习) [TOC] 一. INT类型1. INT类型的分类 TINYINT  存储空间 ： 1 字节 取值范围  有符号(signed) ：  [-128, 127] 无符号(unsigned) ：[0, 255]     SMALLINT  存储空间 ： 2 字节 取值范围  有符号(signed) ：  [-32768, 32767]">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-09T01:02:05.711Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据类型">
+<meta name="twitter:description" content="MySQL学习笔记（Day008：数据类型）@(MySQL学习) [TOC] 一. INT类型1. INT类型的分类 TINYINT  存储空间 ： 1 字节 取值范围  有符号(signed) ：  [-128, 127] 无符号(unsigned) ：[0, 255]     SMALLINT  存储空间 ： 2 字节 取值范围  有符号(signed) ：  [-32768, 32767]">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/">
+
+
+
+
+
+  <title>数据类型 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据类型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day008：数据类型）"><a href="#MySQL学习笔记（Day008：数据类型）" class="headerlink" title="MySQL学习笔记（Day008：数据类型）"></a>MySQL学习笔记（Day008：数据类型）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-INT类型"><a href="#一-INT类型" class="headerlink" title="一. INT类型"></a>一. INT类型</h2><h3 id="1-INT类型的分类"><a href="#1-INT类型的分类" class="headerlink" title="1. INT类型的分类"></a>1. INT类型的分类</h3><ul>
+<li><p><strong>TINYINT</strong></p>
+<ul>
+<li>存储空间 ： 1 字节</li>
+<li>取值范围 <ul>
+<li>有符号(signed) ：  [-128, 127]</li>
+<li>无符号(unsigned) ：[0, 255]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>SMALLINT</strong></p>
+<ul>
+<li>存储空间 ： 2 字节</li>
+<li>取值范围 <ul>
+<li>有符号(signed) ：  [-32768, 32767]</li>
+<li>无符号(unsigned) ：[0, 65535]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>MEDIUMINT</strong></p>
+<ul>
+<li>存储空间 ： 3 字节</li>
+<li>取值范围 <ul>
+<li>有符号(signed) ：  [-8388608, 8388607]</li>
+<li>无符号(unsigned) ：[0, 16777215]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>INT</strong></p>
+<ul>
+<li>存储空间 ： 4 字节</li>
+<li>取值范围 <ul>
+<li>有符号(signed) ：  [-2147483648, 2147483647]</li>
+<li>无符号(unsigned) ：[0, 4294967295]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>BIGINT</strong></p>
+<ul>
+<li>存储空间 ： 8 字节</li>
+<li>取值范围 <ul>
+<li>有符号(signed) ：  [-9223372036854775808, 9223372036854775807]</li>
+<li>无符号(unsigned) ：[0, 18446744073709551615]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-INT类型的使用"><a href="#2-INT类型的使用" class="headerlink" title="2. INT类型的使用"></a>2. INT类型的使用</h3><ul>
+<li><p><strong>自增长ID</strong></p>
+<ul>
+<li><code>推荐</code>使用<code>BIGINT</code>，而不是INT；</li>
+</ul>
+</li>
+<li><p><strong>unsigned or signed</strong></p>
+<ul>
+<li>根据实际情况使用，一般情况下推荐<code>默认</code>的<code>sigend</code></li>
+<li>unsigned 的注意事项</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_unsigned(a int unsigned, b int unsigned);</span><br><span class="line">Query OK, 0 rows affected (0.14 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_unsigned values(1, 2);</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select a - b from test_unsigned;</span><br><span class="line">ERROR 1690 (22003): BIGINT UNSIGNED value is out of range in '(`burn_test`.`test_unsigned`.`a` - `burn_test`.`test_unsigned`.`b`)'</span><br><span class="line"></span><br><span class="line">mysql&gt; select b - a from test_unsigned;   </span><br><span class="line">+<span class="comment">-------+</span></span><br><span class="line">| b - a |</span><br><span class="line">+<span class="comment">-------+</span></span><br><span class="line">|     1 |</span><br><span class="line">+<span class="comment">-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> sql_mode = <span class="string">'no_unsigned_subtraction'</span>; <span class="comment">-- 这样就可以得到负数</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select a - b from test_unsigned;</span><br><span class="line">+<span class="comment">-------+</span></span><br><span class="line">| a - b |</span><br><span class="line">+<span class="comment">-------+</span></span><br><span class="line">|    -1 |</span><br><span class="line">+<span class="comment">-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一般情况下使用<code>int</code>时，推荐有符号数<code>(signed)</code>， 使用无符号数只是比原来多一倍的取值，数量级上没有改变。</p>
+</blockquote>
+<blockquote>
+<p>如果需要取值范围很大，直接选择用<code>BIGINT</code></p>
+</blockquote>
+<h3 id="3-INT-N"><a href="#3-INT-N" class="headerlink" title="3. INT(N)"></a>3. INT(N)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show create table  test_unsigned;</span><br><span class="line">+<span class="comment">---------------+-------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line">| Table         | <span class="keyword">Create</span> <span class="keyword">Table</span>                                                                                                                                    |</span><br><span class="line">+<span class="comment">---------------+-------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line">| test_unsigned | <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test_unsigned`</span> (</span><br><span class="line">  <span class="string">`a`</span> <span class="built_in">int</span>(<span class="number">10</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>, </span><br><span class="line">  <span class="string">`b`</span> <span class="built_in">int</span>(<span class="number">10</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 |</span><br><span class="line">+<span class="comment">---------------+-------------------------------------------------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>int(N) 和 zerofill</strong><ul>
+<li>int(<strong>N</strong>)中的<code>N</code>是显示宽度，<code>不表示</code>存储的数字的<code>长度</code>的上限。</li>
+<li><code>zerofill</code>表示当存储的数字<code>长度 &lt; N</code>时，用<code>数字0</code>填充左边，直至补满长度<code>N</code></li>
+<li>当存储数字的长度<code>超过N时</code>，按照<code>实际存储</code>的数字显示</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create  table  test_int_n(a int(3) zerofill);  -- 显示宽度N=3</span><br><span class="line">Query OK, 0 rows affected (0.11 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_int_n values(1);</span><br><span class="line">Query OK, 1 row affected (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_int_n;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|  001 |   <span class="comment">-- 不满 N=3时，左边用0填充</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_int_n <span class="keyword">values</span>(<span class="number">1111</span>);</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_int_n;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|  001 |</span><br><span class="line">| 1111 |  <span class="comment">-- 超过N=3的长度时，是什么数字，显示什么数字</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, <span class="keyword">HEX</span>(a) <span class="keyword">from</span> test_int_n\G</span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">     a: <span class="number">001</span></span><br><span class="line"><span class="keyword">HEX</span>(a): <span class="number">1</span>    <span class="comment">-- 实际存储的还是1</span></span><br><span class="line">*************************** <span class="number">2.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">     a: <span class="number">1111</span></span><br><span class="line"><span class="keyword">HEX</span>(a): <span class="number">457</span>  <span class="comment">-- 1111对应的16进制就是457</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>int(N)中的<code>N</code>和<code>zerofill</code>配合才有意义，且仅仅是显示的时候才有意义，和实际存储没有关系，不会去截取数字的长度。</p>
+</blockquote>
+<h3 id="4-AUTO-INCREMENT"><a href="#4-AUTO-INCREMENT" class="headerlink" title="4. AUTO_INCREMENT"></a>4. AUTO_INCREMENT</h3><ul>
+<li>自增</li>
+<li>每张表一个</li>
+<li>必须是索引的一部分</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_auto_increment(a int auto_increment);</span><br><span class="line">ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key</span><br><span class="line"><span class="comment">-- 没有指定为key，报错了</span></span><br><span class="line"></span><br><span class="line">mysql&gt; create table test_auto_increment(a int auto_increment primary key);  -- 指定为key后有效</span><br><span class="line">Query OK, 0 rows affected (0.11 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_auto_increment values(NULL);  -- 插入NULL值</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">| a |</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">| 1 |  <span class="comment">-- 插入NULL值，便可以让其自增，且默认从1开始</span></span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_auto_increment <span class="keyword">values</span>(<span class="number">0</span>);  <span class="comment">-- 插入 0</span></span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">| a |</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">| 1 |</span><br><span class="line">| 2 |  <span class="comment">-- 插入 0 ，自增长为2</span></span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_auto_increment <span class="keyword">values</span>(<span class="number">-1</span>);  <span class="comment">-- 插入 -1</span></span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">| a  |</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">| -1 |   <span class="comment">-- 刚刚插入的-1</span></span><br><span class="line">|  1 |</span><br><span class="line">|  2 |</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_auto_increment <span class="keyword">values</span>(<span class="literal">NULL</span>);  <span class="comment">-- 继续插入NULL</span></span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">| a  |</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">| -1 |</span><br><span class="line">|  1 |</span><br><span class="line">|  2 |</span><br><span class="line">|  3 |  <span class="comment">-- 刚刚插入NULL， 自增为3</span></span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_auto_increment <span class="keyword">values</span>(<span class="string">'0'</span>); <span class="comment">-- 插入字符0</span></span><br><span class="line">Query OK, 1 row affected (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">| a  |</span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">| -1 |</span><br><span class="line">|  1 |</span><br><span class="line">|  2 |</span><br><span class="line">|  3 |</span><br><span class="line">|  4 |  <span class="comment">-- 插入字符'0' 后， 自增长为4</span></span><br><span class="line">+<span class="comment">----+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">update</span> test_auto_increment <span class="keyword">set</span> a = <span class="number">0</span> <span class="keyword">where</span> a = <span class="number">-1</span>;  <span class="comment">-- 更新为0</span></span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">| a |</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">| 0 |  <span class="comment">-- 原来的 -1 更新为0</span></span><br><span class="line">| 1 |</span><br><span class="line">| 2 |</span><br><span class="line">| 3 |</span><br><span class="line">| 4 |</span><br><span class="line">+<span class="comment">---+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">--  数字 0 这个值比较特殊， 插入0和插入NULL的效果是一样的，都是代表自增</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_auto_increment <span class="keyword">values</span>(<span class="literal">NULL</span>), (<span class="number">100</span>), (<span class="literal">NULL</span>); </span><br><span class="line">Query OK, 3 rows affected (0.02 sec)</span><br><span class="line">Records: 3  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">-----+</span></span><br><span class="line">| a   |</span><br><span class="line">+<span class="comment">-----+</span></span><br><span class="line">|   0 |</span><br><span class="line">|   1 |</span><br><span class="line">|   2 |</span><br><span class="line">|   3 |</span><br><span class="line">|   4 |</span><br><span class="line">|   5 | <span class="comment">-- 第一个NULL</span></span><br><span class="line">| 100 | <span class="comment">-- 100</span></span><br><span class="line">| 101 | <span class="comment">-- 第二个NULL, 按当前最大的值 +１来设置，之前是100，所以这里101</span></span><br><span class="line">+<span class="comment">-----+</span></span><br><span class="line">8 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_auto_increment <span class="keyword">values</span>(<span class="number">99</span>); <span class="comment">-- 插入99</span></span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_auto_increment;</span><br><span class="line">+<span class="comment">-----+</span></span><br><span class="line">| a   |</span><br><span class="line">+<span class="comment">-----+</span></span><br><span class="line">|   0 |</span><br><span class="line">|   1 |</span><br><span class="line">|   2 |</span><br><span class="line">|   3 |</span><br><span class="line">|   4 |</span><br><span class="line">|   5 |</span><br><span class="line">|  99 |  <span class="comment">-- 刚刚插入的 99</span></span><br><span class="line">| 100 |</span><br><span class="line">| 101 |</span><br><span class="line">+<span class="comment">-----+</span></span><br><span class="line">9 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>AUTO_INCREMENT</code>是实例启动时，取当前表的最大值，然后 +1 即为下次自增的值。<code>（MAX + 1)</code></p>
+</blockquote>
+<blockquote>
+<p><strong>TIPS:</strong><br><code>insert into tablename select NULL;</code> 等价与 <code>insert into tablename values (NULL);</code></p>
+</blockquote>
+<hr>
+<h2 id="二-数字类型"><a href="#二-数字类型" class="headerlink" title="二. 数字类型"></a>二. 数字类型</h2><h3 id="1-数字类型的分类"><a href="#1-数字类型的分类" class="headerlink" title="1. 数字类型的分类"></a>1. 数字类型的分类</h3><ul>
+<li><p>单精度类型：FLOAT</p>
+<ul>
+<li>存储空间：4 字节</li>
+<li>精确性：低</li>
+</ul>
+</li>
+<li><p>双精度类型：DOUBLE</p>
+<ul>
+<li>占用空间：8 字节</li>
+<li>精确性：低，比FLOAT高</li>
+</ul>
+</li>
+<li><p>高精度类型：DECIMAL</p>
+<ul>
+<li>占用空间：变长</li>
+<li>精确性：非常高</li>
+</ul>
+</li>
+</ul>
+<p><strong>注意：财务系统<code>必须使用DECIMAL</code></strong></p>
+<hr>
+<h2 id="三-字符串类型"><a href="#三-字符串类型" class="headerlink" title="三. 字符串类型"></a>三. 字符串类型</h2><h3 id="1-字符串类型介绍"><a href="#1-字符串类型介绍" class="headerlink" title="1. 字符串类型介绍"></a>1. 字符串类型介绍</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">说明</th>
+<th style="text-align:center">N的含义</th>
+<th style="text-align:center">是否有字符集</th>
+<th style="text-align:center">最大长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>CHAR(N)</code></td>
+<td style="text-align:center">定长字符</td>
+<td style="text-align:center">字符</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">255</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>VARCHAR(N)</code></td>
+<td style="text-align:center">变长字符</td>
+<td style="text-align:center">字符</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">16384</td>
+</tr>
+<tr>
+<td style="text-align:center">BINARY(N)</td>
+<td style="text-align:center">定长二进制字节</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">255</td>
+</tr>
+<tr>
+<td style="text-align:center">VARBINARY(N)</td>
+<td style="text-align:center">变长二进制字节</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">16384</td>
+</tr>
+<tr>
+<td style="text-align:center">TINYBLOB(N)</td>
+<td style="text-align:center">二进制大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">256</td>
+</tr>
+<tr>
+<td style="text-align:center">BLOB(N)</td>
+<td style="text-align:center">二进制大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">16K</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMBLOB(N)</td>
+<td style="text-align:center">二进制大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">16M</td>
+</tr>
+<tr>
+<td style="text-align:center">LONGBLOB(N)</td>
+<td style="text-align:center">二进制大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">4G</td>
+</tr>
+<tr>
+<td style="text-align:center">TINYTEXT(N)</td>
+<td style="text-align:center">大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">256</td>
+</tr>
+<tr>
+<td style="text-align:center">TEXT(N)</td>
+<td style="text-align:center">大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">16K</td>
+</tr>
+<tr>
+<td style="text-align:center">MEDIUMTEXT(N)</td>
+<td style="text-align:center">大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">16M</td>
+</tr>
+<tr>
+<td style="text-align:center">LONGTEXT(N)</td>
+<td style="text-align:center">大对象</td>
+<td style="text-align:center">字节</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">4G</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-N和字符集"><a href="#2-N和字符集" class="headerlink" title="2. N和字符集"></a>2. N和字符集</h3><ul>
+<li><strong>char(N)</strong><ul>
+<li>假设当前table的字符集的<code>最大长度</code>为<code>W</code>, 则<code>char(N)</code>的最大存储空间为 <code>(N X W)Byte</code>;假设使用<code>UTF-8</code>，则char(10)可以最小存储10个字节的字符，最大存储30个字节的字符，其实是另一种意义上的<code>varchar</code></li>
+<li>当存储的字符数<code>小于N</code>时，尾部使用<code>空格</code>填充，并且填充最小字节的空格</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_char(a char(10));</span><br><span class="line">Query OK, 0 rows affected (0.12 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show create table test_char;</span><br><span class="line">+<span class="comment">-----------+------------------------------------------------------------------------------------------------+</span></span><br><span class="line">| Table     | <span class="keyword">Create</span> <span class="keyword">Table</span>                                                                                   |</span><br><span class="line">+<span class="comment">-----------+------------------------------------------------------------------------------------------------+</span></span><br><span class="line">| test_char | <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test_char`</span> (</span><br><span class="line">  <span class="string">`a`</span> <span class="built_in">char</span>(<span class="number">10</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 |</span><br><span class="line">+<span class="comment">-----------+------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_char <span class="keyword">values</span>(<span class="string">'abc'</span>);</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_char values('你好吗');</span><br><span class="line">Query OK, 1 row affected (0.05 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_char values('大家好ab');</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_char values('大家ab好');</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_char values('大家ab好吗');</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select a, length(a) from test_char;</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| a              | length(a) |</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| abc            |         3 |</span><br><span class="line">| 你好吗         |         9 |</span><br><span class="line">| 大家好ab       |        11 |</span><br><span class="line">| 大家ab好       |        11 |</span><br><span class="line">| 大家ab好吗     |        14 |</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, <span class="keyword">hex</span>(a) <span class="keyword">from</span> test_char;</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| a              | hex(a)                       |</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| abc            | 616263                       |    <span class="comment">-- 注意这里，以及下面的16进制值，一会可以对比</span></span><br><span class="line">| 你好吗         | E4BDA0E5A5BDE59097           |</span><br><span class="line">| 大家好ab       | E5A4A7E5AEB6E5A5BD6162       |</span><br><span class="line">| 大家ab好       | E5A4A7E5AEB66162E5A5BD       |</span><br><span class="line">| 大家ab好吗     | E5A4A7E5AEB66162E5A5BDE59097 |</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">hex</span>(<span class="string">' '</span>);</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">| hex(' ') |</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">| 20       |   <span class="comment">-- 注意 空格 空格对应的16进制数字是 20</span></span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p><strong><code>test_char</code>表实际二进制存储文件</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- </span></span><br><span class="line"><span class="comment">-- shell&gt; hexdump -C test_char.idb</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 1:abc</span></span><br><span class="line"><span class="comment">-- 2:你好吗</span></span><br><span class="line"><span class="comment">-- 3:大家好ab</span></span><br><span class="line"><span class="comment">-- 4:大家ab好</span></span><br><span class="line"><span class="comment">-- 5:大家ab好吗</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- ---省略---</span></span><br><span class="line">00006070  73 75 70 72 65 6d 75 6d  0a 00 00 00 10 00 24 00  |supremum......$.|</span><br><span class="line">00006080  00 00 00 02 03 00 00 00  00 1f 33 a8 00 00 00 26  |..........3....&amp;|</span><br><span class="line">00006090  01 10 61 62 63 20 20 20  20 20 20 20 0a 00 00 00  |..abc       ....| <span class="comment">-- 1:后面补了7个空格</span></span><br><span class="line">000060a0  18 00 24 00 00 00 00 02  04 00 00 00 00 1f 34 a9  |..$...........4.|</span><br><span class="line">000060b0  00 00 00 25 01 10 e4 bd  a0 e5 a5 bd e5 90 97 20  |...%........... | <span class="comment">-- 2:补充了1个空格</span></span><br><span class="line">000060c0  0b 00 00 00 20 00 25 00  00 00 00 02 05 00 00 00  |.... .%.........|</span><br><span class="line">000060d0  00 1f 39 ac 00 00 00 26  01 10 e5 a4 a7 e5 ae b6  |..9....&amp;........| <span class="comment">-- 3:没有补充空格</span></span><br><span class="line">000060e0  e5 a5 bd 61 62 0b 00 00  00 28 00 25 00 00 00 00  |...ab....(.%....|  <span class="comment">-- </span></span><br><span class="line">000060f0  02 06 00 00 00 00 1f 3a  ad 00 00 00 28 01 10 e5  |.......:....(...| <span class="comment">--</span></span><br><span class="line">00006100  a4 a7 e5 ae b6 61 62 e5  a5 bd 0e 00 00 00 30 ff  |.....ab.......0.|  <span class="comment">-- 4：没有补充空格</span></span><br><span class="line">00006110  5f 00 00 00 00 02 07 00  00 00 00 1f 3f b0 00 00  |_...........?...|</span><br><span class="line">00006120  00 29 01 10 e5 a4 a7 e5  ae b6 61 62 e5 a5 bd e5  |.)........ab....|<span class="comment">--</span></span><br><span class="line">00006130  90 97 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................| <span class="comment">-- 5：没有补充空格</span></span><br><span class="line">00006140  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|</span><br><span class="line"><span class="comment">-- ---省略---</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>varchar(N)</strong><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_varchar(a varchar(10));</span><br><span class="line">Query OK, 0 rows affected (0.12 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show create table test_varchar;</span><br><span class="line">+<span class="comment">--------------+------------------------------------------------------------------------------------------------------+</span></span><br><span class="line">| Table        | <span class="keyword">Create</span> <span class="keyword">Table</span>                                                                                         |</span><br><span class="line">+<span class="comment">--------------+------------------------------------------------------------------------------------------------------+</span></span><br><span class="line">| test_varchar | <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test_varchar`</span> (</span><br><span class="line">  <span class="string">`a`</span> <span class="built_in">varchar</span>(<span class="number">10</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 |</span><br><span class="line">+<span class="comment">--------------+------------------------------------------------------------------------------------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> test_varchar <span class="keyword">values</span>(<span class="string">'abc'</span>);</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_varchar values('你好吗');</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_varchar values('大家好ab');</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_varchar values('大家ab好');</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_varchar values('大家ab好吗');</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select a, hex(a) from test_varchar;</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| a              | hex(a)                       |</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| abc            | 616263                       |</span><br><span class="line">| 你好吗         | E4BDA0E5A5BDE59097           |</span><br><span class="line">| 大家好ab       | E5A4A7E5AEB6E5A5BD6162       |</span><br><span class="line">| 大家ab好       | E5A4A7E5AEB66162E5A5BD       |</span><br><span class="line">| 大家ab好吗     | E5A4A7E5AEB66162E5A5BDE59097 |</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, <span class="keyword">length</span>(a) <span class="keyword">from</span> test_varchar;</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| a              | length(a) |</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| abc            |         3 |</span><br><span class="line">| 你好吗         |         9 |</span><br><span class="line">| 大家好ab       |        11 |</span><br><span class="line">| 大家ab好       |        11 |</span><br><span class="line">| 大家ab好吗     |        14 |</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong><code>test_varchar</code>表实际二进制存储文件</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- </span></span><br><span class="line"><span class="comment">-- shell&gt; hexdump -C test_char.idb</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 1:abc</span></span><br><span class="line"><span class="comment">-- 2:你好吗</span></span><br><span class="line"><span class="comment">-- 3:大家好ab</span></span><br><span class="line"><span class="comment">-- 4:大家ab好</span></span><br><span class="line"><span class="comment">-- 5:大家ab好吗</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 和char一样观察，都没有进行空格的填充</span></span><br><span class="line"></span><br><span class="line">00006070  73 75 70 72 65 6d 75 6d  03 00 00 00 10 00 1d 00  |supremum........|</span><br><span class="line">00006080  00 00 00 02 08 00 00 00  00 1f 44 b5 00 00 00 29  |..........D....)|</span><br><span class="line">00006090  01 10 61 62 63 09 00 00  00 18 00 23 00 00 00 00  |..abc......#....| </span><br><span class="line">000060a0  02 09 00 00 00 00 1f 45  b6 00 00 00 2b 01 10 e4  |.......E....+...|</span><br><span class="line">000060b0  bd a0 e5 a5 bd e5 90 97  0b 00 00 00 20 00 25 00  |............ .%.|</span><br><span class="line">000060c0  00 00 00 02 0a 00 00 00  00 1f 4a b9 00 00 00 2c  |..........J....,|</span><br><span class="line">000060d0  01 10 e5 a4 a7 e5 ae b6  e5 a5 bd 61 62 0b 00 00  |...........ab...|</span><br><span class="line">000060e0  00 28 00 25 00 00 00 00  02 0b 00 00 00 00 1f 4b  |.(.%...........K|</span><br><span class="line">000060f0  ba 00 00 00 2c 01 10 e5  a4 a7 e5 ae b6 61 62 e5  |....,........ab.|</span><br><span class="line">00006100  a5 bd 0e 00 00 00 30 ff  67 00 00 00 00 02 0c 00  |......0.g.......|</span><br><span class="line">00006110  00 00 00 1f 50 bd 00 00  00 2d 01 10 e5 a4 a7 e5  |....P....-......|</span><br><span class="line">00006120  ae b6 61 62 e5 a5 bd e5  90 97 00 00 00 00 00 00  |..ab............|</span><br><span class="line">00006130  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>插入数据尾部带空格</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into test_char values('好好好   ');  -- 后面有3个空格</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_varchar values('好好好   '); -- 后面有3个空格</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- </span></span><br><span class="line"><span class="comment">-- test_char 表</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select a, length(a) from test_char;   </span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| a              | length(a) |</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| abc            |         3 |</span><br><span class="line">| 你好吗         |         9 |</span><br><span class="line">| 大家好ab       |        11 |</span><br><span class="line">| 大家ab好       |        11 |</span><br><span class="line">| 大家ab好吗     |        14 |</span><br><span class="line">| 好好好         |         9 |  <span class="comment">-- 只有9个字节</span></span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, <span class="keyword">hex</span>(a) <span class="keyword">from</span> test_char;</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| a              | hex(a)                       |</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| abc            | 616263                       |</span><br><span class="line">| 你好吗         | E4BDA0E5A5BDE59097           |</span><br><span class="line">| 大家好ab       | E5A4A7E5AEB6E5A5BD6162       |</span><br><span class="line">| 大家ab好       | E5A4A7E5AEB66162E5A5BD       |</span><br><span class="line">| 大家ab好吗     | E5A4A7E5AEB66162E5A5BDE59097 |</span><br><span class="line">| 好好好         | E5A5BDE5A5BDE5A5BD           | <span class="comment">-- 无填充空格</span></span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">6 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- test_varchar表</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, <span class="keyword">length</span>(a) <span class="keyword">from</span> test_varchar;</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| a              | length(a) |</span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">| abc            |         3 |</span><br><span class="line">| 你好吗         |         9 |</span><br><span class="line">| 大家好ab       |        11 |</span><br><span class="line">| 大家ab好       |        11 |</span><br><span class="line">| 大家ab好吗     |        14 |</span><br><span class="line">| 好好好         |        12 |  <span class="comment">-- (好好好)9个字节 +  3个字节的空格</span></span><br><span class="line">+<span class="comment">----------------+-----------+</span></span><br><span class="line">7 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a, <span class="keyword">hex</span>(a) <span class="keyword">from</span> test_varchar;      </span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| a              | hex(a)                       |</span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">| abc            | 616263                       |</span><br><span class="line">| 你好吗         | E4BDA0E5A5BDE59097           |</span><br><span class="line">| 大家好ab       | E5A4A7E5AEB6E5A5BD6162       |</span><br><span class="line">| 大家ab好       | E5A4A7E5AEB66162E5A5BD       |</span><br><span class="line">| 大家ab好吗     | E5A4A7E5AEB66162E5A5BDE59097 |</span><br><span class="line">| 好好好         | E5A5BDE5A5BDE5A5BD202020     |  <span class="comment">-- 后面有20 20 20 ，表示3个自己的空格</span></span><br><span class="line">+<span class="comment">----------------+------------------------------+</span></span><br><span class="line">7 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面的现象无法用统一的规则进行表述，但是<a href="http://dev.mysql.com/doc/refman/5.7/en/innodb-physical-record.html" target="_blank" rel="noopener">官方文档</a>给出的解释是，这样的安排是为了避免索引页的碎片 </p>
+</blockquote>
+<h3 id="3-BLOB和TEXT"><a href="#3-BLOB和TEXT" class="headerlink" title="3.BLOB和TEXT"></a>3.BLOB和TEXT</h3><ul>
+<li><p>在BLOB和TEXT上创建索引时，必须指定索引前缀的长度</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_text(a int primary key, b text, key(b));</span><br><span class="line">ERROR 1170 (42000): BLOB/TEXT column 'b' used in key specification without a key length</span><br><span class="line"></span><br><span class="line">mysql&gt; create table test_text(a int primary key, b text, key(b(64)));</span><br><span class="line">Query OK, 0 rows affected (0.13 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>BLOB和TEXT列不能有默认值</p>
+</li>
+<li>BLOB和TEXT列排序时只使用该列的前max_sort_length个字节<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@max_sort_length;</span><br><span class="line">+<span class="comment">-------------------+</span></span><br><span class="line">| @@max_sort_length |</span><br><span class="line">+<span class="comment">-------------------+</span></span><br><span class="line">|              1024 |</span><br><span class="line">+<span class="comment">-------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>不建议在MySQL中存储大型的二进制数据，比如歌曲，视频</p>
+</blockquote>
+<hr>
+<h2 id="四-字符集"><a href="#四-字符集" class="headerlink" title="四. 字符集"></a>四. 字符集</h2><h3 id="1-常见的字符集"><a href="#1-常见的字符集" class="headerlink" title="1. 常见的字符集"></a>1. 常见的字符集</h3><ul>
+<li>utf8</li>
+<li>utf8mb4</li>
+<li>gbk</li>
+<li>gb18030</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show character set;</span><br><span class="line">+<span class="comment">----------+---------------------------------+---------------------+--------+</span></span><br><span class="line">| Charset  | Description                     | Default collation   | Maxlen |</span><br><span class="line">+<span class="comment">----------+---------------------------------+---------------------+--------+</span></span><br><span class="line">| big5     | Big5 Traditional Chinese        | big5_chinese_ci     |      2 |</span><br><span class="line">| dec8     | DEC West European               | dec8_swedish_ci     |      1 |</span><br><span class="line">| cp850    | DOS West European               | cp850_general_ci    |      1 |</span><br><span class="line">| hp8      | HP West European                | hp8_english_ci      |      1 |</span><br><span class="line">| koi8r    | KOI8-R Relcom Russian           | koi8r_general_ci    |      1 |</span><br><span class="line">| latin1   | cp1252 West European            | latin1_swedish_ci   |      1 |</span><br><span class="line">| latin2   | ISO 8859-2 Central European     | latin2_general_ci   |      1 |</span><br><span class="line">| swe7     | 7bit Swedish                    | swe7_swedish_ci     |      1 |</span><br><span class="line">| ascii    | US ASCII                        | ascii_general_ci    |      1 |</span><br><span class="line">| ujis     | EUC-JP Japanese                 | ujis_japanese_ci    |      3 |</span><br><span class="line">| sjis     | Shift-JIS Japanese              | sjis_japanese_ci    |      2 |</span><br><span class="line">| hebrew   | ISO 8859-8 Hebrew               | hebrew_general_ci   |      1 |</span><br><span class="line">| tis620   | TIS620 Thai                     | tis620_thai_ci      |      1 |</span><br><span class="line">| euckr    | EUC-KR Korean                   | euckr_korean_ci     |      2 |</span><br><span class="line">| koi8u    | KOI8-U Ukrainian                | koi8u_general_ci    |      1 |</span><br><span class="line">| gb2312   | GB2312 Simplified Chinese       | gb2312_chinese_ci   |      2 |</span><br><span class="line">| greek    | ISO 8859-7 Greek                | greek_general_ci    |      1 |</span><br><span class="line">| cp1250   | Windows Central European        | cp1250_general_ci   |      1 |</span><br><span class="line">| gbk      | GBK Simplified Chinese          | gbk_chinese_ci      |      2 | <span class="comment">-- gbk，表示的字符有限</span></span><br><span class="line">| latin5   | ISO 8859-9 Turkish              | latin5_turkish_ci   |      1 |</span><br><span class="line">| armscii8 | ARMSCII-8 Armenian              | armscii8_general_ci |      1 |</span><br><span class="line">| utf8     | UTF-8 Unicode                   | utf8_general_ci     |      3 | <span class="comment">-- utf8，最长3字节</span></span><br><span class="line">| ucs2     | UCS-2 Unicode                   | ucs2_general_ci     |      2 |</span><br><span class="line">| cp866    | DOS Russian                     | cp866_general_ci    |      1 |</span><br><span class="line">| keybcs2  | DOS Kamenicky Czech-Slovak      | keybcs2_general_ci  |      1 |</span><br><span class="line">| macce    | Mac Central European            | macce_general_ci    |      1 |</span><br><span class="line">| macroman | Mac West European               | macroman_general_ci |      1 |</span><br><span class="line">| cp852    | DOS Central European            | cp852_general_ci    |      1 |</span><br><span class="line">| latin7   | ISO 8859-13 Baltic              | latin7_general_ci   |      1 |</span><br><span class="line">| utf8mb4  | UTF-8 Unicode                   | utf8mb4_general_ci  |      4 | <span class="comment">-- utf8 + mobile端字符</span></span><br><span class="line">| cp1251   | Windows Cyrillic                | cp1251_general_ci   |      1 |</span><br><span class="line">| utf16    | UTF-16 Unicode                  | utf16_general_ci    |      4 |</span><br><span class="line">| utf16le  | UTF-16LE Unicode                | utf16le_general_ci  |      4 |</span><br><span class="line">| cp1256   | Windows Arabic                  | cp1256_general_ci   |      1 |</span><br><span class="line">| cp1257   | Windows Baltic                  | cp1257_general_ci   |      1 |</span><br><span class="line">| utf32    | UTF-32 Unicode                  | utf32_general_ci    |      4 |</span><br><span class="line">| binary   | Binary pseudo charset           | binary              |      1 |</span><br><span class="line">| geostd8  | GEOSTD8 Georgian                | geostd8_general_ci  |      1 |</span><br><span class="line">| cp932    | SJIS for Windows Japanese       | cp932_japanese_ci   |      2 |</span><br><span class="line">| eucjpms  | UJIS for Windows Japanese       | eucjpms_japanese_ci |      3 |</span><br><span class="line">| gb18030  | China National Standard GB18030 | gb18030_chinese_ci  |      4 | <span class="comment">-- gb18030,最长4个字节</span></span><br><span class="line">+<span class="comment">----------+---------------------------------+---------------------+--------+</span></span><br><span class="line">41 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h3 id="2-collation"><a href="#2-collation" class="headerlink" title="2. collation"></a>2. collation</h3><p>collation的含义是指排序规则，<code>ci（case insensitive）</code>结尾的排序集是不区分大小写的<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select 'a' = 'A';</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| 'a' = 'A' |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">|         1 |  <span class="comment">-- 因为大小写无关，所以返回1</span></span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">table</span> test_ci (a <span class="built_in">varchar</span>(<span class="number">10</span>), <span class="keyword">key</span>(a));</span><br><span class="line">Query OK, 0 rows affected (0.13 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_ci values('a');</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_ci values('A');</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_ci where a = 'a';</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |  </span><br><span class="line">| A    |  <span class="comment">-- A也被我们查到了</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>上面的情况如果从业务的角度上看，可以很好理解，比如创建一个用户叫做Tom，你是不希望再创建一个叫做tom的用户的</p>
+</blockquote>
+<ul>
+<li><strong>修改默认的collation</strong><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set names utf8mb4 collate utf8mb4_bin;  -- 当前会话有效</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select 'a' = 'A';</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| 'a' = 'A' |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">|         0 |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>字符集的指定，可以在创建数据库的时候指定，也可以在创建表的时候单独指定，也可以创建列的时候进行指定</p>
+</blockquote>
+<hr>
+<h2 id="五-集合类型"><a href="#五-集合类型" class="headerlink" title="五. 集合类型"></a>五. 集合类型</h2><ul>
+<li>集合类型ENUM 和 SET</li>
+<li>ENUM类型最多允许65536个值</li>
+<li>SET类型最多允许64个值</li>
+<li>通过sql_mode参数可以用户约束检查</li>
+</ul>
+<h3 id="1-集合类型的排序"><a href="#1-集合类型的排序" class="headerlink" title="1. 集合类型的排序"></a>1. 集合类型的排序</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_col (</span><br><span class="line">    -&gt; user varchar(10),</span><br><span class="line">    -&gt; sex enum('male', 'female')  -- 虽然写的是字符串，单其实存储的整型，效率还是可以的</span><br><span class="line">    -&gt; );</span><br><span class="line">    </span><br><span class="line">mysql&gt; insert into test_col values ("tom", "male");</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_col values ("tom", "xmale");  -- 不是male 和 female</span><br><span class="line">Query OK, 1 row affected, 1 warning (0.03 sec)  <span class="comment">-- 有warning</span></span><br><span class="line"></span><br><span class="line">mysql&gt; set sql_mode='strict_trans_tables';  -- 设置为严格模式</span><br><span class="line">Query OK, 0 rows affected, 2 warnings (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_col values ("tom", "xmale");</span><br><span class="line">ERROR 1265 (01000): Data truncated for column 'sex' at row 1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>强烈建议新业务上都设置成严格模式</p>
+</blockquote>
+<h3 id="2-集合类型的排序"><a href="#2-集合类型的排序" class="headerlink" title="2. 集合类型的排序"></a>2. 集合类型的排序</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_col_sort(</span><br><span class="line">    -&gt; user char(10),</span><br><span class="line">    -&gt; type enum('aaa','zzz','bbb','yyy','fff')  -- aaa=0, zzz=1, bbb=2, yyy=3, fff=4</span><br><span class="line">    -&gt; );</span><br><span class="line">Query OK, 0 rows affected (0.20 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_col_sort order by type asc; -- 以type作为key，进行升序排序</span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">| user  | type |</span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">| user1 | aaa  |  <span class="comment">-- 0</span></span><br><span class="line">| user4 | zzz  |  <span class="comment">-- 1</span></span><br><span class="line">| user2 | bbb  |  <span class="comment">-- 2</span></span><br><span class="line">| user3 | yyy  |  <span class="comment">-- 3</span></span><br><span class="line">+<span class="comment">-------+------+  -- 枚举类型实际是整型数据，按照插入顺序进行排列</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 使用ascii排序</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_col_sort <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">cast</span>(<span class="keyword">type</span> <span class="keyword">as</span> <span class="built_in">char</span>) <span class="keyword">asc</span>;  <span class="comment">-- 使用cast()函数转换成某种型</span></span><br><span class="line">+<span class="comment">-------+------+                                                     -- 这里我们转成char型</span></span><br><span class="line">| user  | type |                                                     <span class="comment">-- 然后进行排序(ascii)</span></span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">| user1 | aaa  | <span class="comment">-- 0</span></span><br><span class="line">| user2 | bbb  | <span class="comment">-- 2</span></span><br><span class="line">| user3 | yyy  | <span class="comment">-- 3</span></span><br><span class="line">| user4 | zzz  | <span class="comment">-- 1</span></span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 或者使用concat</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_col_sort <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">concat</span>(<span class="keyword">type</span>) <span class="keyword">asc</span>;   <span class="comment">-- concat()是连接字符串函数            </span></span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">| user  | type |</span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">| user1 | aaa  |  <span class="comment">-- 0</span></span><br><span class="line">| user2 | bbb  |  <span class="comment">-- 2</span></span><br><span class="line">| user3 | yyy  |  <span class="comment">-- 3</span></span><br><span class="line">| user4 | zzz  |  <span class="comment">-- 1</span></span><br><span class="line">+<span class="comment">-------+------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">concat</span>(<span class="string">"abc"</span>, <span class="string">"大家好"</span>);</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">| concat("abc", "大家好")    |</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">| abc大家好                  |</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="六-日期类型"><a href="#六-日期类型" class="headerlink" title="六. 日期类型"></a>六. 日期类型</h2><table>
+<thead>
+<tr>
+<th>日期类型</th>
+<th>占用空间(byte)（&lt;5.6）</th>
+<th>占用空间(byte)(&gt;=5.6)</th>
+<th>表示范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATETIME</code></td>
+<td>8</td>
+<td>5 + 微秒存储空间</td>
+<td>1000-01-01 00:00:00 ~ 9999-12-31 23:59:59</td>
+</tr>
+<tr>
+<td>DATE</td>
+<td>3</td>
+<td>3</td>
+<td>1000-01-01 ~ 9999-12-31</td>
+</tr>
+<tr>
+<td><code>TIMESTAMP</code></td>
+<td>4</td>
+<td>4 + 微秒存储空间</td>
+<td>1970-01-01 00:00:00UTC ~ 2038-01-19 03:14:07UTC</td>
+</tr>
+<tr>
+<td>YEAR</td>
+<td>1</td>
+<td>1</td>
+<td>YEAR(2):1970-2070, YEAR(4):1901-2155</td>
+</tr>
+<tr>
+<td>TIME</td>
+<td>3</td>
+<td>3 + 微秒存储空间</td>
+<td>-838:59:59 ~ 838:59:59</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>微秒位数</th>
+<th>所需存储空间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1, 2</td>
+<td>1 byte</td>
+</tr>
+<tr>
+<td>3, 4</td>
+<td>2 bytes</td>
+</tr>
+<tr>
+<td>5, 6</td>
+<td>3 bytes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>TIMESTAMP 带时区功能</p>
+</blockquote>
+<h3 id="1-TIMESTAMP和DATETIME"><a href="#1-TIMESTAMP和DATETIME" class="headerlink" title="1. TIMESTAMP和DATETIME"></a>1. TIMESTAMP和DATETIME</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table test_time(a timestamp, b datetime);</span><br><span class="line">Query OK, 0 rows affected (0.12 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_time values (now(), now());</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_time;</span><br><span class="line">+<span class="comment">---------------------+---------------------+</span></span><br><span class="line">| a                   | b                   |</span><br><span class="line">+<span class="comment">---------------------+---------------------+</span></span><br><span class="line">| 2015-11-28 10:00:39 | 2015-11-28 10:00:39 |</span><br><span class="line">+<span class="comment">---------------------+---------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> @@<span class="keyword">time_zone</span>; </span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">| @@time_zone |</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">| SYSTEM      |</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> <span class="keyword">time_zone</span>=<span class="string">'+00:00'</span>;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @@time_zone;</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">| @@time_zone |</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">| +00:00      |</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> test_time;</span><br><span class="line">+<span class="comment">---------------------+---------------------+</span></span><br><span class="line">| a                   | b                   |</span><br><span class="line">+<span class="comment">---------------------+---------------------+</span></span><br><span class="line">| 2015-11-28 2:00:39 | 2015-11-28 10:00:39  |  <span class="comment">-- 时区的差别体现出来了</span></span><br><span class="line">+<span class="comment">---------------------+---------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h3 id="2-微秒"><a href="#2-微秒" class="headerlink" title="2. 微秒"></a>2. 微秒</h3><p><strong>从<code>MySQL5.6.X</code>开始，支持<code>微秒</code>，最大显示<code>6位</code></strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select now(6);</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">| now(6)                     |</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">| 2015-11-30 21:15:36.415358 |  <span class="comment">-- 6位 微秒显示</span></span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">now</span>(<span class="number">7</span>);</span><br><span class="line">ERROR 1426 (42000): Too-big precision 7 specified for 'now'. Maximum is 6.  <span class="comment">-- 不支持，最大到6</span></span><br><span class="line"></span><br><span class="line">mysql&gt; create table test_time_fac (t datetime(6));</span><br><span class="line">Query OK, 0 rows affected (0.11 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_time_fac values(now(6)); </span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_time_fac;</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">| t                          |</span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">| 2015-11-30 21:19:27.900393 |  <span class="comment">-- 由于是用了6位微秒位数，根据表格显示，实际存储的空间是 5 + 3 = 8 byte</span></span><br><span class="line">+<span class="comment">----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-时间函数"><a href="#3-时间函数" class="headerlink" title="3. 时间函数"></a>3. 时间函数</h3><ul>
+<li>常用函数<br>| 函数名 | 函数说明 | 备注 |<br>|——–|———-|——|<br>| NOW    | 返回<code>SQL执行时</code>的时间| 如果不考虑其他因素，可以理解为写完SQL，敲下回车瞬间的时间 |<br>| CURRENT_TIMESTAMP| 与NOW()函数同义||<br>| SYSDATE | 返回<code>函数执行时</code>的时间|MySQL处理你的函数时的时间，统一SQL语句中，大于NOW|<br>| DATA_ADD(date, interval expr uint) | 增加时间||<br>| DATA_SUB(date, interval expr uint) | 减少时间|可用ADD，然后unit给负数|<br>| DATE FORMAT| 格式化时间| |</li>
+</ul>
+<blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html" target="_blank" rel="noopener">所有时间函数–官方文档</a></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- NOW和SYSDATE的区别</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select now(6),sysdate(6),sleep(5),now(6),sysdate(6);</span><br><span class="line">+<span class="comment">----------------------------+----------------------------+----------+----------------------------+----------------------------+</span></span><br><span class="line">| now(6)                     | sysdate(6)                 | sleep(5) | now(6)                     | sysdate(6)                 |</span><br><span class="line">+<span class="comment">----------------------------+----------------------------+----------+----------------------------+----------------------------+</span></span><br><span class="line">| 2015-11-30 21:40:58.572383 | 2015-11-30 21:40:58.572542 |        0 | 2015-11-30 21:40:58.572383 | 2015-11-30 21:41:03.572720 |</span><br><span class="line">+<span class="comment">----------------------------+----------------------------+----------+----------------------------+----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">5.00</span> sec)</span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 两个now(6)都相等，因为是SQL执行时的时间(可以简单立理解为按回车的时间)</span></span><br><span class="line"><span class="comment">-- 两个sysdate(6)差了5秒，刚好是sleep(5)的时间</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- date_add</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">date_add</span>(<span class="keyword">now</span>(), <span class="built_in">interval</span> <span class="number">5</span> <span class="keyword">day</span>);   <span class="comment">-- 增加5天</span></span><br><span class="line">+<span class="comment">---------------------------------+</span></span><br><span class="line">| date_add(now(), interval 5 day) |</span><br><span class="line">+<span class="comment">---------------------------------+</span></span><br><span class="line">| 2015-12-05 21:42:39             |</span><br><span class="line">+<span class="comment">---------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">date_add</span>(<span class="keyword">now</span>(), <span class="built_in">interval</span> <span class="number">-5</span> <span class="keyword">month</span>);  <span class="comment">-- 减少 5个月</span></span><br><span class="line">+<span class="comment">------------------------------------+</span></span><br><span class="line">| date_add(now(), interval -5 month) |</span><br><span class="line">+<span class="comment">------------------------------------+</span></span><br><span class="line">| 2015-06-30 21:43:49                |</span><br><span class="line">+<span class="comment">------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="keyword">date_sub</span>(<span class="keyword">now</span>(), <span class="built_in">interval</span> <span class="number">5</span> <span class="keyword">month</span>);  <span class="comment">-- 与add + 负数一致</span></span><br><span class="line">+<span class="comment">-----------------------------------+</span></span><br><span class="line">| date_sub(now(), interval 5 month) |</span><br><span class="line">+<span class="comment">-----------------------------------+</span></span><br><span class="line">| 2015-06-30 21:44:21               |</span><br><span class="line">+<span class="comment">-----------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- date_format</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">SELECT</span> <span class="keyword">DATE_FORMAT</span>((<span class="keyword">select</span> <span class="keyword">now</span>(<span class="number">6</span>)), <span class="string">'%H:%i:%s'</span>);</span><br><span class="line">+<span class="comment">------------------------------------------+</span></span><br><span class="line">| DATE_FORMAT((<span class="keyword">select</span> <span class="keyword">now</span>(<span class="number">6</span>)), <span class="string">'%H:%i:%s'</span>) |</span><br><span class="line">+<span class="comment">------------------------------------------+</span></span><br><span class="line">| <span class="number">21</span>:<span class="number">48</span>:<span class="number">30</span>                                 |</span><br><span class="line">+<span class="comment">------------------------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h3 id="4-字段更新时间"><a href="#4-字段更新时间" class="headerlink" title="4. 字段更新时间"></a>4. 字段更新时间</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create  table test_field_update(</span><br><span class="line">    -&gt; a int(10),</span><br><span class="line">    -&gt; b timestamp not null default current_timestamp on update current_timestamp</span><br><span class="line">    -&gt; );</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_field_update values(1, now(6));</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_field_update;</span><br><span class="line">+<span class="comment">------+---------------------+</span></span><br><span class="line">| a    | b                   |</span><br><span class="line">+<span class="comment">------+---------------------+</span></span><br><span class="line">|    1 | 2015-11-30 21:55:18 |  <span class="comment">-- 上面使用了now(6)，但是这里没有微秒，是因为定义的时候就是timestamp</span></span><br><span class="line">+<span class="comment">------+---------------------+  -- 如果写成timestamp(6),就可以显示微秒</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">update</span> test_field_update <span class="keyword">set</span> a=<span class="number">100</span> <span class="keyword">where</span> a=<span class="number">1</span>;  <span class="comment">-- 只更新a字段</span></span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_field_update;    </span><br><span class="line">+<span class="comment">------+---------------------+</span></span><br><span class="line">| a    | b                   |</span><br><span class="line">+<span class="comment">------+---------------------+</span></span><br><span class="line">|  100 | 2015-11-30 22:01:03 |  <span class="comment">-- 发现b字段跟着改变了</span></span><br><span class="line">+<span class="comment">------+---------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 测试timestamp(6)</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">table</span> test_time_disp(</span><br><span class="line">    -&gt; a <span class="built_in">int</span>(<span class="number">10</span>),</span><br><span class="line">    -&gt; b <span class="keyword">timestamp</span>(<span class="number">6</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span> <span class="keyword">current_timestamp</span>(<span class="number">6</span>) <span class="keyword">on</span> <span class="keyword">update</span> <span class="keyword">current_timestamp</span>(<span class="number">6</span>)  <span class="comment">-- 定义了(6)</span></span><br><span class="line">    -&gt; );</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test_time_disp values(1, now(6));      </span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_time_disp;</span><br><span class="line">+<span class="comment">------+----------------------------+</span></span><br><span class="line">| a    | b                          |</span><br><span class="line">+<span class="comment">------+----------------------------+</span></span><br><span class="line">|    1 | 2015-11-30 22:03:23.545406 |  <span class="comment">-- 插入了now(6), 这里就显示了6位微秒</span></span><br><span class="line">+<span class="comment">------+----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/" title="数据类型">https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-09-19/hexo_google_adsense/" rel="next" title="hexo博客next主题添加google adsense">
+                <i class="fa fa-chevron-left"></i> hexo博客next主题添加google adsense
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day005)/" rel="prev" title="slow_log/generic_log/audit/存储引擎一">
+                slow_log/generic_log/audit/存储引擎一 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day008：数据类型）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day008：数据类型）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-INT类型"><span class="nav-number">1.1.</span> <span class="nav-text">一. INT类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-INT类型的分类"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. INT类型的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-INT类型的使用"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. INT类型的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-INT-N"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. INT(N)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-AUTO-INCREMENT"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. AUTO_INCREMENT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-数字类型"><span class="nav-number">1.2.</span> <span class="nav-text">二. 数字类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数字类型的分类"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 数字类型的分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-字符串类型"><span class="nav-number">1.3.</span> <span class="nav-text">三. 字符串类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-字符串类型介绍"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 字符串类型介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-N和字符集"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. N和字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-BLOB和TEXT"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.BLOB和TEXT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-字符集"><span class="nav-number">1.4.</span> <span class="nav-text">四. 字符集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-常见的字符集"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 常见的字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-collation"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. collation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-集合类型"><span class="nav-number">1.5.</span> <span class="nav-text">五. 集合类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-集合类型的排序"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. 集合类型的排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-集合类型的排序"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. 集合类型的排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-日期类型"><span class="nav-number">1.6.</span> <span class="nav-text">六. 日期类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-TIMESTAMP和DATETIME"><span class="nav-number">1.6.1.</span> <span class="nav-text">1. TIMESTAMP和DATETIME</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-微秒"><span class="nav-number">1.6.2.</span> <span class="nav-text">2. 微秒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-时间函数"><span class="nav-number">1.6.3.</span> <span class="nav-text">3. 时间函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-字段更新时间"><span class="nav-number">1.6.4.</span> <span class="nav-text">4. 字段更新时间</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

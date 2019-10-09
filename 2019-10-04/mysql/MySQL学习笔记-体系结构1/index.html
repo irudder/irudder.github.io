@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day004：权限拾遗/Role模拟/Workbench/体系结构）@(MySQL学习) [TOC] ##一. 权限拾遗 1. GRANT与创建用户123456mysql&amp;gt; grant select on sys.* to &apos;perf&apos;@&apos;127.0.0.1&apos; identified by &apos;123&apos;;Query OK, 0 rows affected, 1 warning">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL权限拾遗&#x2F;Role模拟&#x2F;Workbench">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day004：权限拾遗/Role模拟/Workbench/体系结构）@(MySQL学习) [TOC] ##一. 权限拾遗 1. GRANT与创建用户123456mysql&amp;gt; grant select on sys.* to &apos;perf&apos;@&apos;127.0.0.1&apos; identified by &apos;123&apos;;Query OK, 0 rows affected, 1 warning">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/MySQL体系结构.jpg">
+<meta property="og:updated_time" content="2019-10-09T01:06:07.508Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL权限拾遗&#x2F;Role模拟&#x2F;Workbench">
+<meta name="twitter:description" content="MySQL学习笔记（Day004：权限拾遗/Role模拟/Workbench/体系结构）@(MySQL学习) [TOC] ##一. 权限拾遗 1. GRANT与创建用户123456mysql&amp;gt; grant select on sys.* to &apos;perf&apos;@&apos;127.0.0.1&apos; identified by &apos;123&apos;;Query OK, 0 rows affected, 1 warning">
+<meta name="twitter:image" content="https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/MySQL体系结构.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/">
+
+
+
+
+
+  <title>MySQL权限拾遗/Role模拟/Workbench | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL权限拾遗/Role模拟/Workbench</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-04T19:19:18+08:00">
+                2019-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day004：权限拾遗-Role模拟-Workbench-体系结构）"><a href="#MySQL学习笔记（Day004：权限拾遗-Role模拟-Workbench-体系结构）" class="headerlink" title="MySQL学习笔记（Day004：权限拾遗/Role模拟/Workbench/体系结构）"></a>MySQL学习笔记（Day004：权限拾遗/Role模拟/Workbench/体系结构）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<p>##一. 权限拾遗</p>
+<h3 id="1-GRANT与创建用户"><a href="#1-GRANT与创建用户" class="headerlink" title="1. GRANT与创建用户"></a>1. GRANT与创建用户</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; grant select on sys.* to 'perf'@'127.0.0.1' identified by '123';</span><br><span class="line">Query OK, 0 rows affected, 1 warning (0.01 sec) <span class="comment">-- 这里有一个warning</span></span><br><span class="line"></span><br><span class="line">mysql&gt; show warnings;</span><br><span class="line"><span class="comment">-- 输入warning的Message如下：</span></span><br><span class="line"><span class="comment">-- Using GRANT for creating new user is deprecated and will be removed in future release. Create new user with CREATE USER statement.</span></span><br></pre></td></tr></table></figure>
+<p><strong>上面的这个例子使用<code>GRANT</code>赋权限的同时创建了<code>&#39;perf&#39;@&#39;127.0.0.1&#39;</code>这个用户，但是出现了<code>warning</code>，从给出的提示看来，以后的MySQL版本会废弃掉这种方式</strong></p>
+<ul>
+<li><strong>正确的创建用户并赋权的方式</strong><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create user 'pref'@'127.0.0.1' identified by '123';</span><br><span class="line">Query OK, 0 rows affected (0.00sec)</span><br><span class="line">mysql&gt; grant select on sys.* to 'perf'@'127.0.0.1';</span><br><span class="line">Query OK, 0 rows affected (0.00sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-查看某一个用户的权限"><a href="#2-查看某一个用户的权限" class="headerlink" title="2. 查看某一个用户的权限"></a>2. 查看某一个用户的权限</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show grants for 'perf'@'127.0.0.1';   </span><br><span class="line">+<span class="comment">-----------------------------------------------+</span></span><br><span class="line">| Grants for perf@127.0.0.1                     |</span><br><span class="line">+<span class="comment">-----------------------------------------------+</span></span><br><span class="line">| <span class="keyword">GRANT</span> <span class="keyword">USAGE</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'perf'</span>@<span class="string">'127.0.0.1'</span>      | <span class="comment">-- USAGE表示用户可以登录</span></span><br><span class="line">| <span class="keyword">GRANT</span> <span class="keyword">SELECT</span> <span class="keyword">ON</span> <span class="string">`sys`</span>.* <span class="keyword">TO</span> <span class="string">'perf'</span>@<span class="string">'127.0.0.1'</span> | <span class="comment">-- 对sys库的所有表有select权限</span></span><br><span class="line">+<span class="comment">-----------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h3 id="3-删除某一个用户"><a href="#3-删除某一个用户" class="headerlink" title="3. 删除某一个用户"></a>3. 删除某一个用户</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; drop user 'perf'@'127.0.0.1';</span><br><span class="line">Query OK, 0 rows affected (0.00sec)</span><br></pre></td></tr></table></figure>
+<h3 id="4-MySQL权限信息"><a href="#4-MySQL权限信息" class="headerlink" title="4. MySQL权限信息"></a>4. MySQL权限信息</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from mysql.user where user='perf'\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">                  Host: 127.0.0.1</span><br><span class="line">                  User: perf</span><br><span class="line">           Select_priv: N   <span class="comment">---由于perf用户是对sys库有权限，所以这里（USER）全是N</span></span><br><span class="line">           Insert_priv: N</span><br><span class="line">           Update_priv: N</span><br><span class="line">           Delete_priv: N</span><br><span class="line">           Create_priv: N</span><br><span class="line">             Drop_priv: N</span><br><span class="line">           Reload_priv: N</span><br><span class="line">         Shutdown_priv: N</span><br><span class="line">          Process_priv: N</span><br><span class="line">             File_priv: N</span><br><span class="line">            Grant_priv: N</span><br><span class="line">       References_priv: N</span><br><span class="line">            Index_priv: N</span><br><span class="line">            Alter_priv: N</span><br><span class="line">          Show_db_priv: N</span><br><span class="line">            Super_priv: N</span><br><span class="line"> Create_tmp_table_priv: N</span><br><span class="line">      Lock_tables_priv: N</span><br><span class="line">          Execute_priv: N</span><br><span class="line">       Repl_slave_priv: N</span><br><span class="line">      Repl_client_priv: N</span><br><span class="line">      Create_view_priv: N</span><br><span class="line">        Show_view_priv: N</span><br><span class="line">   Create_routine_priv: N</span><br><span class="line">    Alter_routine_priv: N</span><br><span class="line">      Create_user_priv: N</span><br><span class="line">            Event_priv: N</span><br><span class="line">          Trigger_priv: N</span><br><span class="line">Create_tablespace_priv: N</span><br><span class="line">              ssl_type: </span><br><span class="line">            ssl_cipher: </span><br><span class="line">           x509_issuer: </span><br><span class="line">          x509_subject: </span><br><span class="line">         max_questions: 0</span><br><span class="line">           max_updates: 0</span><br><span class="line">       max_connections: 0</span><br><span class="line">  max_user_connections: 0</span><br><span class="line">                plugin: mysql_native_password</span><br><span class="line"> authentication_string: *23AE809DDACAF96AF0FD78ED04B6A265E05AA257</span><br><span class="line">      password_expired: N</span><br><span class="line"> password_last_changed: 2015-11-18 12:20:13</span><br><span class="line">     password_lifetime: NULL</span><br><span class="line">        account_locked: N    <span class="comment">-- 如果这里为Y，该用户就无法使用了</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">------------------------我是分割线-----------------------------</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> mysql.db <span class="keyword">where</span> <span class="keyword">user</span>=<span class="string">'perf'</span>\G    </span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">                 Host: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">                   Db: <span class="keyword">sys</span>  <span class="comment">-- sys 数据库</span></span><br><span class="line">                 <span class="keyword">User</span>: perf</span><br><span class="line">          Select_priv: Y    <span class="comment">-- 有select权限，和我们赋予perf的权限一致</span></span><br><span class="line">          Insert_priv: N</span><br><span class="line">          Update_priv: N</span><br><span class="line">          Delete_priv: N</span><br><span class="line">          Create_priv: N</span><br><span class="line">            Drop_priv: N</span><br><span class="line">           Grant_priv: N</span><br><span class="line">      References_priv: N</span><br><span class="line">           Index_priv: N</span><br><span class="line">           Alter_priv: N</span><br><span class="line">Create_tmp_table_priv: N</span><br><span class="line">     Lock_tables_priv: N</span><br><span class="line">     Create_view_priv: N</span><br><span class="line">       Show_view_priv: N</span><br><span class="line">  Create_routine_priv: N</span><br><span class="line">   Alter_routine_priv: N</span><br><span class="line">         Execute_priv: N</span><br><span class="line">           Event_priv: N</span><br><span class="line">         Trigger_priv: N</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong><br><strong><code>不建议</code>使用<code>INSERT</code>或者<code>GRANT</code>对元数据表进行修改，来达到修改权限的目的</strong></p>
+</blockquote>
+<h3 id="5-information-schema"><a href="#5-information-schema" class="headerlink" title="5. information_schema"></a>5. information_schema</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select user();</span><br><span class="line">+<span class="comment">----------------+</span></span><br><span class="line">| user()         |</span><br><span class="line">+<span class="comment">----------------+</span></span><br><span class="line">| perf@127.0.0.1 |</span><br><span class="line">+<span class="comment">----------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">databases</span>;</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| Database           |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| information_schema |  <span class="comment">-- 这是一个特殊的数据库，我们虽然可以看见，但其实没有权限</span></span><br><span class="line">| sys                |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">use</span> information_schema;</span><br><span class="line">Reading table information for completion of table and column names</span><br><span class="line">You can turn off this feature to get a quicker startup with -A</span><br><span class="line"></span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; select * from  INNODB_CMP;</span><br><span class="line">ERROR 1227 (42000): Access denied; you need (at least one of) the PROCESS privilege(s) for this operation</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="二-MySQL模拟角色"><a href="#二-MySQL模拟角色" class="headerlink" title="二. MySQL模拟角色"></a>二. MySQL模拟角色</h2><h3 id="1-角色的定义："><a href="#1-角色的定义：" class="headerlink" title="1. 角色的定义："></a>1. 角色的定义：</h3><blockquote>
+<p><code>角色</code>(Role)可以用来批量管理用户，同一个角色下的用户，拥有相同的权限。<br><code>MySQL5.7.X</code>以后可以模拟角色(Role)的功能，通过<code>mysql.proxies_priv</code>模拟实现。<br><code>mysql.proxies_priv</code>在<code>5.5.X</code>和<code>5.6.X</code>的时候就存在，但是<code>无法模拟</code>角色(Role)功能。</p>
+</blockquote>
+<h3 id="2-模拟角色操作："><a href="#2-模拟角色操作：" class="headerlink" title="2. 模拟角色操作："></a>2. 模拟角色操作：</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create user 'junior_dba'@'127.0.0.1';  -- 相当于定于一个 角色(Role),</span><br><span class="line">                                               <span class="comment">-- 但这只是个普通的用户，名字比较有(Role)的感觉</span></span><br><span class="line">                                               <span class="comment">-- 有点类似用户组</span></span><br><span class="line">Query OK, 0 rows affected (0.00sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; create user 'tom'@'127.0.0.1';         -- 用户1</span><br><span class="line">Query OK, 0 rows affected (0.02sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; create user 'jim'@'127.0.0.1';         -- 用户2</span><br><span class="line">Query OK, 0 rows affected (0.02sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; grant proxy on 'junior_dba'@'127.0.0.1' to 'tom'@'127.0.0.1';  -- 将junior_dba的权限映射(map)到tom</span><br><span class="line">Query OK, 0 rows affected (0.02sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; grant proxy on 'junior_dba'@'127.0.0.1' to 'jim'@'127.0.0.1';  -- 然后映射(map)给jim</span><br><span class="line">Query OK, 0 rows affected (0.01sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; grant select on *.* to 'junior_dba'@'127.0.0.1';  -- 给junior_dba（模拟的Role）赋予实际权限</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; show grants for 'junior_dba'@'127.0.0.1';        -- 查看 junior_dba的权限</span><br><span class="line">+<span class="comment">-------------------------------------------------+</span></span><br><span class="line">| Grants for junior_dba@127.0.0.1                 |</span><br><span class="line">+<span class="comment">-------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">GRANT</span> <span class="keyword">SELECT</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'junior_dba'</span>@<span class="string">'127.0.0.1'</span> |</span><br><span class="line">+<span class="comment">-------------------------------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">grants</span> <span class="keyword">for</span> <span class="string">'jim'</span>@<span class="string">'127.0.0.1'</span>;               <span class="comment">-- 查看jim的权限</span></span><br><span class="line">+<span class="comment">--------------------------------------------------------------+</span></span><br><span class="line">| Grants for jim@127.0.0.1                                     |</span><br><span class="line">+<span class="comment">--------------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">GRANT</span> <span class="keyword">USAGE</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'jim'</span>@<span class="string">'127.0.0.1'</span>                      |</span><br><span class="line">| <span class="keyword">GRANT</span> PROXY <span class="keyword">ON</span> <span class="string">'junior_dba'</span>@<span class="string">'127.0.0.1'</span> <span class="keyword">TO</span> <span class="string">'jim'</span>@<span class="string">'127.0.0.1'</span> |</span><br><span class="line">+<span class="comment">--------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">grants</span> <span class="keyword">for</span> <span class="string">'tom'</span>@<span class="string">'127.0.0.1'</span>;               <span class="comment">-- 查看tom的权限 </span></span><br><span class="line">+<span class="comment">--------------------------------------------------------------+</span></span><br><span class="line">| Grants for tom@127.0.0.1                                     |</span><br><span class="line">+<span class="comment">--------------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">GRANT</span> <span class="keyword">USAGE</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'tom'</span>@<span class="string">'127.0.0.1'</span>                      |</span><br><span class="line">| <span class="keyword">GRANT</span> PROXY <span class="keyword">ON</span> <span class="string">'junior_dba'</span>@<span class="string">'127.0.0.1'</span> <span class="keyword">TO</span> <span class="string">'tom'</span>@<span class="string">'127.0.0.1'</span> |</span><br><span class="line">+<span class="comment">--------------------------------------------------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> mysql.proxies_priv;    <span class="comment">--  查看 proxies_priv的权限</span></span><br><span class="line">+<span class="comment">-----------+------+--------------+--------------+------------+----------------------+---------------------+</span></span><br><span class="line">| Host      | User | Proxied_host | Proxied_user | With_grant | Grantor              | Timestamp           |</span><br><span class="line">+<span class="comment">-----------+------+--------------+--------------+------------+----------------------+---------------------+</span></span><br><span class="line">| localhost | root |              |              |          1 | boot@connecting host | 0000-00-00 00:00:00 |</span><br><span class="line">| 127.0.0.1 | tom  | 127.0.0.1    | junior_dba   |          0 | root@localhost       | 0000-00-00 00:00:00 |</span><br><span class="line">| 127.0.0.1 | jim  | 127.0.0.1    | junior_dba   |          0 | root@localhost       | 0000-00-00 00:00:00 |</span><br><span class="line">+<span class="comment">-----------+------+--------------+--------------+------------+----------------------+---------------------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong><code>mysql.proxies_priv</code>仅仅是对Role的<code>模拟</code>，和Oracle的角色还是有所不同.官方称呼为<code>Role like</code></strong></p>
+</blockquote>
+<hr>
+<h2 id="三-Workbench与Utilities介绍"><a href="#三-Workbench与Utilities介绍" class="headerlink" title="三. Workbench与Utilities介绍"></a>三. Workbench与Utilities介绍</h2><h3 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h3><ul>
+<li><a href="http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-6.3.5-win32.msi" target="_blank" rel="noopener">Workbench-win32下载</a></li>
+<li><a href="http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-6.3.5-winx64.msi" target="_blank" rel="noopener">Workbench-win64下载</a></li>
+<li><a href="http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-utilities-1.5.6.tar.gz" target="_blank" rel="noopener">Utilities下载</a></li>
+</ul>
+<h3 id="2-Workbench功能概述"><a href="#2-Workbench功能概述" class="headerlink" title="2. Workbench功能概述"></a>2. Workbench功能概述</h3><ul>
+<li><strong>SQL语句格式化</strong></li>
+<li><strong>SQL关键字upcase</strong></li>
+<li><strong>MySQL Dashboard</strong></li>
+<li><strong>SQL语法提示</strong></li>
+<li><strong>ER图</strong></li>
+<li><strong>Forward Engine</strong>  <code>//ER图 --&gt; DB表结构</code></li>
+<li><strong>Reverse</strong>  <code>//DB表结构 --&gt; ER图</code></li>
+</ul>
+<h3 id="3-Utilities安装"><a href="#3-Utilities安装" class="headerlink" title="3. Utilities安装"></a>3. Utilities安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; python setup.py install  <span class="comment"># 如果安装不成功，查看一下python的版本。推荐2.7.X</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="四-MySQL体系结构"><a href="#四-MySQL体系结构" class="headerlink" title="四. MySQL体系结构"></a>四. MySQL体系结构</h2><h3 id="1-数据库"><a href="#1-数据库" class="headerlink" title="1. 数据库"></a>1. 数据库</h3><blockquote>
+<p>数据库（数据库文件）是一个或者一组二进制文件，通常来说存在与文件系统之上。</p>
+</blockquote>
+<h3 id="2-数据库实例"><a href="#2-数据库实例" class="headerlink" title="2. 数据库实例"></a>2. 数据库实例</h3><blockquote>
+<p>由数据库后台进程/线程以及一个共享区域组成(程序的概念),数据库实例是用来操作数据库文件的</p>
+</blockquote>
+<p><strong><code>注意：MySQL中，数据库实例和数据库是一一对应的。没有Oracle的一对多(RAC)的机制。</code></strong></p>
+<h3 id="3-MySQL体系结构"><a href="#3-MySQL体系结构" class="headerlink" title="3. MySQL体系结构"></a>3. MySQL体系结构</h3><ol>
+<li>单进程多线程结构<ul>
+<li>不会影响MySQL的性能，看程序如何写。（多进程程序，进程间通信开销大于多线程）</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li>存储引擎的概念<ul>
+<li>可以理解成文件系统，例如FAT32, NTFS, EXT4。 一个表是一个分区，引擎就是分区的文件系统</li>
+<li><code>存储引擎的对象就是表</code></li>
+<li>show tables; 可以看到每个表对应的是上面引擎(Engine)</li>
+<li>除了特殊情况，我们现在就只考虑<code>INNODB</code></li>
+</ul>
+</li>
+</ol>
+<ol start="3">
+<li><p>体系结构图<br><img src="./MySQL体系结构.jpg" alt="MySQL体系结构提"></p>
+</li>
+<li><p>逻辑存储结构</p>
+<p> |MySQL逻辑存储结构|<br> |:—————:|<br> |instance|<br> |database|<br> |schema|<br> |table|<br> |view|</p>
+</li>
+</ol>
+<ul>
+<li><strong>一个DB对应一个schema</strong></li>
+<li><strong>一个DB对应一个文件夹</strong></li>
+<li><strong>一个表对应一组文件</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">                                                 |--&gt; table1 --- | view1 |</span><br><span class="line">MySQL Instance -----&gt; Database ----&gt; Schema ---&gt; |--&gt; table2 --- | view2 |</span><br><span class="line">                                                 |--&gt; table3 --- | View3 |</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong><br>MySQL中一个<code>Database</code>对应一个<code>Schema</code>,之所以要有这个<code>schema</code>, 是为了兼容其他数据库<br><code>information_schema</code>数据库不是文件夹，存在于内存中，在启动时创建</p>
+</blockquote>
+<h3 id="4-MySQL物理存储结构"><a href="#4-MySQL物理存储结构" class="headerlink" title="4. MySQL物理存储结构"></a>4. MySQL物理存储结构</h3><ol>
+<li>MySQL配置文件</li>
+</ol>
+<ul>
+<li><code>datadir</code><pre><code>- 存储数据二进制文件的路径
+</code></pre></li>
+</ul>
+<ol start="2">
+<li><p>表结构的组成</p>
+<ul>
+<li>frm：表结构定义文件</li>
+<li>MYI：索引文件</li>
+<li>MYD：数据文件</li>
+<li>可以用<code>hexdump -c XXX.frm</code>查看二进制文件(意义不大)</li>
+<li><code>show create table tablename;</code></li>
+<li><p>mysqlfrm (utilities工具包)</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysqlfrm --diagnostic /data/mysql_data/aaa/.a.frm  <span class="comment">#可将frm文件转成create table的语句</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="3">
+<li>错误日志文件</li>
+</ol>
+<ul>
+<li><code>log_err</code><pre><code>- 建议配置成统一的名字
+</code></pre></li>
+<li>方便定位错误</li>
+</ul>
+<ol start="4">
+<li>慢查询日志文件</li>
+</ol>
+<ul>
+<li>将运行超过某一个时间<code>阈</code>(<em>yu四声</em>)<code>值</code>的SQL语句记录到文件<pre><code>- MySQL &lt; 5.1 ：以秒为单位
+- MySQL &gt;= 5.1 : 以毫秒为单位
+- MySQL &gt;= 5.5 : 可以将慢查询日志记录到表
+- MySQL &gt;= 5.6 : 以更细的粒度记录慢查询
+- MySQL &gt;= 5.7 : 增加timestamps支持
+</code></pre></li>
+<li><code>slow_query_log_file</code><pre><code>- 建议配置成统一的名字
+</code></pre></li>
+<li>用于优化查询</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/" title="MySQL权限拾遗/Role模拟/Workbench">https://mrpastor.github.io/2019-10-04/mysql/MySQL学习笔记-体系结构1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-03/mysql/MySQL学习笔记(Day010)/" rel="next" title="Employees/临时表的创建/外键约束">
+                <i class="fa fa-chevron-left"></i> Employees/临时表的创建/外键约束
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-04/mysql/MySQL学习笔记-体系结构2/" rel="prev" title="MySQL体系结构">
+                MySQL体系结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day004：权限拾遗-Role模拟-Workbench-体系结构）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day004：权限拾遗/Role模拟/Workbench/体系结构）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-GRANT与创建用户"><span class="nav-number">1.0.1.</span> <span class="nav-text">1. GRANT与创建用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查看某一个用户的权限"><span class="nav-number">1.0.2.</span> <span class="nav-text">2. 查看某一个用户的权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-删除某一个用户"><span class="nav-number">1.0.3.</span> <span class="nav-text">3. 删除某一个用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-MySQL权限信息"><span class="nav-number">1.0.4.</span> <span class="nav-text">4. MySQL权限信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-information-schema"><span class="nav-number">1.0.5.</span> <span class="nav-text">5. information_schema</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-MySQL模拟角色"><span class="nav-number">1.1.</span> <span class="nav-text">二. MySQL模拟角色</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-角色的定义："><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 角色的定义：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-模拟角色操作："><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 模拟角色操作：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-Workbench与Utilities介绍"><span class="nav-number">1.2.</span> <span class="nav-text">三. Workbench与Utilities介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Workbench功能概述"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. Workbench功能概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Utilities安装"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. Utilities安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-MySQL体系结构"><span class="nav-number">1.3.</span> <span class="nav-text">四. MySQL体系结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据库"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据库实例"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 数据库实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MySQL体系结构"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. MySQL体系结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-MySQL物理存储结构"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. MySQL物理存储结构</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）@(MySQL学习) [TOC] 一. 慢查询日志进阶1. 相关参数： slow_query_log  是否开启慢查询日志                   slow_query_log_file  慢查询日志文件名, 在my.cnf我们已经定义为slow.log，默认是 机器名-slow.log">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="slow_log&#x2F;generic_log&#x2F;audit&#x2F;存储引擎一">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）@(MySQL学习) [TOC] 一. 慢查询日志进阶1. 相关参数： slow_query_log  是否开启慢查询日志                   slow_query_log_file  慢查询日志文件名, 在my.cnf我们已经定义为slow.log，默认是 机器名-slow.log">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-09T01:00:53.278Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="slow_log&#x2F;generic_log&#x2F;audit&#x2F;存储引擎一">
+<meta name="twitter:description" content="MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）@(MySQL学习) [TOC] 一. 慢查询日志进阶1. 相关参数： slow_query_log  是否开启慢查询日志                   slow_query_log_file  慢查询日志文件名, 在my.cnf我们已经定义为slow.log，默认是 机器名-slow.log">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/">
+
+
+
+
+
+  <title>slow_log/generic_log/audit/存储引擎一 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">slow_log/generic_log/audit/存储引擎一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day005：slow-log-generic-log-audit-存储引擎一）"><a href="#MySQL学习笔记（Day005：slow-log-generic-log-audit-存储引擎一）" class="headerlink" title="MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）"></a>MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-慢查询日志进阶"><a href="#一-慢查询日志进阶" class="headerlink" title="一. 慢查询日志进阶"></a>一. 慢查询日志进阶</h2><h3 id="1-相关参数："><a href="#1-相关参数：" class="headerlink" title="1. 相关参数："></a>1. 相关参数：</h3><ul>
+<li><p><strong><code>slow_query_log</code></strong></p>
+<ul>
+<li>是否开启慢查询日志                </li>
+</ul>
+</li>
+<li><p><strong><code>slow_query_log_file</code></strong></p>
+<ul>
+<li>慢查询日志文件名, 在<code>my.cnf</code>我们已经定义为slow.log，默认是 <em>机器名-slow.log</em>          </li>
+</ul>
+</li>
+<li><p><strong><code>long_query_time</code></strong></p>
+<ul>
+<li>制定慢查询阈值, 单位是秒，且当版本 <code>&gt;=5.5.X</code>，支持毫秒。例如<code>0.5</code>即为<code>500ms</code></li>
+<li><code>大于</code>该值，不包括值本身。例如该值为2，则执行时间正好<code>等于</code>2的SQL语句<code>不会记录</code></li>
+</ul>
+</li>
+<li><p><strong><code>log_queries_not_using_indexes</code></strong></p>
+<ul>
+<li>将没有使用索引的SQL记录到慢查询日志 <ul>
+<li>如果一开始因为数据少，查表快，耗时的SQL语句没被记录，当数据量大时，该SQL可能会执行很长时间</li>
+<li>需要测试阶段就要发现问题，减小上线后出现问题的概率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>log_throttle_queries_not_using_indexes</code></strong></p>
+<ul>
+<li>限制每分钟内，在慢查询日志中，去记录没有使用索引的SQL语句的次数；版本需要<code>&gt;=5.6.X</code><ul>
+<li>因为没有使用索引的SQL可能会短时间重复执行，为了避免日志快速增大，限制每分钟的记录次数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>min_examined_row_limit</code></strong></p>
+<ul>
+<li>扫描记录少于改值的SQL不记录到慢查询日志 <ul>
+<li>结合去记录没有使用索引的SQL语句的例子，有可能存在某一个表，数据量维持在百行左右，且没有建立索引。这种表即使不建立索引，查询也很快，扫描记录很小，如果确定有这种表，则可以通过此参数设置，将这个SQL不记录到慢查询日志。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>log_slow_admin_statements</code></strong></p>
+<ul>
+<li>记录超时的管理操作SQL到慢查询日志，比如ALTER/ANALYZE TABLE</li>
+</ul>
+</li>
+<li><p><strong><code>log_output</code></strong></p>
+<ul>
+<li>慢查询日志的格式，[FILE | TABLE | NONE]，默认是FILE；版本<code>&gt;=5.5</code></li>
+<li>如果设置为TABLE，则记录的到<code>mysql.slow_log</code></li>
+</ul>
+</li>
+<li><p><strong><code>log_slow_slave_statements</code></strong></p>
+<ul>
+<li>在从服务器上开启慢查询日志</li>
+</ul>
+</li>
+<li><p><strong><code>log_timestamps</code></strong></p>
+<ul>
+<li>写入时区信息。可根据需求记录UTC时间或者服务器本地系统时间</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-慢查询日志实践"><a href="#2-慢查询日志实践" class="headerlink" title="2. 慢查询日志实践"></a>2. 慢查询日志实践</h3><ul>
+<li><p>设置慢查询记录的相关参数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 终端A</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 注意做实验以前，先把my.cnf中的 slow_query_log = 0, 同时将min_examined_row_limit = 100 进行注释</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select version();</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| version() |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| 5.7.9-log |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"slow_query_log"</span>； <span class="comment">-- 为了测试，特地在my.cnf中关闭了该选项</span></span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| Variable_name  | <span class="keyword">Value</span> |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| slow_query_log | <span class="keyword">OFF</span>   |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> <span class="keyword">global</span> slow_query_log = <span class="number">1</span>;         <span class="comment">-- slow_query_log可以在线打开</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like "slow_query_log";  -- 已经打开</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| Variable_name  | Value |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| slow_query_log | ON    |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"long_query_time"</span>;</span><br><span class="line">+<span class="comment">-----------------+----------+</span></span><br><span class="line">| Variable_name   | Value    |</span><br><span class="line">+<span class="comment">-----------------+----------+</span></span><br><span class="line">| long_query_time | 2.000000 |   <span class="comment">-- my.cnf 中该值设置为2秒</span></span><br><span class="line">+<span class="comment">-----------------+----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"min_ex%"</span>;  <span class="comment">-- my.cnf 中已经关闭注释，所以这里为0</span></span><br><span class="line">+<span class="comment">------------------------+-------+</span></span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+<span class="comment">------------------------+-------+</span></span><br><span class="line">| min_examined_row_limit | 0     |</span><br><span class="line">+<span class="comment">------------------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看慢查询日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#终端B</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@localhost mysql_data]<span class="comment"># tail -f slow.log </span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql/bin/mysqld, Version: 5.7.9-log (MySQL Community Server (GPL)). started with:</span><br><span class="line">Tcp port: 3306  Unix socket: (null)</span><br><span class="line">Time                 Id Command    Argument  <span class="comment">#测试没有任何慢查询日志信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进行模拟耗时操作</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 终端A</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select sleep(4);</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">| sleep(4) |</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">|        0 |</span><br><span class="line">+<span class="comment">----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">4.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最终产生慢查询日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#终端B</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@localhost mysql_data]<span class="comment"># tail -f slow.log </span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql/bin/mysqld, Version: 5.7.9-log (MySQL Community Server (GPL)). started with:</span><br><span class="line">Tcp port: 3306  Unix socket: (null)</span><br><span class="line">Time                 Id Command    Argument  <span class="comment">#测试没有任何慢查询日志信息</span></span><br><span class="line"><span class="comment"># Time: 2015-11-21T07:18:10.741663+08:00</span></span><br><span class="line"><span class="comment"># User@Host: root[root] @ localhost []  Id:     2</span></span><br><span class="line"><span class="comment"># Query_time: 4.000333  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0 </span></span><br><span class="line">                                                          <span class="comment">#这个就是min_examined_row_limit</span></span><br><span class="line">                                                          <span class="comment">#设置的意义。如my.cnf中设置该值为100</span></span><br><span class="line">                                                          <span class="comment">#则这条语句因为Rows_examined &lt; 100,而不会被记录</span></span><br><span class="line">SET timestamp=1448061490;</span><br><span class="line">select sleep(4);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong><br>如果在终端A中<code>set global min_examined_row_limit = 100;</code>, 然后执行<code>select sleep(5);</code>，会发现该记录仍然被记录到慢查询日志中。原因是因为<code>set global min_examined_row_limit</code>设置的是全局变量，此次会话不生效。</p>
+</blockquote>
+<blockquote>
+<p><strong>但是我们上面<code>set global slow_query_log = 1；</code>却是在线生效的，这点有所不通</strong></p>
+</blockquote>
+<ul>
+<li>mysqldumpslow<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql_data]<span class="comment"># mysqldumpslow  slow.log</span></span><br><span class="line"></span><br><span class="line">Reading mysql slow query <span class="built_in">log</span> from slow.log</span><br><span class="line">Count: 2  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), 0users@0hosts</span><br><span class="line">  Time: N-N-21T07:N:N.N+N:N</span><br><span class="line">  <span class="comment"># User@Host: root[root] @ localhost []  Id:     N</span></span><br><span class="line">  <span class="comment"># Query_time: N.N  Lock_time: N.N Rows_sent: N  Rows_examined: N</span></span><br><span class="line">  SET timestamp=N;</span><br><span class="line">  select sleep(N)</span><br><span class="line"></span><br><span class="line">Count: 1  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), 0users@0hosts</span><br><span class="line">  <span class="comment"># Time: N-N-21T07:N:N.N+N:N</span></span><br><span class="line">  <span class="comment"># User@Host: root[root] @ localhost []  Id:     N</span></span><br><span class="line">  <span class="comment"># Query_time: N.N  Lock_time: N.N Rows_sent: N  Rows_examined: N</span></span><br><span class="line">  SET timestamp=N;</span><br><span class="line">  select sleep(N)</span><br><span class="line">  </span><br><span class="line"><span class="comment">#######################################################################</span></span><br><span class="line"></span><br><span class="line">[root@localhost mysql_data]<span class="comment"># mysqldumpslow  --help</span></span><br><span class="line">Usage: mysqldumpslow [ OPTS... ] [ LOGS... ]</span><br><span class="line"></span><br><span class="line">Parse and summarize the MySQL slow query <span class="built_in">log</span>. Options are</span><br><span class="line"></span><br><span class="line">  --verbose    verbose</span><br><span class="line">  --debug      debug</span><br><span class="line">  --<span class="built_in">help</span>       write this text to standard output</span><br><span class="line"></span><br><span class="line">  -v           verbose</span><br><span class="line">  -d           debug</span><br><span class="line">  -s ORDER     what to sort by (al, at, ar, c, l, r, t), <span class="string">'at'</span> is default <span class="comment">#根据以下某个信息来排序</span></span><br><span class="line">                al: average lock time</span><br><span class="line">                ar: average rows sent</span><br><span class="line">                at: average query time</span><br><span class="line">                 c: count</span><br><span class="line">                 l: lock time</span><br><span class="line">                 r: rows sent</span><br><span class="line">                 t: query time  </span><br><span class="line">  -r           reverse the sort order (largest last instead of first)  <span class="comment"># 逆序输出</span></span><br><span class="line">  -t NUM       just show the top n queries      <span class="comment"># TOP(n)参数</span></span><br><span class="line">  -a           don<span class="string">'t abstract all numbers to N and strings to '</span>S<span class="string">'</span></span><br><span class="line"><span class="string">  -n NUM       abstract numbers with at least n digits within names</span></span><br><span class="line"><span class="string">  -g PATTERN   grep: only consider stmts that include this string</span></span><br><span class="line"><span class="string">  -h HOSTNAME  hostname of db server for *-slow.log filename (can be wildcard),</span></span><br><span class="line"><span class="string">               default is '</span>*<span class="string">', i.e. match all</span></span><br><span class="line"><span class="string">  -i NAME      name of server instance (if using mysql.server startup script)</span></span><br><span class="line"><span class="string">  -l           don'</span>t subtract lock time from total time</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>如果在线上操作，不需要<code>mysqldumpslow</code>去扫整个<code>slow.log</code>， 可以去<code>tail -n 10000 slow.log &gt; last_10000_slow.log</code>(<em>10000这个数字根据实际情况进行调整</em>),然后进行<code>mysqldumpslow last_10000_slow.log</code></p>
+</blockquote>
+<ul>
+<li>慢查询日志存入表<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 在my.cnf 中增加 log_output = TABLE，打开slow_query_log选项，然后重启数据库实例</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; show variables like "log_output%";</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| log_output    | TABLE |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">"slow_query_log"</span>;</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| Variable_name  | Value |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">| slow_query_log | ON    |</span><br><span class="line">+<span class="comment">----------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> mysql.slow_log;</span><br><span class="line">+<span class="comment">----------------------------+---------------------------+-----------------+-----------------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span></span><br><span class="line">| start_time                 | user_host                 | query_time      | lock_time       | rows_sent | rows_examined | db | last_insert_id | insert_id | server_id | sql_text        | thread_id |</span><br><span class="line">+<span class="comment">----------------------------+---------------------------+-----------------+-----------------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span></span><br><span class="line">| 2015-11-20 19:50:28.574677 | root[root] @ localhost [] | 00:00:04.000306 | 00:00:00.000000 |         1 |             0 |    |              0 |         0 |        11 | <span class="keyword">select</span> <span class="keyword">sleep</span>(<span class="number">4</span>) |         <span class="number">3</span> |</span><br><span class="line">+<span class="comment">----------------------------+---------------------------+-----------------+-----------------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">create</span> <span class="keyword">table</span> mysql.slow_log;</span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 表结构输出省略</span></span><br><span class="line"><span class="comment">-- 关键一句如下：</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">ENGINE=CSV DEFAULT CHARSET=utf8 <span class="keyword">COMMENT</span>=<span class="string">'Slow log'</span>  <span class="comment">-- ENGINE=CSV 这里使用的是CSV的引擎,性能较差</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 建议将slow_log表的存储引擎改成MyISAM</span></span><br><span class="line">mysql&gt; <span class="keyword">alter</span> <span class="keyword">table</span> mysql.slow_log <span class="keyword">engine</span> = myisam;</span><br><span class="line">ERROR 1580 (HY000): You cannot '<span class="keyword">ALTER</span><span class="string">' a log table if logging is enabled  '</span><span class="comment">-- 提示我正在记录日志中，不能转换</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> <span class="keyword">global</span> slow_query_log = <span class="number">0</span>;    <span class="comment">-- 先停止记录日志</span></span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; alter table mysql.slow_log engine = myisam;   -- 然后转换表的引擎</span><br><span class="line">Query OK, 2 rows affected (5.05 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; set global slow_query_log = 1;     -- 再开启记录日志</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show create table mysql.slow_log;</span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 表结构输出省略</span></span><br><span class="line"><span class="comment">-- 关键一句如下：</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">ENGINE=MyISAM DEFAULT CHARSET=utf8 <span class="keyword">COMMENT</span>=<span class="string">'Slow log'</span>  <span class="comment">-- ENGINE 变成了MyISAM</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>使用<code>TABLE</code>的优势在于方便查询，但是记住当在备份的时候，不要备份慢查询日志的表，避免备份过大。<br>使用<code>FILE</code>也可以，需要定时清除该文件，避免单文件过大。</p>
+</blockquote>
+<hr>
+<h2 id="二-通用日志-generic-log-与审计"><a href="#二-通用日志-generic-log-与审计" class="headerlink" title="二. 通用日志(generic_log)与审计"></a>二. 通用日志(generic_log)与审计</h2><p>###1. 通用日志作用</p>
+<ul>
+<li><p>当需要查找某条特定SQL语句，且该SQL语句执行较快，无法记录到slow_log中时，可以开启通用日志<code>generic_log</code>,进行全面记录， 可用于审计<code>Audit</code></p>
+</li>
+<li><p>通用日志会记录所有操作，性能下降明显。所以如果需要审计，需要<code>Audit Plugin</code></p>
+</li>
+</ul>
+<p>###2. 审计插件</p>
+<ul>
+<li><p>MariaDB Audit 插件</p>
+<ul>
+<li>MySQL社区版本目前没有提供Audit的功能，企业版本提供了该功能。MariaDB 提供了开源的Audit插件，且MySQL也能使用。</li>
+</ul>
+</li>
+<li><p>插件下载</p>
+<ul>
+<li><a href="https://downloads.mariadb.com/enterprise/6ahb-eete/mariadb-audit-plugin/server_audit-1.2.0.tar.gz" target="_blank" rel="noopener">server_audit-1.2.0.tar.gz</a> 上述链接如果失效，可以进入官方页面注册，然后下载</li>
+<li><a href="https://mariadb.com/my_portal/download/audit_plugin" target="_blank" rel="noopener">官方注册下载插件</a></li>
+</ul>
+</li>
+</ul>
+<p>###3.  Audit Plugin安装</p>
+<ul>
+<li><p><strong><code>MySQL5.7.9</code> 审计插件安装失败，提示如下：</strong></p>
+<blockquote>
+<p><code>ERROR 1126 (HY000): Can&#39;t open shared library &#39;/usr/lib64/mysql/plugin/server_audit.so&#39; (errno: 13 /usr/lib64/mysql/plugin/server_audit.so: undefined symbol: _my_thread_var)</code></p>
+</blockquote>
+</li>
+<li><p><strong>MySQL5.6.27 审计插件安装成功，步骤如下：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 找到plugin位置</span></span><br><span class="line">[root@localhost ~]&gt; cat /etc/my.cnf  | grep plugin_dir</span><br><span class="line">plugin_dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压plugin</span></span><br><span class="line">[root@localhost ~]&gt; tar zxvf server_audit-1.2.0.tar.gz</span><br><span class="line">server_audit-1.2.0/</span><br><span class="line">server_audit-1.2.0/linux-32_debug/</span><br><span class="line">server_audit-1.2.0/linux-32_debug/server_audit.so</span><br><span class="line">server_audit-1.2.0/linux-32/</span><br><span class="line">server_audit-1.2.0/linux-32/server_audit.so</span><br><span class="line">server_audit-1.2.0/linux-64_debug/</span><br><span class="line">server_audit-1.2.0/linux-64_debug/server_audit.so</span><br><span class="line">server_audit-1.2.0/windows-32/</span><br><span class="line">server_audit-1.2.0/windows-32/server_audit.dll</span><br><span class="line">server_audit-1.2.0/windows-64_debug/</span><br><span class="line">server_audit-1.2.0/windows-64_debug/server_audit.dll</span><br><span class="line">server_audit-1.2.0/linux-64/</span><br><span class="line">server_audit-1.2.0/linux-64/server_audit.so</span><br><span class="line">server_audit-1.2.0/windows-64/</span><br><span class="line">server_audit-1.2.0/windows-64/server_audit.dll</span><br><span class="line">server_audit-1.2.0/windows-32_debug/</span><br><span class="line">server_audit-1.2.0/windows-32_debug/server_audit.dll</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移动插件到对应的插件目录</span></span><br><span class="line">[root@localhost ~]&gt; mv server_audit-1.2.0/linux-64/server_audit.so /usr/<span class="built_in">local</span>/mysql/lib/plugin</span><br><span class="line">[root@localhost ~]&gt; <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql/lib/plugin</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 相关安装步骤</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select version();</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| version()  |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| 5.6.27-log |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">INSTALL</span> <span class="keyword">PLUGIN</span> server_audit <span class="keyword">SONAME</span> <span class="string">'server_audit.so'</span>;  <span class="comment">-- 安装插件，该步骤在5.7.9中失败</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like "%server_audit%";    -- 查看和server_audit相关的参数</span><br><span class="line">+<span class="comment">-------------------------------+-----------------------+</span></span><br><span class="line">| Variable_name                 | Value                 |</span><br><span class="line">+<span class="comment">-------------------------------+-----------------------+</span></span><br><span class="line">| server_audit_events           |                       |</span><br><span class="line">| server_audit_excl_users       |                       |</span><br><span class="line">| server_audit_file_path        | server_audit.log      |</span><br><span class="line">| server_audit_file_rotate_now  | OFF                   |</span><br><span class="line">| server_audit_file_rotate_size | 1000000               |</span><br><span class="line">| server_audit_file_rotations   | 9                     |</span><br><span class="line">| server_audit_incl_users       |                       |</span><br><span class="line">| server_audit_logging          | OFF                   |</span><br><span class="line">| server_audit_mode             | 1                     |</span><br><span class="line">| server_audit_output_type      | file                  |</span><br><span class="line">| server_audit_syslog_facility  | LOG_USER              |</span><br><span class="line">| server_audit_syslog_ident     | mysql-server_auditing |</span><br><span class="line">| server_audit_syslog_info      |                       |</span><br><span class="line">| server_audit_syslog_priority  | LOG_INFO              |</span><br><span class="line">+<span class="comment">-------------------------------+-----------------------+</span></span><br><span class="line">14 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> <span class="keyword">global</span> server_audit_logging = <span class="number">1</span>;   <span class="comment">-- 打开审计功能</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show variables like "server_audit_logging"; </span><br><span class="line">+<span class="comment">----------------------+-------+</span></span><br><span class="line">| Variable_name        | Value |</span><br><span class="line">+<span class="comment">----------------------+-------+</span></span><br><span class="line">| server_audit_logging | ON    |</span><br><span class="line">+<span class="comment">----------------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">'%audit%'</span>;</span><br><span class="line">+<span class="comment">----------------------------+------------------+</span></span><br><span class="line">| Variable_name              | Value            |</span><br><span class="line">+<span class="comment">----------------------------+------------------+</span></span><br><span class="line">| server_audit_active        | ON               |</span><br><span class="line">| server_audit_current_log   | server_audit.log |</span><br><span class="line">| server_audit_last_error    |                  |</span><br><span class="line">| server_audit_writes_failed | 0                |</span><br><span class="line">+<span class="comment">----------------------------+------------------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#查看审计日志</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">[root@MyServer mysql_data]&gt; tail -f server_audit.log </span><br><span class="line">20151120 22:40:54,MyServer,root,localhost,2,9,QUERY,,<span class="string">'set global server_audit_logging = 1'</span>,0</span><br><span class="line">20151120 22:41:16,MyServer,root,localhost,2,10,QUERY,,<span class="string">'show variables like "server_audit_logging"'</span>,0</span><br><span class="line">20151120 22:41:53,MyServer,root,localhost,1,5,QUERY,,<span class="string">'show status like \'</span>%audit%\<span class="string">''</span>,0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>以上仅为基本功能操作，详细的细粒度控制请参考<a href="https://mariadb.com/kb/en/mariadb/about-the-mariadb-audit-plugin/" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<h2 id="三-存储引擎-一"><a href="#三-存储引擎-一" class="headerlink" title="三. 存储引擎(一)"></a>三. 存储引擎(一)</h2><h3 id="1-Mysql上支持的存储引擎"><a href="#1-Mysql上支持的存储引擎" class="headerlink" title="1.Mysql上支持的存储引擎"></a>1.Mysql上支持的存储引擎</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show engines;</span><br><span class="line">+<span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line">| Engine             | Support | <span class="keyword">Comment</span>                                                        | Transactions | XA   | Savepoints |</span><br><span class="line">+<span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line">| MyISAM             | YES     | MyISAM <span class="keyword">storage</span> <span class="keyword">engine</span>                                          | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| CSV                | YES     | CSV <span class="keyword">storage</span> <span class="keyword">engine</span>                                             | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| PERFORMANCE_SCHEMA | YES     | <span class="keyword">Performance</span> <span class="keyword">Schema</span>                                             | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| BLACKHOLE          | YES     | /dev/<span class="literal">null</span> <span class="keyword">storage</span> <span class="keyword">engine</span> (anything you write <span class="keyword">to</span> it disappears) | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| MRG_MYISAM         | YES     | Collection <span class="keyword">of</span> identical MyISAM <span class="keyword">tables</span>                          | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| <span class="keyword">InnoDB</span>             | <span class="keyword">DEFAULT</span> | Supports transactions, <span class="keyword">row</span>-<span class="keyword">level</span> locking, <span class="keyword">and</span> foreign <span class="keyword">keys</span>     | YES          | YES  | YES        |</span><br><span class="line">| <span class="keyword">ARCHIVE</span>            | YES     | <span class="keyword">Archive</span> <span class="keyword">storage</span> <span class="keyword">engine</span>                                         | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| <span class="keyword">MEMORY</span>             | YES     | <span class="keyword">Hash</span> based, <span class="keyword">stored</span> <span class="keyword">in</span> <span class="keyword">memory</span>, useful <span class="keyword">for</span> <span class="keyword">temporary</span> <span class="keyword">tables</span>      | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| FEDERATED          | <span class="keyword">NO</span>      | Federated MySQL <span class="keyword">storage</span> <span class="keyword">engine</span>                                 | <span class="literal">NULL</span>         | <span class="literal">NULL</span> | <span class="literal">NULL</span>       |</span><br><span class="line">+<span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="number">9</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h3 id="2-存储引擎的概念"><a href="#2-存储引擎的概念" class="headerlink" title="2. 存储引擎的概念"></a>2. 存储引擎的概念</h3><blockquote>
+<p>用来处理数据库的相关CRUD操作</p>
+</blockquote>
+<p>每个数据库都有存储引擎，只是MySQL比较强调存储引擎的概念。</p>
+<h3 id="3-MySQL存储引擎"><a href="#3-MySQL存储引擎" class="headerlink" title="3. MySQL存储引擎"></a>3. MySQL存储引擎</h3><ul>
+<li>官方存储引擎<ul>
+<li>MyISAM</li>
+<li><code>InnoDB</code>  – 推荐；其他引擎已经体停止维护和开发</li>
+<li>Memory</li>
+<li>Federated</li>
+<li>CSV</li>
+<li>Archive</li>
+</ul>
+</li>
+<li>第三方存储引擎<ul>
+<li>TokuDB  – 开源，适合插入密集型</li>
+<li>InfoBright  – 商业，开源版本有数据量限制。属于列存储，面向OLAP场景</li>
+<li>Spider<blockquote>
+<p>第三方存储引擎在特定场合下比较适合，除此之外，都应该使用InnoDB</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-存储引擎之MyISAM"><a href="#3-存储引擎之MyISAM" class="headerlink" title="3. 存储引擎之MyISAM"></a>3. 存储引擎之MyISAM</h3><ul>
+<li>MySQL5.1版本之前的默认存储引擎</li>
+<li>堆表数据结构</li>
+<li>表锁设计</li>
+<li>支持数据静态压缩</li>
+<li>不支持事物</li>
+<li>数据容易丢失</li>
+<li>索引容易损坏</li>
+<li>唯一优点<ul>
+<li>数据文件可以直接拷贝到另一台服务器使用</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>现在MySQL中还有用MyISAM的表，主要是历史原因。数据库文件以<code>MY</code>开头的基本都是MyISAM的表</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/" title="slow_log/generic_log/audit/存储引擎一">https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day008)(含009前半部分)V2.0/" rel="next" title="数据类型">
+                <i class="fa fa-chevron-left"></i> 数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day012)/" rel="prev" title="子查询/INSERT/UPDATE/DELETE/REPLACE">
+                子查询/INSERT/UPDATE/DELETE/REPLACE <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day005：slow-log-generic-log-audit-存储引擎一）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-慢查询日志进阶"><span class="nav-number">1.1.</span> <span class="nav-text">一. 慢查询日志进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-相关参数："><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 相关参数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-慢查询日志实践"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 慢查询日志实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-通用日志-generic-log-与审计"><span class="nav-number">1.2.</span> <span class="nav-text">二. 通用日志(generic_log)与审计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-存储引擎-一"><span class="nav-number">1.3.</span> <span class="nav-text">三. 存储引擎(一)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Mysql上支持的存储引擎"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.Mysql上支持的存储引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-存储引擎的概念"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 存储引擎的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MySQL存储引擎"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. MySQL存储引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-存储引擎之MyISAM"><span class="nav-number">1.3.4.</span> <span class="nav-text">3. 存储引擎之MyISAM</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

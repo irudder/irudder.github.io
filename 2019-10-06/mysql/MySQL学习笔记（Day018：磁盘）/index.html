@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day018：磁盘）@(MySQL学习) [TOC] 一. iostat123456789101112131415## 安装 iostat#shell&amp;gt; yum install sysstat # debian 系： apt-get install sysstat# 使用shell&amp;gt; iostat -xm 3 # x表示显示扩展统计信息，m表示以兆为单位显示，3表示">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 磁盘">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day018：磁盘）@(MySQL学习) [TOC] 一. iostat123456789101112131415## 安装 iostat#shell&amp;gt; yum install sysstat # debian 系： apt-get install sysstat# 使用shell&amp;gt; iostat -xm 3 # x表示显示扩展统计信息，m表示以兆为单位显示，3表示">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/Selection_001.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/130px-RAID_0.svg.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/130px-RAID_1.svg.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/220px-RAID_5.svg.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/270px-RAID_6.svg.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/220px-RAID_10.svg.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/RAID_50.png">
+<meta property="og:updated_time" content="2019-10-09T01:09:45.817Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL 磁盘">
+<meta name="twitter:description" content="MySQL学习笔记（Day018：磁盘）@(MySQL学习) [TOC] 一. iostat123456789101112131415## 安装 iostat#shell&amp;gt; yum install sysstat # debian 系： apt-get install sysstat# 使用shell&amp;gt; iostat -xm 3 # x表示显示扩展统计信息，m表示以兆为单位显示，3表示">
+<meta name="twitter:image" content="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/Selection_001.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/">
+
+
+
+
+
+  <title>MySQL 磁盘 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL 磁盘</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-06T19:29:18+08:00">
+                2019-10-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day018：磁盘）"><a href="#MySQL学习笔记（Day018：磁盘）" class="headerlink" title="MySQL学习笔记（Day018：磁盘）"></a>MySQL学习笔记（Day018：磁盘）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-iostat"><a href="#一-iostat" class="headerlink" title="一. iostat"></a>一. iostat</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># 安装 iostat</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">shell&gt; yum install sysstat </span><br><span class="line"><span class="comment"># debian 系： apt-get install sysstat</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">shell&gt; iostat -xm 3 <span class="comment"># x表示显示扩展统计信息，m表示以兆为单位显示，3表示每隔3秒显示</span></span><br><span class="line"><span class="comment"># 输出如下：</span></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           0.58    0.00    0.33    0.00    0.00   99.08</span><br><span class="line"></span><br><span class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rMB/s    wMB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</span><br><span class="line">sda               0.00     0.00    0.00    0.67     0.00     0.00     8.00     0.00    2.00    0.00    2.00   1.00   0.07</span><br><span class="line">sdb               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00    0.00    0.00   0.00   0.00</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">CPU属性</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">%user</td>
+<td style="text-align:center">CPU处在用户模式下的时间百分比</td>
+</tr>
+<tr>
+<td style="text-align:center">%nice</td>
+<td style="text-align:center">CPU处在带NICE值的用户模式下的时间百分比</td>
+</tr>
+<tr>
+<td style="text-align:center">%sys</td>
+<td style="text-align:center">CPU处在系统模式下的时间百分比</td>
+</tr>
+<tr>
+<td style="text-align:center">%iowait</td>
+<td style="text-align:center">CPU等待IO完成时间的百分比</td>
+</tr>
+<tr>
+<td style="text-align:center">%steal</td>
+<td style="text-align:center">管理程序维护另一个虚拟处理器时，虚拟CPU的无意的等待时间的百分比</td>
+</tr>
+<tr>
+<td style="text-align:center">%idle</td>
+<td style="text-align:center">闲置cpu的百分比</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>提示：</strong><br>如果%iowait的值过高，表示硬盘存在I/O瓶颈;<br>如果%idle值高，表示CPU较空闲，如果%idle值高但系统响应慢时，有可能是CPU等待分配内存，此时应加大内存容量。<br>如果%idle值如果<code>持续</code>很低，那么系统的CPU处理能力相对较低，表明系统中最需要解决的资源是CPU。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Device属性</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">rrqm/s</td>
+<td style="text-align:center">每秒进行 merge 的读操作数目</td>
+</tr>
+<tr>
+<td style="text-align:center">wrqm/s</td>
+<td style="text-align:center">每秒进行 merge 的写操作数目</td>
+</tr>
+<tr>
+<td style="text-align:center">r/s</td>
+<td style="text-align:center">每秒完成的读 I/O 设备次数</td>
+</tr>
+<tr>
+<td style="text-align:center">w/s</td>
+<td style="text-align:center">每秒完成的写 I/O 设备次数</td>
+</tr>
+<tr>
+<td style="text-align:center">rsec/s</td>
+<td style="text-align:center">每秒读扇区数</td>
+</tr>
+<tr>
+<td style="text-align:center">wsec/s</td>
+<td style="text-align:center">每秒写扇区数</td>
+</tr>
+<tr>
+<td style="text-align:center">rkB/s</td>
+<td style="text-align:center">每秒读K字节数</td>
+</tr>
+<tr>
+<td style="text-align:center">wkB/s</td>
+<td style="text-align:center">每秒写K字节数</td>
+</tr>
+<tr>
+<td style="text-align:center">avgrq-sz</td>
+<td style="text-align:center">平均每次设备I/O操作的数据大小 (扇区)</td>
+</tr>
+<tr>
+<td style="text-align:center">avgqu-sz</td>
+<td style="text-align:center">平均I/O队列长度</td>
+</tr>
+<tr>
+<td style="text-align:center">await</td>
+<td style="text-align:center">平均每次设备I/O操作的等待时间 (毫秒)</td>
+</tr>
+<tr>
+<td style="text-align:center">svctm</td>
+<td style="text-align:center">平均每次设备I/O操作的服务时间 (毫秒)</td>
+</tr>
+<tr>
+<td style="text-align:center">%util</td>
+<td style="text-align:center">一秒中有百分之多少的时间用于 I/O 操作，即被io消耗的cpu百分比</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>提示：</strong><br>如果 %util 接近 100%，说明产生的I/O请求太多，I/O系统已经满负荷，该磁盘可能存在瓶颈。<br>如果 svctm 比较接近 await，说明 I/O 几乎没有等待时间；<br>如果 await 远大于 svctm，说明I/O队列太长，io响应太慢，则需要进行必要优化。<br>如果avgqu-sz比较大，也表示有当量io在等待。</p>
+</blockquote>
+<hr>
+<h2 id="二-磁盘"><a href="#二-磁盘" class="headerlink" title="二. 磁盘"></a>二. 磁盘</h2><h3 id="1-磁盘的访问模式"><a href="#1-磁盘的访问模式" class="headerlink" title="1. 磁盘的访问模式"></a>1. 磁盘的访问模式</h3><ul>
+<li>顺序访问<ul>
+<li>顺序的访问磁盘上的块；</li>
+<li>一般经过测试后，得到该值的单位是<code>MB/s</code>，表示为磁盘<code>带宽</code>，普通硬盘在 50~ 100 MB/s</li>
+</ul>
+</li>
+<li>随机访问<ul>
+<li>随机的访问磁盘上的块</li>
+<li>也可以用MB/s进行表示，但是通常使用<code>IOPS</code>（每秒处理IO的能力），普通硬盘在 100-200 IOPS</li>
+</ul>
+</li>
+</ul>
+<p><img src="./Selection_001.png" alt="磁盘的访问模式"></p>
+<blockquote>
+<p>拷贝文件属于顺序访问，<code>数据库</code>中访问数据属于<code>随机访问</code>。<br>数据库对数据的访问做了优化，把随机访问转成顺序访问。</p>
+</blockquote>
+<h3 id="2-磁盘的分类"><a href="#2-磁盘的分类" class="headerlink" title="2. 磁盘的分类"></a>2. 磁盘的分类</h3><ul>
+<li><p>HDD</p>
+<ul>
+<li>盘片通过旋转，磁头进行定位，读取数据；</li>
+<li>顺序性较好，随机性较差；</li>
+<li><p>常见转速</p>
+<ul>
+<li>笔记本硬盘：5400转/分钟；</li>
+<li>桌面硬盘：7200转/分钟；</li>
+<li>服务器硬盘：10000转/分钟、15000转/分钟；</li>
+<li>SATA：120 ~ 150 IOPS</li>
+<li>SAS ：150 ~ 200 IOPS</li>
+</ul>
+<blockquote>
+<p>从理论上讲，15000转/分钟，最高是 15000/60 约等于250IOPS<br>由于机械盘片需要旋转，转速太高无法很好的散热</p>
+</blockquote>
+<blockquote>
+<p>如果一个HDD对4K的块做随机访问是0.8MB/s，可通过<code>0.8 *（1 / 4）= 200</code> 或者 <code>（0.8 * 1000） / 4=200</code>得到<code>IOPS</code>，但是这个值存在部分干扰因素，如cache等</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>SSD</p>
+<ul>
+<li>纯电设备</li>
+<li>由FLash Memory组成</li>
+<li>没有读写磁头</li>
+<li>MLC闪存颗粒对一般企业的业务够用。目前SLC闪存颗粒价格较贵</li>
+<li><p>IOPS高</p>
+<ul>
+<li>50000+ IOPS</li>
+<li><p>读写速度非对称 以 <a href="http://www.intel.com/content/www/us/en/solid-state-drives/ssd-dc-s3500-spec.html" target="_blank" rel="noopener">INTEL SSD DC-S3500</a>为例子：</p>
+<ul>
+<li>Random 4KB3 Reads: Up to 75,000 IOPS </li>
+<li>Random 4KB Writes: Up to 11,500 IOPS</li>
+<li>Random 8KB3 Reads: Up to 47,500 IOPS</li>
+<li>Random 8KB Writes: Up to 5,500 IOPS</li>
+</ul>
+</li>
+<li><p>当写入数据时，要先擦除老数据，再写入新数据</p>
+</li>
+<li><p>擦除数据需要擦除整个区域（128K or 256K）一起擦除（自动把部分有用的数据挪到别的区域）</p>
+<blockquote>
+<p>对比发现4K性能要优于8K的性能，几乎是2倍的差距，当然16K就更明显，所以当使用SSD时，建议数据库页大小设置成4K或者是8K，<code>innodb_page_size=8K</code>）<br>上线以前，SSD需要经过严格的压力测试（一周时间），确保性能平稳</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Endurance Rating</p>
+<ul>
+<li>表示该SSD的寿命是多少</li>
+<li>比如450TBW，表示这个SSD可以反复写入的数据总量是450T（包括添加和更新）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>- SSD线上参数设置
+    - 磁盘调度算法改为Deadline
+
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> deadline &gt; /sys/block/sda/queue/scheduler  <span class="comment"># deadline适用于数据库，HDD也建议改成Deadline</span></span><br></pre></td></tr></table></figure>
+
+
+    - MySQL参数
+        - `innodb_log_file_size=4G`  该参数设置的尽可能大
+        - `innodb_flush_neighbors=0`
+
+        &gt; 性能更平稳，且至少有15%的性能提升
+
+- SSD 品牌推荐
+    - Intel
+    - FusionIO
+    - 宝存
+
+- 不是很建议使用PCI-E的Flash卡（PCI-E插槽的SSD） 
+    - 性能过剩
+    - 安装比较麻烦
+</code></pre><h3 id="3-提升IOPS性能的手段"><a href="#3-提升IOPS性能的手段" class="headerlink" title="3. 提升IOPS性能的手段"></a>3. 提升IOPS性能的手段</h3><ul>
+<li><p>通过 RAID 技术</p>
+<ul>
+<li>功耗较高</li>
+<li>IOPS在2000左右</li>
+</ul>
+</li>
+<li><p>通过购买共享存储设备</p>
+<ul>
+<li>价格非常昂贵</li>
+<li>但是比较稳定</li>
+<li>底层还是通过RAID实现</li>
+</ul>
+</li>
+<li><p>直接使用SSD</p>
+<ul>
+<li>性能较好的SSD可以达到 <code>万级别的IOPS</code></li>
+<li>建议可以用SSD + RAID5，RAID1+0太奢侈</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-RAID类别"><a href="#4-RAID类别" class="headerlink" title="4. RAID类别"></a>4. RAID类别</h3><ul>
+<li><p>RAID0<br><img src="./130px-RAID_0.svg.png" alt="RAID0"></p>
+<ul>
+<li>速度最快</li>
+<li>没有冗余备份</li>
+</ul>
+</li>
+<li><p>RAID1<br><img src="./130px-RAID_1.svg.png" alt="RAID1"></p>
+<ul>
+<li>可靠性高</li>
+<li>读取速度理论上等于硬盘数量的倍数</li>
+<li>容量等于一个硬盘的容量</li>
+</ul>
+</li>
+<li><p>RAID5<br><img src="./220px-RAID_5.svg.png" alt="RAID5"></p>
+<ul>
+<li>至少要3块硬盘</li>
+<li>通过对数据的奇偶检验信息存储到不同的磁盘上，来恢复数据，最多只能坏一块</li>
+<li>属于折中方案</li>
+</ul>
+</li>
+<li><p>RAID6<br><img src="./270px-RAID_6.svg.png" alt="RAID6"></p>
+<ul>
+<li>至少是4块硬盘</li>
+<li>和RAID5比较，RAID6增加第二个独立的奇偶校验信息，写入速度略受影响</li>
+<li>数据可靠性高，可以同时坏两块</li>
+<li>由于使用了双校验机制，恢复数据速度较慢</li>
+</ul>
+</li>
+<li><p>RAID1+0<br><img src="./220px-RAID_10.svg.png" alt="RAID 1+0"></p>
+</li>
+<li><p>RAID5+0<br><img src="./RAID_50.png" alt="Alt text"></p>
+</li>
+</ul>
+<h3 id="5-RAID卡"><a href="#5-RAID卡" class="headerlink" title="5. RAID卡"></a>5. RAID卡</h3><ul>
+<li><p>BBU</p>
+<ul>
+<li>Battery Backup Unit</li>
+<li>目前几乎所有RAID卡都带BBU</li>
+<li>需要电池保证写入的可靠性（在断电后，将RAID卡<code>内存</code>中的缓存的数据刷入到磁盘）</li>
+<li>电池有充放电时间 (30天左右一个周期，充放电会切换成 Write Through，导致性能下降)<ul>
+<li>使用<code>闪存（Flash）</code>的方式，就不会有充放电性能下降的问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>RAID卡缓存</p>
+<ul>
+<li>Write Backup （<code>强烈建议开启缓存</code>）</li>
+<li>Write Through (不使用缓存，直接写入)</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>LSI-RAID卡相关命令</p>
+<ul>
+<li><p>查看电量百分比</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@test_raid ~]<span class="comment"># megacli -AdpBbuCmd -GetBbuStatus -aALL |grep "Relative State of Charge"</span></span><br><span class="line">Relative State of Charge: 100 %</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看充电状态</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@test_raid ~]<span class="comment"># megacli -AdpBbuCmd -GetBbuStatus -aALL |grep "Charger Status"</span></span><br><span class="line">Charger Status: Complete</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看缓存策略</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@test_raid ~]<span class="comment"># megacli -LDGetProp -Cache -LALL -a0</span></span><br><span class="line">Adapter 0-VD 0(target id: 0): Cache Policy:WriteBack, ReadAdaptive, Direct, No Write Cache <span class="keyword">if</span> bad BBU</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-文件系统和操作系统"><a href="#6-文件系统和操作系统" class="headerlink" title="6. 文件系统和操作系统"></a>6. 文件系统和操作系统</h3><ul>
+<li><p>文件系统</p>
+<ul>
+<li>XFS/EXT4</li>
+<li>noatime (不更新文件的atime标记，减少系统的IO访问)</li>
+<li><p>nobarrier （禁用barrier，可以提高性能，前提是使用write backup和使用BBU）</p>
+<blockquote>
+<p>mount -o noatime,nobarrier /dev/sda1 /data</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>操作系统</p>
+<ul>
+<li>推荐Linux</li>
+<li>关闭SWAP</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/" title="MySQL 磁盘">https://mrpastor.github.io/2019-10-06/mysql/MySQL学习笔记（Day018：磁盘）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-06/mysql/MySQL学习笔记(Day008)/" rel="next" title="MySQL数据类型">
+                <i class="fa fa-chevron-left"></i> MySQL数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day018：磁盘）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day018：磁盘）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-iostat"><span class="nav-number">1.1.</span> <span class="nav-text">一. iostat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-磁盘"><span class="nav-number">1.2.</span> <span class="nav-text">二. 磁盘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-磁盘的访问模式"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 磁盘的访问模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-磁盘的分类"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 磁盘的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-提升IOPS性能的手段"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 提升IOPS性能的手段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-RAID类别"><span class="nav-number">1.2.4.</span> <span class="nav-text">4. RAID类别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-RAID卡"><span class="nav-number">1.2.5.</span> <span class="nav-text">5. RAID卡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-文件系统和操作系统"><span class="nav-number">1.2.6.</span> <span class="nav-text">6. 文件系统和操作系统</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）@(MySQL学习) [TOC] 一. 子查询 子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。MySQL 5.6.x 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。  1select a from t1 where a &amp;gt">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="子查询&#x2F;INSERT&#x2F;UPDATE&#x2F;DELETE&#x2F;REPLACE">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）@(MySQL学习) [TOC] 一. 子查询 子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。MySQL 5.6.x 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。  1select a from t1 where a &amp;gt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-09T01:01:16.974Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="子查询&#x2F;INSERT&#x2F;UPDATE&#x2F;DELETE&#x2F;REPLACE">
+<meta name="twitter:description" content="MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）@(MySQL学习) [TOC] 一. 子查询 子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。MySQL 5.6.x 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。  1select a from t1 where a &amp;gt">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/">
+
+
+
+
+
+  <title>子查询/INSERT/UPDATE/DELETE/REPLACE | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">子查询/INSERT/UPDATE/DELETE/REPLACE</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-01T19:19:18+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day012：子查询-INSERT-UPDATE-DELETE-REPLACE）"><a href="#MySQL学习笔记（Day012：子查询-INSERT-UPDATE-DELETE-REPLACE）" class="headerlink" title="MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）"></a>MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-子查询"><a href="#一-子查询" class="headerlink" title="一. 子查询"></a>一. 子查询</h2><blockquote>
+<p>子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。<br><code>MySQL 5.6.x</code> 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a <span class="keyword">from</span> t1 <span class="keyword">where</span> a &gt; <span class="keyword">any</span>(<span class="keyword">select</span> a <span class="keyword">from</span> t2);</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>select a from t1</code> 是外部查询(outer query)</li>
+<li><code>(select a from t2)</code> 是子查询</li>
+</ol>
+<p>一般说来，子查询嵌套于外部查询中，可以将两个或两个以上的子查询进行嵌套</p>
+<h3 id="1-子查询的使用"><a href="#1-子查询的使用" class="headerlink" title="1. 子查询的使用"></a>1. 子查询的使用</h3><h4 id="1-1-ANY-SOME"><a href="#1-1-ANY-SOME" class="headerlink" title="1.1.  ANY / SOME"></a>1.1.  ANY / SOME</h4><p>如果外部查询的列的结果和子查询的列的结果比较得到为True的话，则返回比较值为True的（外查询）的记录</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table  t1 (a int);</span><br><span class="line">Query OK, 0 rows affected (0.15 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; create table  t2 (a int); </span><br><span class="line">Query OK, 0 rows affected (0.14 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t1 values(10),(4);</span><br><span class="line">Query OK, 2 rows affected (0.02 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t2 values(12),(13),(5);</span><br><span class="line">Query OK, 3 rows affected (0.03 sec)</span><br><span class="line">Records: 3  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select a from t1;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   10 |</span><br><span class="line">|    4 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> t2;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   12 |   <span class="comment">-- t1中10，4比12小</span></span><br><span class="line">|   13 |   <span class="comment">-- t1中10，4比13小</span></span><br><span class="line">|    5 |   <span class="comment">-- t1中10比5大，4比5小</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a <span class="keyword">from</span> t1  </span><br><span class="line">    -&gt; <span class="keyword">where</span> a &gt; <span class="keyword">any</span></span><br><span class="line">    -&gt; (<span class="keyword">select</span> a <span class="keyword">from</span> t2); <span class="comment">-- 返回(12，13，4)</span></span><br><span class="line">                           <span class="comment">-- t1中a列的值，只要大于(12,13,4)中任意一值</span></span><br><span class="line">                           <span class="comment">-- 即t1.a &gt; t2.a为True，则返回对应的t1.a</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   10 |  <span class="comment">-- 10 比 5 大为True，则返回该值，4比t2中所有的a值小，为False</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 这个查询可以解释为，t1表内a列的值 大于 t2表中a列的任意(any)一个值（t1.a &gt; any(t2.a) == true）,则返回t1.a的记录</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>ANY</code>关键词必须与一个<code>比较操作符</code>一起使用： <code>=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code> <em>(这个是!=的意思)</em></p>
+</blockquote>
+<blockquote>
+<p><strong>子查询中<code>SOME</code>和<code>ANY</code>是同一个意思</strong></p>
+</blockquote>
+<h4 id="1-2-IN"><a href="#1-2-IN" class="headerlink" title="1.2. IN"></a>1.2. IN</h4><p><code>in</code>是<code>ANY</code>的一种特殊情况：<strong><code>&quot;in&quot;</code></strong>  <code>equals</code>  <strong><code>&quot;= any&quot;</code></strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into t1 values(5);  -- 向t1中插入一个t2中存在的值 5</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select a from t1 where a = any(select a from t2); -- t1.a==t2.a 的只有5</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    5 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> a <span class="keyword">from</span> t1 <span class="keyword">where</span> a <span class="keyword">in</span> (<span class="keyword">select</span> a <span class="keyword">from</span> t2); <span class="comment">-- in的结果等同于 =any 的结果</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    5 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>select a from s1 where  a in (select a in t2);</code>是用的比较多的一种语法</p>
+</blockquote>
+<h4 id="1-3-ALL"><a href="#1-3-ALL" class="headerlink" title="1.3. ALL"></a>1.3. ALL</h4><p>如果外部查询的列的结果和子查询的列的<code>所有结果</code>比较得到为True的话，则返回比较值为True的（外查询）的记录<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; truncate t1;   -- 清空t1</span><br><span class="line">Query OK, 0 rows affected (0.07 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; truncate t2;   -- 清空t2</span><br><span class="line">Query OK, 0 rows affected (0.10 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t1 values(10),(4);</span><br><span class="line">Query OK, 2 rows affected (0.02 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t2 values(5),(4),(3);  </span><br><span class="line">Query OK, 3 rows affected (0.03 sec)</span><br><span class="line">Records: 3  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select a from t1 where a &gt; all(select a from t2);</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   10 |  <span class="comment">-- (10 &gt; 5, 4, 3 为 True) 而 (4 &gt;5, 4, 3 为 False)</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><code>ALL</code>关键词必须与一个<code>比较操作符</code>一起使用<br><code>NOT IN</code> 是 <code>&lt;&gt; ALL</code>的别名 </p>
+</blockquote>
+<h3 id="2-子查询的分类"><a href="#2-子查询的分类" class="headerlink" title="2. 子查询的分类"></a>2. 子查询的分类</h3><ul>
+<li><p><strong>独立子查询</strong></p>
+<ul>
+<li>不依赖外部查询而运行的子查询<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select a from t1 where a in (1,2,3,4,5);</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    4 |  </span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>相关子查询</strong></p>
+<ul>
+<li>引用了外部查询列的子查询<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 在这个例子中，子查询中使用到了外部的列t2.a </span></span><br><span class="line">mysql&gt; select a from t1 where a in (select * from t2 where t1.a = t2.a);</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    4 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-子查询的优化"><a href="#3-子查询的优化" class="headerlink" title="3. 子查询的优化"></a>3. 子查询的优化</h3><ul>
+<li><strong>MySQL5.6之前</strong><br>在<code>MySQL5.6</code>之前，优化器会把子查询重写成<code>exists</code>的形式<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> a <span class="keyword">from</span> t1 <span class="keyword">where</span> a <span class="keyword">in</span> (<span class="keyword">select</span> a <span class="keyword">from</span> t2); <span class="comment">-- 这个是一条独立的子查询，时间复杂度 O(M+N)</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 经过优化器重写后</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">select</span> a <span class="keyword">from</span> t1 <span class="keyword">where</span> <span class="keyword">exists</span> (<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t2 <span class="keyword">where</span> t1.a = t2.a); <span class="comment">-- 这是相关子查询，复杂度O(M*N + M)</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>所以在<code>MySQL 5.6</code>之前，部分的子查询需要重写成join的形式 <em>（注意表的大小）</em><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select t1.a from t1 join t2 on t1.a = t2.a;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    4 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>MySQL 5.6之后</strong><br>在<code>MySQL 5.6</code>之后，优化器<code>不会</code>将子查询<code>重写</code>成<code>exists</code>的形式，而是自动优化，性能有了大幅提升</li>
+</ul>
+<blockquote>
+<p>可通过<code>explain extended</code>来查看子查询优化的结果。由于<code>explain</code>还未讲到，该部分暂时跳过</p>
+</blockquote>
+<h3 id="4-包含NULL值的NOT-IN"><a href="#4-包含NULL值的NOT-IN" class="headerlink" title="4. 包含NULL值的NOT IN"></a>4. 包含NULL值的NOT IN</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select null in ('a', 'b', null);</span><br><span class="line">+<span class="comment">--------------------------+</span></span><br><span class="line">| null in ('a', 'b', null) |</span><br><span class="line">+<span class="comment">--------------------------+</span></span><br><span class="line">|                     NULL |</span><br><span class="line">+<span class="comment">--------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>MySQL数据库的<code>比较操作</code>，除了返回<code>1(True)</code>, <code>0(False)</code>之外，还会返回<code>NULL</code><br><code>NULL</code>和<code>NULL</code>的比较，返回的还是<code>NULL</code></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select null not in ('a', 'b', null);  </span><br><span class="line">+<span class="comment">------------------------------+</span></span><br><span class="line">| null not in ('a', 'b', null) |</span><br><span class="line">+<span class="comment">------------------------------+</span></span><br><span class="line">|                         NULL |  <span class="comment">-- null不在('a', 'b', null)中，返回的还是null，因为有null和null的比较</span></span><br><span class="line">+<span class="comment">------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="string">'a'</span> <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="literal">null</span>);  </span><br><span class="line">+<span class="comment">-----------------------------+</span></span><br><span class="line">| 'a' not in ('a', 'b', null) |</span><br><span class="line">+<span class="comment">-----------------------------+</span></span><br><span class="line">|                           0 |  <span class="comment">-- a 不在 ('a', 'b', null)中，返回0,即False</span></span><br><span class="line">+<span class="comment">-----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="string">'c'</span> <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">'a'</span>, <span class="string">'b'</span>);</span><br><span class="line">+<span class="comment">-----------------------+</span></span><br><span class="line">| 'c' not in ('a', 'b') |</span><br><span class="line">+<span class="comment">-----------------------+</span></span><br><span class="line">|                     1 |  <span class="comment">-- 这个返回值可以理解 'c'不在('a', 'b')中，返回1，即为True</span></span><br><span class="line">+<span class="comment">-----------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="string">'c'</span> <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="literal">null</span>); </span><br><span class="line">+<span class="comment">-----------------------------+</span></span><br><span class="line">| 'c' not in ('a', 'b', null) |</span><br><span class="line">+<span class="comment">-----------------------------+</span></span><br><span class="line">|                        NULL | <span class="comment">-- 理论上应该是返回1，即True的。但是包含了null值。则返回null</span></span><br><span class="line">+<span class="comment">-----------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>对于包含了<code>NULL</code>值的<code>IN</code>操作，总是返回<code>True</code>或者<code>NULL</code></strong><br><strong><code>NOT IN</code>返回<code>NOT True (False)</code>或者<code>NOT NULL (NULL)</code></strong></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- SQL语句一 使用 EXISTS</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">select</span> customerid, companyname </span><br><span class="line">    <span class="keyword">from</span> customers <span class="keyword">as</span> A</span><br><span class="line">    <span class="keyword">where</span> country = <span class="string">'Spain'</span> </span><br><span class="line">        <span class="keyword">and</span> <span class="keyword">not</span> <span class="keyword">exists</span></span><br><span class="line">            ( <span class="keyword">select</span> * <span class="keyword">from</span> orders <span class="keyword">as</span> B</span><br><span class="line">              <span class="keyword">where</span> A.customerid = B.customerid );</span><br><span class="line">              </span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- SQL语句二 使用 IN</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">select</span> customerid, companyname </span><br><span class="line">    <span class="keyword">from</span> customers <span class="keyword">as</span> A</span><br><span class="line">    <span class="keyword">where</span> country = <span class="string">'Spain'</span> </span><br><span class="line">        <span class="keyword">and</span> customerid <span class="keyword">not</span> <span class="keyword">in</span> (<span class="keyword">select</span> customerid <span class="keyword">from</span> orders);</span><br><span class="line">              </span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- 当结果集合中没有NULL值时，上述两条SQL语句查询的结果是一致的 </span></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 插入一个NULL值</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> orders(orderid) <span class="keyword">values</span> (<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- SQL语句1 : 返回和之前一致</span></span><br><span class="line"><span class="comment">-- SQL语句2 : 返回为空表，因为子查询返回的结果集中存在NULL值。not in null 永远返回False或者NULL</span></span><br><span class="line"><span class="comment">--            此时 where (country = 'Spain' and (False or NULL)) 为 False OR NULL，条件永远不匹配</span></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- SQL语句2 改写后</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="keyword">select</span> customerid, companyname </span><br><span class="line">    <span class="keyword">from</span> customers <span class="keyword">as</span> A</span><br><span class="line">    <span class="keyword">where</span> country = <span class="string">'Spain'</span> </span><br><span class="line">        <span class="keyword">and</span> customerid <span class="keyword">not</span> <span class="keyword">in</span> (<span class="keyword">select</span> customerid <span class="keyword">from</span> orders </span><br><span class="line">                                <span class="keyword">where</span> customerid <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span>);  <span class="comment">-- 增加这个过滤条件，使用is not，而不是&lt;&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 和 null比较，使用is和is not， 而不是 = 和 &lt;&gt;</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; select null = null; </span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">| null = null |</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">|        NULL |</span><br><span class="line">+<span class="comment">-------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="literal">null</span> &lt;&gt; <span class="literal">null</span>;</span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">| null &lt;&gt; null |</span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">|         NULL |</span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="literal">null</span> <span class="keyword">is</span> <span class="literal">null</span>; </span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">| null is null |</span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">|            1 |  <span class="comment">-- 返回 True</span></span><br><span class="line">+<span class="comment">--------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> <span class="literal">null</span> <span class="keyword">is</span> <span class="keyword">not</span>  <span class="literal">null</span>;</span><br><span class="line">+<span class="comment">-------------------+</span></span><br><span class="line">| null is not  null |</span><br><span class="line">+<span class="comment">-------------------+</span></span><br><span class="line">|                 0 |  <span class="comment">-- 返回 False</span></span><br><span class="line">+<span class="comment">-------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>EXISTS</code>不管返回值是什么，而是看是否有<code>行</code>返回，所以<code>EXISTS</code>中子查询都是<code>select *</code>、<code>select 1</code>等，因为只关心返回是否有行（结果集）</p>
+</blockquote>
+<hr>
+<h2 id="二-INSERT"><a href="#二-INSERT" class="headerlink" title="二. INSERT"></a>二. INSERT</h2><blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/insert.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into t1 values(1);  -- 插入一个值</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t1 values(2),(3),(-1);  -- 插入多个值，MySQL独有</span><br><span class="line">Query OK, 3 rows affected (0.03 sec)</span><br><span class="line">Records: 3  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t1 select 8;   -- insert XXX select XXX 语法，MySQ独有</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; create table t3 (a int, b int); -- 有多个列</span><br><span class="line">Query OK, 0 rows affected (0.15 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t3 select 8;  -- 没有指定列，报错</span><br><span class="line">ERROR 1136 (21S01): Column count doesn't match value count at row 1</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t3(a) select 8;  -- 指定列a</span><br><span class="line">Query OK, 1 row affected (0.04 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t3 select 8, 9;  -- 不指定列，但是插入值匹配列的个数和类型</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> t3(b) <span class="keyword">select</span> a <span class="keyword">from</span> t2;  <span class="comment">-- 从t2表中查询数据并插入到t3(a)中，注意指定列</span></span><br><span class="line">Query OK, 3 rows affected (0.03 sec)</span><br><span class="line">Records: 3  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 如果想快速增长表格中的数据，可以使用如下方法，使得数据成倍增长</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> t3 <span class="keyword">select</span> * <span class="keyword">from</span> t3;</span><br><span class="line">Query OK, 5 rows affected (0.03 sec)  <span class="comment">-- 插入了5列</span></span><br><span class="line">Records: 5  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;               </span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">10 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> t3 <span class="keyword">select</span> * <span class="keyword">from</span> t3;</span><br><span class="line">Query OK, 10 rows affected (0.03 sec)  <span class="comment">-- 插入了10列，成倍增长</span></span><br><span class="line">Records: 10  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;               </span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">| NULL |    5 |</span><br><span class="line">| NULL |    4 |</span><br><span class="line">| NULL |    3 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">20 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="三-DELETE"><a href="#三-DELETE" class="headerlink" title="三. DELETE"></a>三. DELETE</h2><blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/delete.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delete from t3 where a is null;  -- 根据过滤条件删除</span><br><span class="line">Query OK, 12 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;               </span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">|    8 | NULL |</span><br><span class="line">|    8 |    9 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">8 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">delete</span> <span class="keyword">from</span> t3;   <span class="comment">-- 删除整个表</span></span><br><span class="line">Query OK, 8 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;</span><br><span class="line">Empty <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="四-UPDATE"><a href="#四-UPDATE" class="headerlink" title="四. UPDATE"></a>四. UPDATE</h2><blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/update.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into t3 select 1,2;</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line">Records: 1  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    1 |    2 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">update</span> t3 <span class="keyword">set</span> a=<span class="number">10</span> <span class="keyword">where</span> a=<span class="number">1</span>;</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t3;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|   10 |    2 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 关联后更新</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> t1;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   10 |</span><br><span class="line">|    4 |  <span class="comment">-- 和t2中的4相等</span></span><br><span class="line">|    1 |</span><br><span class="line">|    2 |</span><br><span class="line">|    3 |  <span class="comment">-- 和t2中的3相等</span></span><br><span class="line">|   -1 |</span><br><span class="line">|    8 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">7 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> t2;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    5 |</span><br><span class="line">|    4 |  <span class="comment">-- 和t1中的4相等</span></span><br><span class="line">|    3 |  <span class="comment">-- 和t1中的3相等</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">update</span> t1 <span class="keyword">join</span> t2 <span class="keyword">on</span> t1.a = t2.a <span class="keyword">set</span> t1.a=<span class="number">100</span>;  <span class="comment">-- 先得到t1.a=t2.a的结果集</span></span><br><span class="line">                                                       <span class="comment">-- 然后将结果集中的t1.a设置为100</span></span><br><span class="line">Query OK, 2 rows affected (0.03 sec)</span><br><span class="line">Rows matched: 2  Changed: 2  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t1;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| a    |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   10 |</span><br><span class="line">|  100 |  <span class="comment">-- 该行被更新成100</span></span><br><span class="line">|    1 |</span><br><span class="line">|    2 |</span><br><span class="line">|  100 |  <span class="comment">-- 该行被更新成100</span></span><br><span class="line">|   -1 |</span><br><span class="line">|    8 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">7 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="五-REPLACE"><a href="#五-REPLACE" class="headerlink" title="五. REPLACE"></a>五. REPLACE</h2><blockquote>
+<p><a href="http://dev.mysql.com/doc/refman/5.7/en/replace.html" target="_blank" rel="noopener">官方文档</a></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table t4(a int primary key auto_increment, b int);</span><br><span class="line">Query OK, 0 rows affected (0.15 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t4 values(NULL, 10);</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t4 values(NULL, 11);</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t4 values(NULL, 12);</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t4;</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| a | b    |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| 1 |   10 |</span><br><span class="line">| 2 |   11 |</span><br><span class="line">| 3 |   12 |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> t4 <span class="keyword">values</span>(<span class="number">1</span>, <span class="number">100</span>);  <span class="comment">-- 报错，说存在重复的主键记录 "1"</span></span><br><span class="line">ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'</span><br><span class="line"></span><br><span class="line">mysql&gt; replace into t4 values(1, 100); -- 替换该主键对应的值  </span><br><span class="line">Query OK, 2 rows affected (0.03 sec)   <span class="comment">-- 两行记录受到影响</span></span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t4;</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| a | b    |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| 1 |  100 |  <span class="comment">-- 已经被替换</span></span><br><span class="line">| 2 |   11 |</span><br><span class="line">| 3 |   12 |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- replace的原理是：先delete，在insert</span></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">replace</span> <span class="keyword">into</span> t4 <span class="keyword">values</span>(<span class="number">5</span>, <span class="number">50</span>);  <span class="comment">-- 没有替换对象时，类似插入效果</span></span><br><span class="line">Query OK, 1 row affected (0.03 sec)    <span class="comment">-- 只影响1行</span></span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t4;</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| a | b    |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| 1 |  100 |</span><br><span class="line">| 2 |   11 |</span><br><span class="line">| 3 |   12 |</span><br><span class="line">| 5 |   50 |  <span class="comment">-- 插入了1行</span></span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- replace原理更明显的例子 </span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">table</span> t6 </span><br><span class="line">    -&gt; (a <span class="built_in">int</span> primary <span class="keyword">key</span>, </span><br><span class="line">    -&gt; b <span class="built_in">int</span> auto_increment,   <span class="comment">-- b是auto_increment的int型数据</span></span><br><span class="line">    -&gt; c <span class="built_in">int</span>, <span class="keyword">key</span>(b));</span><br><span class="line">Query OK, 0 rows affected (0.15 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t6 values(10, NULL, 100),(20,NULL,200);  -- b自增长</span><br><span class="line">Query OK, 2 rows affected (0.02 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t6;</span><br><span class="line">+<span class="comment">----+---+------+</span></span><br><span class="line">| a  | b | c    |</span><br><span class="line">+<span class="comment">----+---+------+</span></span><br><span class="line">| 10 | 1 |  100 |  <span class="comment">-- b为1</span></span><br><span class="line">| 20 | 2 |  200 |  <span class="comment">-- b为2</span></span><br><span class="line">+<span class="comment">----+---+------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">replace</span> <span class="keyword">into</span> t6 <span class="keyword">values</span>(<span class="number">10</span>,<span class="literal">NULL</span>,<span class="number">150</span>);  <span class="comment">-- 将a=10的替换掉</span></span><br><span class="line">Query OK, 2 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t6;</span><br><span class="line">+<span class="comment">----+---+------+</span></span><br><span class="line">| a  | b | c    |</span><br><span class="line">+<span class="comment">----+---+------+</span></span><br><span class="line">| 10 | 3 |  150 |  <span class="comment">-- 替换后b从1变成了3，说明是先删除，再插入</span></span><br><span class="line">| 20 | 2 |  200 |</span><br><span class="line">+<span class="comment">----+---+------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-----</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- insert on duplicate 效果和 replace类似</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">insert</span> <span class="keyword">into</span> t4 <span class="keyword">values</span>(<span class="number">1</span>,<span class="number">1</span>);  <span class="comment">-- 插入报错，存在key为1的记录</span></span><br><span class="line">ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t4 values(1,1) on duplicate key update b=1;  -- 带上on duplicate参数</span><br><span class="line">                                                                <span class="comment">-- 非SQL标准，不推荐</span></span><br><span class="line">Query OK, 2 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t4;</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| a | b    |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line">| 1 |    1 |  <span class="comment">-- 该行的b列从100被替换成1</span></span><br><span class="line">| 2 |   11 |</span><br><span class="line">| 3 |   12 |</span><br><span class="line">| 5 |   50 |</span><br><span class="line">+<span class="comment">---+------+</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- insert ignore</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; insert ignore into t4 values(1,1);   -- 忽略重复的错误</span><br><span class="line">Query OK, 0 rows affected, 1 warning (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show warnings;</span><br><span class="line">+<span class="comment">---------+------+---------------------------------------+</span></span><br><span class="line">| Level   | Code | Message                               |</span><br><span class="line">+<span class="comment">---------+------+---------------------------------------+</span></span><br><span class="line">| Warning | 1062 | Duplicate entry '1' for key 'PRIMARY' |</span><br><span class="line">+<span class="comment">---------+------+---------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="六-其他知识点"><a href="#六-其他知识点" class="headerlink" title="六. 其他知识点"></a>六. 其他知识点</h2><ul>
+<li><strong>更新有关系的值</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table t5 (a int, b int);</span><br><span class="line">Query OK, 0 rows affected (0.14 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into t5 values(1,1);</span><br><span class="line">Query OK, 1 row affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t5;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    1 |    1 |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">update</span> t5 <span class="keyword">set</span> a=a+<span class="number">1</span>, b=a <span class="keyword">where</span> a=<span class="number">1</span>;</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t5;</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">| a    | b    |</span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">|    2 |    2 |  <span class="comment">-- SQL Server和Oracle中得到的值是2, 1</span></span><br><span class="line">+<span class="comment">------+------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> se</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>显示行号(RowNumber)</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 方法一</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; use employees ;</span><br><span class="line">Reading table information for completion of table and column names</span><br><span class="line">You can turn off this feature to get a quicker startup with -A</span><br><span class="line"></span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; set @rn:=0;  -- 产生 SESSION(会话)级别的变量</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @rn:=@rn+1 as rownumber, emp_no, gender from employees limit 10;  -- ：= 是赋值的意思</span><br><span class="line">+<span class="comment">-----------+--------+--------+</span></span><br><span class="line">| rownumber | emp_no | gender |</span><br><span class="line">+<span class="comment">-----------+--------+--------+</span></span><br><span class="line">|        11 |  10001 | M      |</span><br><span class="line">|        12 |  10002 | F      |</span><br><span class="line">|        13 |  10003 | M      |</span><br><span class="line">|        14 |  10004 | M      |</span><br><span class="line">|        15 |  10005 | M      |</span><br><span class="line">|        16 |  10006 | F      |</span><br><span class="line">|        17 |  10007 | F      |</span><br><span class="line">|        18 |  10008 | M      |</span><br><span class="line">|        19 |  10009 | F      |</span><br><span class="line">|        20 |  10010 | F      |</span><br><span class="line">+<span class="comment">-----------+--------+--------+</span></span><br><span class="line">10 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 方法二 （推荐）</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> @rn1:=@rn1+<span class="number">1</span> <span class="keyword">as</span> rownumber, emp_no, gender <span class="keyword">from</span> employees, (<span class="keyword">select</span> @rn1:=<span class="number">0</span>) <span class="keyword">as</span> a <span class="keyword">limit</span> <span class="number">10</span>;</span><br><span class="line">+<span class="comment">-----------+--------+--------+</span></span><br><span class="line">| rownumber | emp_no | gender |</span><br><span class="line">+<span class="comment">-----------+--------+--------+</span></span><br><span class="line">|         1 |  10001 | M      |</span><br><span class="line">|         2 |  10002 | F      |</span><br><span class="line">|         3 |  10003 | M      |</span><br><span class="line">|         4 |  10004 | M      |</span><br><span class="line">|         5 |  10005 | M      |</span><br><span class="line">|         6 |  10006 | F      |</span><br><span class="line">|         7 |  10007 | F      |</span><br><span class="line">|         8 |  10008 | M      |</span><br><span class="line">|         9 |  10009 | F      |</span><br><span class="line">|        10 |  10010 | F      |</span><br><span class="line">+<span class="comment">-----------+--------+--------+</span></span><br><span class="line">10 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- MySQL 自定义变量，根据每一记录进行变化的</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> @rn1:=<span class="number">0</span>;</span><br><span class="line">+<span class="comment">---------+</span></span><br><span class="line">| @rn1:=0 |</span><br><span class="line">+<span class="comment">---------+</span></span><br><span class="line">|       0 |  <span class="comment">-- 只有一行记录</span></span><br><span class="line">+<span class="comment">---------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 相当于 把 employees 和 (select @rn1:=0)做了笛卡尔积，然后使用@rn1:=@rn + 1，根据每行进行累加</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- ":=" 和 "="</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">set</span> @a:=<span class="number">1</span>;  <span class="comment">-- 赋值为1</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @a;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| @a   |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    1 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">set</span> @a:=<span class="number">10</span>;  <span class="comment">-- 赋值为10</span></span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @a;</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| @a   |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|   10 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> @a=<span class="number">9</span>;  <span class="comment">-- 进行比较</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">| @a=9 |</span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">|    0 |  <span class="comment">-- 返回为False</span></span><br><span class="line">+<span class="comment">------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 作业：通过子查询或者其他方式，计算出employees的行号</span></span><br><span class="line"><span class="comment">--</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/" title="子查询/INSERT/UPDATE/DELETE/REPLACE">https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day005)/" rel="next" title="slow_log/generic_log/audit/存储引擎一">
+                <i class="fa fa-chevron-left"></i> slow_log/generic_log/audit/存储引擎一
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-01/mysql/MySQL学习笔记(Day007)/" rel="prev" title="MySQL多实例下/SSL">
+                MySQL多实例下/SSL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day012：子查询-INSERT-UPDATE-DELETE-REPLACE）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-子查询"><span class="nav-number">1.1.</span> <span class="nav-text">一. 子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-子查询的使用"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 子查询的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-ANY-SOME"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.  ANY / SOME</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-IN"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">1.2. IN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-ALL"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">1.3. ALL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-子查询的分类"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 子查询的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-子查询的优化"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 子查询的优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-包含NULL值的NOT-IN"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 包含NULL值的NOT IN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-INSERT"><span class="nav-number">1.2.</span> <span class="nav-text">二. INSERT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-DELETE"><span class="nav-number">1.3.</span> <span class="nav-text">三. DELETE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-UPDATE"><span class="nav-number">1.4.</span> <span class="nav-text">四. UPDATE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-REPLACE"><span class="nav-number">1.5.</span> <span class="nav-text">五. REPLACE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-其他知识点"><span class="nav-number">1.6.</span> <span class="nav-text">六. 其他知识点</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

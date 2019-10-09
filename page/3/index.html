@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-09-19/hexo_google_adsense/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -282,7 +282,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/" itemprop="url">WebRTC视频统计信息之延迟抖动与丢包</a></h1>
+                <a class="post-title-link" href="/2019-09-19/hexo_google_adsense/" itemprop="url">hexo博客next主题添加google adsense</a></h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-07T19:14:50+08:00">
-                2019-06-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-19T19:19:18+08:00">
+                2019-09-19
               </time>
             
 
@@ -317,164 +317,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebRTC/" itemprop="url" rel="index">
-                    <span itemprop="name">WebRTC</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>这篇文章主要想说明的是WebRTC内部对视频<code>上下行延时、抖动、丢包</code>如何更新，上层又怎么获取到这些统计信息的。对应的<code>WebRTC版本：63</code>。</p>
-</blockquote>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><blockquote>
-<p>最近在内网情况下测试视频会议，视频下行延时很大，很多时候超过<code>100ms</code>。另外，视频的上下行抖动总是稳定在<code>30~40ms</code>这个区间。这些统计在内网环境下是不正常的，于是决定看看是哪里导致这些问题的。</p>
-<p>在解决这些问题的过程中，也对WebRTC内部视频统计数据做了一次梳理。</p>
-<p>阅读这篇文章之前，最好对RTP、RTCP、SR、RR有一些了解。这里就不过多展开，可以参考以下文章：</p>
-<p><a href="https://tools.ietf.org/html/rfc3550#section-5" target="_blank" rel="noopener">RTP Data Transfer Protocol</a></p>
-<p><a href="https://tools.ietf.org/html/rfc3550#section-6" target="_blank" rel="noopener">RTP Control Protocol – RTC</a></p>
-<p><a href="https://www.zhihu.com/question/20278635/answer/14590945" target="_blank" rel="noopener">RTP/RTSP/RTCP有什么区别</a></p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-30/reference/WebRTC/webrtc-src/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-05-30/reference/WebRTC/webrtc-src/" itemprop="url">WebRTC 镜像源</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-30T19:14:50+08:00">
-                2019-05-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebRTC/" itemprop="url" rel="index">
-                    <span itemprop="name">WebRTC</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
 
@@ -512,39 +356,21 @@
       
         
           
-          WebRTC 镜像源
-WebRTC 镜像源
+          流程说明
+google adsense对网站内容有要求。
+网站必须提交几篇(博主写了五篇)博客之后再去申请google adsense，否则会被拒。
 
+google adsense账号申请google adsense账号，见网址
+adsense代码
+登录google adsense，首页申请google adsense，google会生成一段代码。
+复制代码到themes/next/layout/_partials/head.swig其中一script块下面。
+hexo deploy网站，google adsense首页上确认已添加代码到网站中，等待审核。
 
-webrtc src
-
-
-WebRTC-编译以及运行IOS的Demo
-WebRTC iOS&amp;OSX 库的编译
-生成WebRTC的DEMO并运行
-使用xcode来生成webrtc的Demo
-webrtc ios client 源码拉取和编译
-
-
-webrtc视频jitterbuffer原理机制(描述版)
-jitter buffer QoS的解决方案
-webrtc中的码率控制
-
-
-WebRTC介绍
-WebRTC源码解读一
-WebRTC架构简介
-C/C++ Linux 程序员必须了解的 10 个工具
-C++设计一个类不能偷懒的地方
-设计性能良好系统的指导思想
-WebRTC实时音视频技术的整体架构介绍
-WebRTC 开发（二）源码下载与编译
-
-查看和下载特定版本的webrtc代码注：这个方法已经不适用了
+12345678&lt;script async src=&quot;//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js&quot;
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-05-30/reference/WebRTC/webrtc-src/#more" rel="contents">
+            <a class="btn" href="/2019-09-19/hexo_google_adsense/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -595,7 +421,7 @@ WebRTC 开发（二）源码下载与编译
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-29/reference/实用的计算机工具库/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-08-27/reference/Android/android-learn-note/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -614,7 +440,7 @@ WebRTC 开发（二）源码下载与编译
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-05-29/reference/实用的计算机工具库/" itemprop="url">实用的计算机工具库</a></h1>
+                <a class="post-title-link" href="/2019-08-27/reference/Android/android-learn-note/" itemprop="url">Android学习笔记</a></h1>
         
 
         <div class="post-meta">
@@ -626,8 +452,8 @@ WebRTC 开发（二）源码下载与编译
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-29T10:14:50+08:00">
-                2019-05-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-27T18:04:02+08:00">
+                2019-08-27
               </time>
             
 
@@ -649,8 +475,8 @@ WebRTC 开发（二）源码下载与编译
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/other/" itemprop="url" rel="index">
-                    <span itemprop="name">other</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -687,11 +513,26 @@ WebRTC 开发（二）源码下载与编译
 
       
         
-          <p>在我们平时的工作过程中，经常会用到各种工具，每次遇到问题都得各种百度搜索，今天给大家带来几个私藏多年的工具库，有了它，你再也不用到处找工具了，里面包含了大量的使用工具。</p>
-<h2 id="MikuTools"><a href="#MikuTools" class="headerlink" title="MikuTools"></a>MikuTools</h2><p><a href="https://miku.tools/" target="_blank" rel="noopener">网站地址</a></p>
+          
+          Android 开发者文档
+Android 官方 开发者文档
+中文翻译项目
+
+Progressive Web App
+简单介绍一下Progressive Web App(PWA)
+下一代 Web 应用模型 —— Progressive Web App
+LAVAS 基于 Vue.js 的 PWA 解决方案
+PWA超简单入门
+PWA，现代前端必会的黑科技
+
+Java 知识汇总
+JAVA的abstract修饰符 &amp;&amp; 接口interface用法 &amp;&amp; 抽象类和interface的差别
+
+
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-05-29/reference/实用的计算机工具库/#more" rel="contents">
+            <a class="btn" href="/2019-08-27/reference/Android/android-learn-note/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -742,7 +583,7 @@ WebRTC 开发（二）源码下载与编译
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-28/reference/FFmpeg/FFmpeg的H.264解码器源代码简单分析/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-08-12/reference/MacOS/mac-clion-md/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -761,7 +602,7 @@ WebRTC 开发（二）源码下载与编译
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-05-28/reference/FFmpeg/FFmpeg的H.264解码器源代码简单分析/" itemprop="url">FFmpeg的H.264解码器源代码简单分析</a></h1>
+                <a class="post-title-link" href="/2019-08-12/reference/MacOS/mac-clion-md/" itemprop="url">IntelliJ IDEA 常用快捷键</a></h1>
         
 
         <div class="post-meta">
@@ -773,8 +614,8 @@ WebRTC 开发（二）源码下载与编译
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-28T10:14:50+08:00">
-                2019-05-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-12T19:35:21+08:00">
+                2019-08-12
               </time>
             
 
@@ -796,8 +637,8 @@ WebRTC 开发（二）源码下载与编译
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
-                    <span itemprop="name">FFmpeg</span>
+                  <a href="/categories/MacOS/" itemprop="url" rel="index">
+                    <span itemprop="name">MacOS</span>
                   </a>
                 </span>
 
@@ -834,14 +675,26 @@ WebRTC 开发（二）源码下载与编译
 
       
         
-          <blockquote>
-<p>文章参考汇总至<a href="https://blog.csdn.net/leixiaohua1020/article/details/45536607" target="_blank" rel="noopener">雷神笔记</a></p>
-</blockquote>
-<h1 id="编码-x264"><a href="#编码-x264" class="headerlink" title="编码 - x264"></a>编码 - x264</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>最近正在研究H.264和HEVC的编码方式，因此分析了一下最常见的H.264编码器——x264的源代码。本文简单梳理一下它的结构。X264的源代码量比较大而且涉及到很多的算法，目前还有很多不懂的地方，因此也不能保证分析的完全正确。目前打算先把已经理解的部分整理出来以作备忘。</p>
-<h3 id="函数调用关系图"><a href="#函数调用关系图" class="headerlink" title="函数调用关系图"></a>函数调用关系图</h3>
+          
+          
+温馨提示：在 IntelliJ IDEA 中有两个 Mac 版本的快捷键，分别为 Mac OS X 和 Mac OS X 10.5+， 其中 Mac OS X 10.5+ 为 IntelliJ IDEA 默认的快捷键版本。此外，建议将 Mac 系统中与 IntelliJ IDEA 冲突的快捷键取消或更改，不建议改 IntelliJ IDEA 的默认快捷键。
+
+Mac 键盘符号和修饰键说明
+⌘ ——&gt; Command
+⇧ ——&gt; Shift
+⌥ ——&gt; Option
+⌃ ——&gt; Control
+↩︎ ——&gt; Return/Enter
+⌫ ——&gt; Delete
+⌦ ——&gt; 向前删除键(Fn + Delete)
+↑ ——&gt; 上箭头
+↓ ——&gt; 下箭头
+← ——&gt; 左箭头
+→ ——&gt; 右箭头
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-05-28/reference/FFmpeg/FFmpeg的H.264解码器源代码简单分析/#more" rel="contents">
+            <a class="btn" href="/2019-08-12/reference/MacOS/mac-clion-md/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -892,7 +745,7 @@ WebRTC 开发（二）源码下载与编译
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-27/reference/WebRTC/webrtc-opensrc/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-10/reference/MacOS/mac-shell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -911,7 +764,7 @@ WebRTC 开发（二）源码下载与编译
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-05-27/reference/WebRTC/webrtc-opensrc/" itemprop="url">WebRTC开源src</a></h1>
+                <a class="post-title-link" href="/2019-07-10/reference/MacOS/mac-shell/" itemprop="url">Mac 高效shell终端设置</a></h1>
         
 
         <div class="post-meta">
@@ -923,8 +776,1022 @@ WebRTC 开发（二）源码下载与编译
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-27T19:14:50+08:00">
-                2019-05-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-10T10:14:50+08:00">
+                2019-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MacOS/" itemprop="url" rel="index">
+                    <span itemprop="name">MacOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          iterm2 快捷键光标控制
+
+
+快捷键
+描述
+
+
+
+
+ctrl + a
+到行首
+
+
+ctrl + e
+行末
+
+
+ctrl + u
+清除当前行
+
+
+ctrl + f/b
+前进后退，相当于左右方向键，但是显然比移开手按方向键更快
+
+
+ctrl + p
+上一条命令，相当于方向键上
+
+
+ctrl + r
+搜索命令历史，这个大家都应该很熟悉了
+
+
+ctrl + d
+删除当前字符
+
+
+ctrl + h
+删除之前的字符
+
+
+ctrl + w
+删除光标前的单词
+
+
+ctrl + k
+删除到文本末尾
+
+
+ctrl + t
+交换光标处文本
+
+
+⌘ + —/+/0
+调整字体大小
+
+
+⌘ + r
+清屏，其实是滚到新的一屏，并没有清空。ctrl + l 也可以做到
+
+
+
+标签
+
+
+快捷键
+描述
+
+
+
+
+command + t
+新建标签
+
+
+command + w
+关闭标签
+
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-07-10/reference/MacOS/mac-shell/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-03/行业知识图谱构建与应用-下篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-07-03/行业知识图谱构建与应用-下篇/" itemprop="url">CCKS-2017 行业知识图谱构建与应用-下篇</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-03T19:18:19+08:00">
+                2019-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/知识图谱/" itemprop="url" rel="index">
+                    <span itemprop="name">知识图谱</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          行业知识图谱关键技术上篇我们讲行业知识图谱生命周期划分为6个阶段，分为知识建模，知识获取，知识融合，知识存储，知识计算和知识应用。接下来我们详细描述每个阶段具体是如何完成的，有没有现成可用的工具、工具的优缺点如何、没有现成工具的话如何实现；同时，我们会以金融证券领域的创投知识图谱为例来进行实战描述。
+知识建模即为行业的知识和数据进行抽象建模。上篇描述了行业数据的特点和企业面临的数据利用挑战，也提到了使用行业知识图谱来克服这些难题。具体而言，首先使用知识图谱相关技术对行业知识和数据进行建模：
+
+以实体为主体目标，实现对不同来源的数据进行映射与合并。（实体抽取与合并）
+利用属性来表示不同数据源中针对实体的描述，形成对实体的全方位描述。（属性映射与归并）
+利用关系来描述各类抽象建模成实体的数据之间的关联关系，从而支持关联分析。（关系抽取）
+通过实体链接技术
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-07-03/行业知识图谱构建与应用-下篇/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-02/行业知识图谱构建与应用-上篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-07-02/行业知识图谱构建与应用-上篇/" itemprop="url">CCKS-2017 行业知识图谱构建与应用-上篇</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-02T19:18:19+08:00">
+                2019-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/知识图谱/" itemprop="url" rel="index">
+                    <span itemprop="name">知识图谱</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          本次Tutorial主要包括以下三方面内容：
+
+行业知识图谱概述，包括行业图谱简介，行业知识图谱的应用及挑战，以及行业知识图谱生命周期管理。
+
+行业知识图谱关键技术，包括行业知识图谱生命周期中各过程的相关技术、现有可用的工具，以及各过程中的最佳实践及相关组件。
+
+行业知识图谱应用实战，以金融证券行业应用为例，演示知识图谱从知识建模、知识抽取到行业应用的全过程。
+
+
+目标听众与我们公众号的粉丝群体一致：
+
+知识图谱学习者，对知识图谱在行业应用感兴趣的技术人员。
+
+各行业应用中想引入知识图谱相关技术的知识及数据管理人员，尤其是有行业知识库构建及上层问答搜索等需求的。
+
+希望了解知识图谱如何在行业中应用的管理决策者。
+
+
+这篇文章通读完大致需要60分钟时间，不过这些时间都是值得的，因为你将可以：
+
+了解行业知识图谱相关概念及其在行业中的现有应用，理解其给行
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-07-02/行业知识图谱构建与应用-上篇/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-02/reference/Architect/架构师之路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-07-02/reference/Architect/架构师之路/" itemprop="url">架构师之路</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-02T10:14:50+08:00">
+                2019-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/架构师/" itemprop="url" rel="index">
+                    <span itemprop="name">架构师</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          架构师入门
+我的职业是架构师：12年经验带你入门
+软件架构入门 – 阮一峰
+成为1个架构师的入门到进阶之路（学习路线图）
+
+
+架构师之路
+W3Cschool架构师之路
+
+
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-07-02/reference/Architect/架构师之路/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-07-01/知识图谱研究进展/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-07-01/知识图谱研究进展/" itemprop="url">知识图谱研究进展</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-01T19:18:19+08:00">
+                2019-07-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/知识图谱/" itemprop="url" rel="index">
+                    <span itemprop="name">知识图谱</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          1 知识图谱构建技术
+本节首先给出知识图谱的技术地图，然后介绍知识图谱构建的关键技术，包括关系抽取技术、知识融合技术、实体链接技术和知识推理技术。
+1.1 知识图谱技术地图
+构建知识图谱的主要目的是获取大量的、让计算机可读的知识。在互联网飞速发展的今天，知识大量存在于非结构化的文本数据、大量半结构化的表格和网页以及生产系统的结构化数据中。为了阐述如何构建知识图谱，本文给出了构建知识图谱的技术地图，该技术地图如图1所示。整个技术图主要分为三个部分，第一个部分是知识获取，主要阐述如何从非结构化、半结构化、以及结构化数据中获取知识。第二部是数据融合，主要阐述如何将不同数据源获取的知识进行融合构建数据之间的关联。第三部分是知识计算及应用，这一部分关注的是基于知识图谱计算功能以及基于知识图谱的应用。
+1.1.1 知识获取
+在处理非结构化数据方面，首先要对用户的
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-07-01/知识图谱研究进展/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-26/十大编程算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-06-26/十大编程算法/" itemprop="url">十大编程算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-26T19:18:19+08:00">
+                2019-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          算法一：快速排序算法快速排序是由东尼·霍尔所发展的一种排序算法。在平均状况下，排序 n 个项目要Ο(n log n)次比较。在最坏状况下则需要Ο(n2)次比较，但这种状况并不常见。
+事实上，快速排序通常明显比其他Ο(n log n) 算法更快，因为它的内部循环（inner loop）可以在大部分的架构上很有效率地被实现出来。
+快速排序使用分治法（Divide and conquer）策略来把一个串行（list）分为两个子串行（sub-lists）。
+算法步骤：
+
+1 从数列中挑出一个元素，称为 “基准”（pivot），
+
+2 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。
+
+3 递归地（recursi
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019-06-26/十大编程算法/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-19/reference/WebRTC/webrtc-专题-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019-06-19/reference/WebRTC/webrtc-专题-02/" itemprop="url">webrtc-专题-02-WebRTC应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-19T19:17:23+08:00">
+                2019-06-19
               </time>
             
 
@@ -984,763 +1851,20 @@ WebRTC 开发（二）源码下载与编译
 
       
         
-          <p>web端用webRTC实现的一对一视频，互动直播和会议。<a href="https://github.com/starrtc/android-demo" target="_blank" rel="noopener">https://github.com/starrtc/android-demo</a></p>
-<p>ios源码<a href="https://github.com/starrtc/ios-demo" target="_blank" rel="noopener">https://github.com/starrtc/ios-demo</a> </p>
-<p>web端源码 <a href="https://github.com/starrtc/webrtc-demo" target="_blank" rel="noopener">https://github.com/starrtc/webrtc-demo</a>  </p>
+          
+          WebRTC浏览器APIWebRTC实现了多个Web API接口，其中三个重要的Web API分别是:
+
+MediaStream：通过 MediaStream 的 API 能够通过设备的摄像头及话筒获得视频、音频的同步流。
+RTCPeerConnection：RTCPeerConnection 是 WebRTC 用于构建点对点之间稳定、高效的流传输的组件。
+RTCDataChannel：RTCDataChannel 使得浏览器之间（点对点）建立一个高吞吐量、低延时的信道，用于传输任意数据。
+
+这里大致介绍一下这三个API：
+MediaStream (aka getUserMedia)MediaStream API为WebRTC提供了从设备的摄像头、话筒获取视频、音频流数据的功能.
+W3C标准详见：https://w3c.github.io/media
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-05-27/reference/WebRTC/webrtc-opensrc/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-27/reference/FFmpeg/FFmpeg框架函数分析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-05-27/reference/FFmpeg/FFmpeg框架函数分析/" itemprop="url">FFmpeg框架详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-27T10:14:50+08:00">
-                2019-05-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
-                    <span itemprop="name">FFmpeg</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p><a href="https://blog.csdn.net/leixiaohua1020/article/details/84499632" target="_blank" rel="noopener">[总结]FFMPEG视音频编解码零基础学习方法</a></p>
-</blockquote>
-<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><h2 id="FFMPEG-SDL的视频播放器"><a href="#FFMPEG-SDL的视频播放器" class="headerlink" title="FFMPEG+SDL的视频播放器"></a>FFMPEG+SDL的视频播放器</h2><blockquote>
-<p><a href="https://blog.csdn.net/leixiaohua1020/article/details/38868499" target="_blank" rel="noopener">最简单的基于FFMPEG+SDL的视频播放器 ver2 （采用SDL2.0）</a></p>
-</blockquote>
-<p><strong>FFmpeg 解码一个视频流程：</strong></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-05-27/reference/FFmpeg/FFmpeg框架函数分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-25/reference/FFmpeg/FFmpeg源代码结构note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-05-25/reference/FFmpeg/FFmpeg源代码结构note/" itemprop="url">FFmpeg 源代码结构（编解码解析）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-25T10:14:50+08:00">
-                2019-05-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
-                    <span itemprop="name">FFmpeg</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>特别说明，此文参考至<a href="https://blog.csdn.net/leixiaohua1020/article/details/44220151" target="_blank" rel="noopener">雷神笔记</a>，做一个备忘录。</p>
-</blockquote>
-<h2 id="FFmpeg源代码结构图-解码"><a href="#FFmpeg源代码结构图-解码" class="headerlink" title="FFmpeg源代码结构图 - 解码"></a>FFmpeg源代码结构图 - 解码</h2><p>下图表明了 FFmpeg 在解码一个视频的时候的函数调用流程。为了保证结构清晰，其中仅列出了最关键的函数，剔除了其它不是特别重要的函数。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-05-25/reference/FFmpeg/FFmpeg源代码结构note/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-19/reference/FFmpeg/ffmpeg实时美颜推流/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-05-19/reference/FFmpeg/ffmpeg实时美颜推流/" itemprop="url">FFMpeg实时美颜直播推流</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-19T10:14:50+08:00">
-                2019-05-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
-                    <span itemprop="name">FFmpeg</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p><a href="https://www.jianshu.com/p/6b9ab2652147" target="_blank" rel="noopener">基于FFmpeg进行RTMP推流（二）</a></p>
-</blockquote>
-<p>实战 - 基于ffmpeg，qt5，opencv视频课程</p>
-<h2 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1. 基础知识"></a>1. 基础知识</h2><h3 id="1-1-直播推流流程分析"><a href="#1-1-直播推流流程分析" class="headerlink" title="1.1 直播推流流程分析"></a>1.1 直播推流流程分析</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-05-19/reference/FFmpeg/ffmpeg实时美颜推流/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-18/reference/FFmpeg/FFmpeg+SDL视频播放器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-05-18/reference/FFmpeg/FFmpeg+SDL视频播放器/" itemprop="url">FFMPEG+SDL视频播放器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-18T10:14:50+08:00">
-                2019-05-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
-                    <span itemprop="name">FFmpeg</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p><a href="https://github.com/HatsuneMikuV/FFmpeg_Leixiaohua" target="_blank" rel="noopener">GitHub</a></p>
-<p><a href="https://blog.csdn.net/leixiaohua1020/column/info/ffmpeg-devel/7" target="_blank" rel="noopener">FFmpeg</a></p>
-<p><a href="https://blog.csdn.net/leixiaohua1020/article/details/12677129" target="_blank" rel="noopener">ffmpeg 源代码简单分析</a></p>
-</blockquote>
-<h1 id="100行代码实现最简单的基于FFMPEG-SDL的视频播放器"><a href="#100行代码实现最简单的基于FFMPEG-SDL的视频播放器" class="headerlink" title="100行代码实现最简单的基于FFMPEG+SDL的视频播放器"></a>100行代码实现最简单的基于FFMPEG+SDL的视频播放器</h1><blockquote>
-<p><a href="https://github.com/leixiaohua1020/simplest_ffmpeg_player" target="_blank" rel="noopener">simplest_ffmpeg_player</a></p>
-</blockquote>
-<p>该播放器虽然简单，但是几乎包含了使用FFMPEG播放一个视频所有必备的API，并且使用SDL显示解码出来的视频。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-05-18/reference/FFmpeg/FFmpeg+SDL视频播放器/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-17/reference/WebRTC/webrtc-03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019-05-17/reference/WebRTC/webrtc-03/" itemprop="url">WebRTC（三）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-17T10:14:50+08:00">
-                2019-05-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebRTC/" itemprop="url" rel="index">
-                    <span itemprop="name">WebRTC</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="WebRTC-环境搭建"><a href="#WebRTC-环境搭建" class="headerlink" title="WebRTC 环境搭建"></a>WebRTC 环境搭建</h2><h3 id="简单的-https-server-服务搭建"><a href="#简单的-https-server-服务搭建" class="headerlink" title="简单的 https server 服务搭建"></a>简单的 https server 服务搭建</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019-05-17/reference/WebRTC/webrtc-03/#more" rel="contents">
+            <a class="btn" href="/2019-06-19/reference/WebRTC/webrtc-专题-02/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1782,7 +1906,7 @@ WebRTC 开发（二）源码下载与编译
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1830,7 +1954,7 @@ WebRTC 开发（二）源码下载与编译
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1841,7 +1965,7 @@ WebRTC 开发（二）源码下载与编译
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1852,7 +1976,7 @@ WebRTC 开发（二）源码下载与编译
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

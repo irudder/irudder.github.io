@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=">
+
+
+  <link rel="mask-icon" href="/images/favicon-32x32-next.png?v=" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="MySQL学习笔记（Day017：Explain_2）@(MySQL学习) [TOC] 一. 作业解析 哪张原数据表中记录了Cardinality信息  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL Explain_2">
+<meta property="og:url" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/index.html">
+<meta property="og:site_name" content="牧羊人">
+<meta property="og:description" content="MySQL学习笔记（Day017：Explain_2）@(MySQL学习) [TOC] 一. 作业解析 哪张原数据表中记录了Cardinality信息  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_001.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_002.png">
+<meta property="og:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_003.png">
+<meta property="og:updated_time" content="2019-10-09T01:09:25.224Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL Explain_2">
+<meta name="twitter:description" content="MySQL学习笔记（Day017：Explain_2）@(MySQL学习) [TOC] 一. 作业解析 哪张原数据表中记录了Cardinality信息  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
+<meta name="twitter:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_001.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-9246611541606574",
+    enable_page_level_ads: true
+  });
+</script>
+
+
+  <link rel="canonical" href="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/">
+
+
+
+
+
+  <title>MySQL Explain_2 | 牧羊人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牧羊人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">跟着梦想去远方</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tools"></i> <br>
+            
+            小工具
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="pastor">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牧羊人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL Explain_2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-05T19:29:18+08:00">
+                2019-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL学习笔记（Day017：Explain-2）"><a href="#MySQL学习笔记（Day017：Explain-2）" class="headerlink" title="MySQL学习笔记（Day017：Explain_2）"></a>MySQL学习笔记（Day017：Explain_2）</h1><p>@(MySQL学习)</p>
+<p>[TOC]</p>
+<h2 id="一-作业解析"><a href="#一-作业解析" class="headerlink" title="一. 作业解析"></a>一. 作业解析</h2><ul>
+<li><strong>哪张原数据表中记录了Cardinality信息</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 在information_schema.STATISTICS中记录了相关的信息</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; use information_schema;</span><br><span class="line">Database changed</span><br><span class="line"></span><br><span class="line">mysql&gt; show create table STATISTICS\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">       Table: STATISTICS</span><br><span class="line"><span class="keyword">Create</span> <span class="keyword">Table</span>: <span class="keyword">CREATE</span> <span class="keyword">TEMPORARY</span> <span class="keyword">TABLE</span> <span class="string">`STATISTICS`</span> (</span><br><span class="line">  <span class="string">`TABLE_CATALOG`</span> <span class="built_in">varchar</span>(<span class="number">512</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`TABLE_SCHEMA`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,  <span class="comment">-- 表所在的库</span></span><br><span class="line">  <span class="string">`TABLE_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,  <span class="comment">-- 表名</span></span><br><span class="line">  <span class="string">`NON_UNIQUE`</span> <span class="built_in">bigint</span>(<span class="number">1</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span>,</span><br><span class="line">  <span class="string">`INDEX_SCHEMA`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>, </span><br><span class="line">  <span class="string">`INDEX_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,  <span class="comment">-- 索引名</span></span><br><span class="line">  <span class="string">`SEQ_IN_INDEX`</span> <span class="built_in">bigint</span>(<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span>, <span class="comment">-- 索引的序号</span></span><br><span class="line">  <span class="string">`COLUMN_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`COLLATION`</span> <span class="built_in">varchar</span>(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`CARDINALITY`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,   <span class="comment">-- 这里我们找到了Cardinality</span></span><br><span class="line">  <span class="string">`SUB_PART`</span> <span class="built_in">bigint</span>(<span class="number">3</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`PACKED`</span> <span class="built_in">varchar</span>(<span class="number">10</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`NULLABLE`</span> <span class="built_in">varchar</span>(<span class="number">3</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`INDEX_TYPE`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`COMMENT`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`INDEX_COMMENT`</span> <span class="built_in">varchar</span>(<span class="number">1024</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">MEMORY</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 之前我们可以通过 show index from table_name的方式查看索引</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line">mysql&gt;  <span class="keyword">show</span> <span class="keyword">index</span> <span class="keyword">from</span> employees.salaries\G</span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">        <span class="keyword">Table</span>: salaries</span><br><span class="line">   Non_unique: <span class="number">0</span></span><br><span class="line">     Key_name: PRIMARY</span><br><span class="line"> Seq_in_index: <span class="number">1</span>       <span class="comment">-- 索引序号为1</span></span><br><span class="line">  Column_name: emp_no</span><br><span class="line">    <span class="keyword">Collation</span>: A</span><br><span class="line">  Cardinality: <span class="number">286271</span>  <span class="comment">-- Cardinality值</span></span><br><span class="line">     Sub_part: <span class="literal">NULL</span></span><br><span class="line">       Packed: <span class="literal">NULL</span></span><br><span class="line">         <span class="literal">Null</span>: </span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      <span class="keyword">Comment</span>: </span><br><span class="line">Index_comment: </span><br><span class="line">*************************** <span class="number">2.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">        <span class="keyword">Table</span>: salaries</span><br><span class="line">   Non_unique: <span class="number">0</span></span><br><span class="line">     Key_name: PRIMARY</span><br><span class="line"> Seq_in_index: <span class="number">2</span>         <span class="comment">-- 索引序号为2</span></span><br><span class="line">  Column_name: from_date</span><br><span class="line">    <span class="keyword">Collation</span>: A</span><br><span class="line">  Cardinality: <span class="number">2760952</span>   <span class="comment">-- Cardinality值</span></span><br><span class="line">     Sub_part: <span class="literal">NULL</span></span><br><span class="line">       Packed: <span class="literal">NULL</span></span><br><span class="line">         <span class="literal">Null</span>: </span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      <span class="keyword">Comment</span>: </span><br><span class="line">Index_comment: </span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 现在可以通过STATISTICS表查看某张表的信息</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">STATISTICS</span> <span class="keyword">where</span> table_name=<span class="string">'salaries'</span>\G</span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">TABLE_CATALOG: <span class="keyword">def</span></span><br><span class="line"> TABLE_SCHEMA: employees</span><br><span class="line">   TABLE_NAME: salaries</span><br><span class="line">   NON_UNIQUE: <span class="number">0</span></span><br><span class="line"> INDEX_SCHEMA: employees</span><br><span class="line">   INDEX_NAME: PRIMARY</span><br><span class="line"> SEQ_IN_INDEX: <span class="number">1</span>        <span class="comment">-- 索引序号为1</span></span><br><span class="line">  COLUMN_NAME: emp_no</span><br><span class="line">    <span class="keyword">COLLATION</span>: A</span><br><span class="line">  CARDINALITY: <span class="number">286271</span>   <span class="comment">-- Cardinality值</span></span><br><span class="line">     SUB_PART: <span class="literal">NULL</span></span><br><span class="line">       PACKED: <span class="literal">NULL</span></span><br><span class="line">     NULLABLE: </span><br><span class="line">   INDEX_TYPE: BTREE</span><br><span class="line">      <span class="keyword">COMMENT</span>: </span><br><span class="line">INDEX_COMMENT: </span><br><span class="line">*************************** <span class="number">2.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">TABLE_CATALOG: <span class="keyword">def</span></span><br><span class="line"> TABLE_SCHEMA: employees</span><br><span class="line">   TABLE_NAME: salaries</span><br><span class="line">   NON_UNIQUE: <span class="number">0</span></span><br><span class="line"> INDEX_SCHEMA: employees</span><br><span class="line">   INDEX_NAME: PRIMARY</span><br><span class="line"> SEQ_IN_INDEX: <span class="number">2</span>          <span class="comment">-- 索引序号为2</span></span><br><span class="line">  COLUMN_NAME: from_date</span><br><span class="line">    <span class="keyword">COLLATION</span>: A</span><br><span class="line">  CARDINALITY: <span class="number">2760952</span>    <span class="comment">-- Cardinality值</span></span><br><span class="line">     SUB_PART: <span class="literal">NULL</span></span><br><span class="line">       PACKED: <span class="literal">NULL</span></span><br><span class="line">     NULLABLE: </span><br><span class="line">   INDEX_TYPE: BTREE</span><br><span class="line">      <span class="keyword">COMMENT</span>: </span><br><span class="line">INDEX_COMMENT: </span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">---</span></span><br><span class="line"><span class="comment">---  可以看出，上面两个方法得到的Cardinality的值是相等</span></span><br><span class="line"><span class="comment">---  结论就是information_schema.STATISTICS这张表记录了Cardinality信息</span></span><br><span class="line"><span class="comment">---</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>检查表的索引创建的情况，判断该索引是否有创建的必要</strong></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 1. 表的信息如table_schema, table_name, table_rows等</span></span><br><span class="line"><span class="comment">--    在information_schema.TABLES中</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; show create table TABLES\G  </span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">       Table: TABLES</span><br><span class="line"><span class="keyword">Create</span> <span class="keyword">Table</span>: <span class="keyword">CREATE</span> <span class="keyword">TEMPORARY</span> <span class="keyword">TABLE</span> <span class="string">`TABLES`</span> (</span><br><span class="line">  <span class="string">`TABLE_CATALOG`</span> <span class="built_in">varchar</span>(<span class="number">512</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`TABLE_SCHEMA`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,   <span class="comment">-- 表所在的库</span></span><br><span class="line">  <span class="string">`TABLE_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,     <span class="comment">-- 表名</span></span><br><span class="line">  <span class="string">`TABLE_TYPE`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`ENGINE`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`VERSION`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`ROW_FORMAT`</span> <span class="built_in">varchar</span>(<span class="number">10</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`TABLE_ROWS`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,    <span class="comment">-- 表的记录数</span></span><br><span class="line">  <span class="string">`AVG_ROW_LENGTH`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`DATA_LENGTH`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`MAX_DATA_LENGTH`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`INDEX_LENGTH`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`DATA_FREE`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`AUTO_INCREMENT`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`CREATE_TIME`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`UPDATE_TIME`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`CHECK_TIME`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`TABLE_COLLATION`</span> <span class="built_in">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`CHECKSUM`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">unsigned</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`CREATE_OPTIONS`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`TABLE_COMMENT`</span> <span class="built_in">varchar</span>(<span class="number">2048</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">MEMORY</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 2. information.STATISTICS中存在 table_schema 和 table_name 信息</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">STATISTICS</span>\G</span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">       <span class="keyword">Table</span>: <span class="keyword">STATISTICS</span></span><br><span class="line"><span class="keyword">Create</span> <span class="keyword">Table</span>: <span class="keyword">CREATE</span> <span class="keyword">TEMPORARY</span> <span class="keyword">TABLE</span> <span class="string">`STATISTICS`</span> (</span><br><span class="line">  <span class="string">`TABLE_CATALOG`</span> <span class="built_in">varchar</span>(<span class="number">512</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`TABLE_SCHEMA`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,  <span class="comment">-- 表所在的库</span></span><br><span class="line">  <span class="string">`TABLE_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,  <span class="comment">-- 表名</span></span><br><span class="line">  <span class="string">`NON_UNIQUE`</span> <span class="built_in">bigint</span>(<span class="number">1</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span>,</span><br><span class="line">  <span class="string">`INDEX_SCHEMA`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>, </span><br><span class="line">  <span class="string">`INDEX_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,   <span class="comment">-- 索引名</span></span><br><span class="line">  <span class="string">`SEQ_IN_INDEX`</span> <span class="built_in">bigint</span>(<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span>, </span><br><span class="line">  <span class="string">`COLUMN_NAME`</span> <span class="built_in">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`COLLATION`</span> <span class="built_in">varchar</span>(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`CARDINALITY`</span> <span class="built_in">bigint</span>(<span class="number">21</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>, </span><br><span class="line">  <span class="string">`SUB_PART`</span> <span class="built_in">bigint</span>(<span class="number">3</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`PACKED`</span> <span class="built_in">varchar</span>(<span class="number">10</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`NULLABLE`</span> <span class="built_in">varchar</span>(<span class="number">3</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`INDEX_TYPE`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`COMMENT`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`INDEX_COMMENT`</span> <span class="built_in">varchar</span>(<span class="number">1024</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span></span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">MEMORY</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8</span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 3. 将TABLES 和 STATISTICS 表中的table_schema和table_name相关联</span></span><br><span class="line"><span class="comment">--    通过Cardinality和table_rows 计算，即可得到对应索引名的 选择性</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 3.1 因为存在复合索引，所以我们要取出复合索引中seq最大的哪个值</span></span><br><span class="line"><span class="comment">--     这样取出的cardinality值才是最大的</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">mysql&gt; <span class="keyword">select</span> </span><br><span class="line">    -&gt;     table_schema, table_name, index_name,</span><br><span class="line">    -&gt;     <span class="keyword">max</span>(seq_in_index)  <span class="comment">-- 取出最大的seq号后，选出index_name等信息</span></span><br><span class="line">    -&gt; <span class="keyword">from</span></span><br><span class="line">    -&gt;     <span class="keyword">STATISTICS</span></span><br><span class="line">    -&gt; <span class="keyword">group</span> <span class="keyword">by</span> table_schema , table_name , index_name\G</span><br><span class="line"></span><br><span class="line"><span class="comment">--  -----------省略其他输出-----------</span></span><br><span class="line">*************************** <span class="number">10.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">     table_schema: burn_test</span><br><span class="line">       table_name: test_index_2</span><br><span class="line">       index_name: idx_mul_ab   <span class="comment">-- 这个是上次测试复合索引建立的index</span></span><br><span class="line"><span class="keyword">max</span>(seq_in_index): <span class="number">2</span>            <span class="comment">-- 取出了最大的seq</span></span><br><span class="line"><span class="comment">--  -----------省略其他输出-----------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">--  3.2 得到了最大的seq，从而可以取出对应的cardinality</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> </span><br><span class="line">    -&gt;     table_schema, table_name, index_name, cardinality</span><br><span class="line">    -&gt; <span class="keyword">from</span></span><br><span class="line">    -&gt;     <span class="keyword">STATISTICS</span></span><br><span class="line">    -&gt; <span class="keyword">where</span></span><br><span class="line">    -&gt;     (table_schema , table_name, index_name, seq_in_index) <span class="keyword">in</span> </span><br><span class="line">    -&gt;        (<span class="keyword">select</span> </span><br><span class="line">    -&gt;             table_schema, table_name, </span><br><span class="line">    -&gt;             index_name, <span class="keyword">max</span>(seq_in_index)</span><br><span class="line">    -&gt;         <span class="keyword">from</span></span><br><span class="line">    -&gt;             <span class="keyword">STATISTICS</span></span><br><span class="line">    -&gt;         <span class="keyword">group</span> <span class="keyword">by</span> table_schema , table_name , index_name)\G</span><br><span class="line"></span><br><span class="line">*************************** <span class="number">1.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">table_schema: burn_test</span><br><span class="line">  table_name: Orders</span><br><span class="line">  index_name: PRIMARY</span><br><span class="line"> cardinality: <span class="number">5</span></span><br><span class="line">*************************** <span class="number">2.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">table_schema: burn_test</span><br><span class="line">  table_name: Orders_MV</span><br><span class="line">  index_name: product_name</span><br><span class="line"> cardinality: <span class="number">3</span></span><br><span class="line">*************************** <span class="number">3.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">table_schema: burn_test</span><br><span class="line">  table_name: <span class="keyword">child</span></span><br><span class="line">  index_name: par_ind</span><br><span class="line"> cardinality: <span class="number">0</span></span><br><span class="line">*************************** <span class="number">4.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">table_schema: burn_test</span><br><span class="line">  table_name: <span class="keyword">parent</span></span><br><span class="line">  index_name: PRIMARY</span><br><span class="line"> cardinality: <span class="number">1</span></span><br><span class="line">*************************** <span class="number">5.</span> <span class="keyword">row</span> ***************************</span><br><span class="line">table_schema: burn_test</span><br><span class="line">  table_name: t4</span><br><span class="line">  index_name: PRIMARY</span><br><span class="line"> cardinality: <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--  -----------省略其他输出-----------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 3.3 最后通过table_schema和table_name 让上述的信息和TABLES表进行关联</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">     t.TABLE_SCHEMA,t.TABLE_NAME,INDEX_NAME, CARDINALITY, TABLE_ROWS, </span><br><span class="line">     CARDINALITY/TABLE_ROWS <span class="keyword">AS</span> SELECTIVITY  <span class="comment">-- 得到选择性</span></span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    <span class="keyword">TABLES</span> t,  <span class="comment">-- 查询的表一，TABLES</span></span><br><span class="line">	(</span><br><span class="line">		<span class="keyword">SELECT</span>     </span><br><span class="line">			table_schema,</span><br><span class="line">			table_name,</span><br><span class="line">			index_name,</span><br><span class="line">			cardinality</span><br><span class="line">		<span class="keyword">FROM</span> <span class="keyword">STATISTICS</span> </span><br><span class="line">		<span class="keyword">WHERE</span> (table_schema,table_name,index_name,seq_in_index) <span class="keyword">IN</span> (</span><br><span class="line">		<span class="keyword">SELECT</span> </span><br><span class="line">			table_schema,</span><br><span class="line">			table_name,</span><br><span class="line">			index_name,</span><br><span class="line">			<span class="keyword">MAX</span>(seq_in_index)</span><br><span class="line">		<span class="keyword">FROM</span></span><br><span class="line">			<span class="keyword">STATISTICS</span></span><br><span class="line">		<span class="keyword">GROUP</span> <span class="keyword">BY</span> table_schema , table_name , index_name )</span><br><span class="line">	) s   <span class="comment">-- 查询的表二，就是上面3.2的查询结果</span></span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    t.table_schema = s.table_schema   <span class="comment">-- 通过库关联</span></span><br><span class="line">        <span class="keyword">AND</span> t.table_name = s.table_name  <span class="comment">-- 再通过表变量</span></span><br><span class="line">        <span class="keyword">AND</span> t.table_schema = <span class="string">'employees'</span>   <span class="comment">-- 指定某一个库名</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> SELECTIVITY;</span><br><span class="line"></span><br><span class="line">+<span class="comment">--------------+--------------+------------+-------------+------------+------------+</span></span><br><span class="line">| TABLE_SCHEMA | TABLE_NAME   | index_name | cardinality | TABLE_ROWS | SELECTIVITY |</span><br><span class="line">+<span class="comment">--------------+--------------+------------+-------------+------------+------------+</span></span><br><span class="line">| employees    | dept_emp     | dept_no    |           8 |     330400 |     0.0000 |</span><br><span class="line">| employees    | salaries     | PRIMARY    |      286271 |    2760952 |     0.1037 |</span><br><span class="line">| employees    | dept_manager | dept_no    |           9 |         24 |     0.3750 |</span><br><span class="line">| employees    | titles       | PRIMARY    |      296887 |     440887 |     0.6734 |</span><br><span class="line">| employees    | dept_emp     | PRIMARY    |      298761 |     330400 |     0.9042 |</span><br><span class="line">| employees    | titles       | PRIMARY    |      440166 |     440887 |     0.9984 |</span><br><span class="line">| employees    | salaries     | PRIMARY    |     2760952 |    2760952 |     1.0000 |</span><br><span class="line">| employees    | dept_manager | PRIMARY    |          24 |         24 |     1.0000 |</span><br><span class="line">| employees    | titles       | PRIMARY    |      440887 |     440887 |     1.0000 |</span><br><span class="line">| employees    | departments  | PRIMARY    |           9 |          9 |     1.0000 |</span><br><span class="line">| employees    | employees    | PRIMARY    |      298124 |     298124 |     1.0000 |</span><br><span class="line">| employees    | dept_emp     | PRIMARY    |      330400 |     330400 |     1.0000 |</span><br><span class="line">| employees    | dept_manager | PRIMARY    |          24 |         24 |     1.0000 |</span><br><span class="line">| employees    | departments  | dept_name  |           9 |          9 |     1.0000 |</span><br><span class="line">+<span class="comment">--------------+--------------+------------+-------------+------------+------------+</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">--  通过最后一列的SELECTIVITY是否接近1，判断该索引创建是否合理</span></span><br><span class="line"><span class="comment">--  注意：</span></span><br><span class="line"><span class="comment">--  Cardinality和table_rows的值，都是通过随机采样，预估得到的</span></span><br><span class="line"><span class="comment">--  当analyze前后，Cardinality值相差较多，说明该索引是不应该被创建的(页上的记录数值分布不平均)</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">--  推荐 SELECTIVITY 15% 以上是适合的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- 索引使用情况</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"></span><br><span class="line">mysql&gt; select * from x$schema_index_statistics limit 1\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">  table_schema: employees</span><br><span class="line">    table_name: employees</span><br><span class="line">    index_name: PRIMARY       <span class="comment">--  索引名字</span></span><br><span class="line"> rows_selected: 300024        <span class="comment">--  读取的记录数</span></span><br><span class="line">select_latency: 370177723990  <span class="comment">--  使用该索引读取时总的延迟时间370毫秒（单位是皮秒）</span></span><br><span class="line"> rows_inserted: 0             <span class="comment">--  插入的行数</span></span><br><span class="line">insert_latency: 0</span><br><span class="line">  rows_updated: 0             <span class="comment">--  更新的行数</span></span><br><span class="line">update_latency: 0</span><br><span class="line">  rows_deleted: 0</span><br><span class="line">delete_latency: 0</span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 结合 之前的SELECTIVITY和这里的数值，可以更好的判断索引是否合理</span></span><br><span class="line"><span class="comment">-- 重启后数据归0</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>索引是要排序的，建立索引越多，排序以及维护成本会很大，插入数据的速度会变慢，所以索引建立的多，不是仅仅是浪费空间，还会降低性能，增加磁盘IO</p>
+</blockquote>
+<p><strong>注意：MySQL5.6的版本<code>STATISTICS数据存在问题</code>，截止5.6.28仍然存在，官方定性为Bug</strong></p>
+<blockquote>
+<p>作业一：在<code>MySQL5.6</code>中使用<code>mysql.innodb_index_stats</code>得到索引的选择性（SELECTIVITY）</p>
+</blockquote>
+<hr>
+<h2 id="二-MySQL5-6安装sys库"><a href="#二-MySQL5-6安装sys库" class="headerlink" title="二. MySQL5.6安装sys库"></a>二. MySQL5.6安装sys库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">shell &gt; git <span class="built_in">clone</span> https://github.com/mysql/mysql-sys.git</span><br><span class="line">shell &gt; ls | grep sys_56.sql</span><br><span class="line">sys_56.sql <span class="comment"># 这个就是我们要安装的到mysql5.6的sys</span></span><br><span class="line"></span><br><span class="line">shell&gt; mysql -u root -S /tmp/mysql.sock_56 &lt; sys_56.sql  <span class="comment"># 直接导入即可</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select version();</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| version()  |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">| 5.6.27-log |</span><br><span class="line">+<span class="comment">------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">databases</span>;</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| Database           |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| information_schema |</span><br><span class="line">| burn_test          |</span><br><span class="line">| burn_test_56       |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |  <span class="comment">-- 新安装的sys库，但是这个里面只有88个记录，因为5.7中增加了几张表，有101个记录</span></span><br><span class="line">| test               |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">7 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="三-Explain（二）"><a href="#三-Explain（二）" class="headerlink" title="三. Explain（二）"></a>三. Explain（二）</h2><h3 id="1-Explain输出介绍"><a href="#1-Explain输出介绍" class="headerlink" title="1. Explain输出介绍"></a>1. Explain输出介绍</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">列</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">id</td>
+<td style="text-align:center">执行计划的id标志</td>
+</tr>
+<tr>
+<td style="text-align:center">select_type</td>
+<td style="text-align:center">SELECT的类型</td>
+</tr>
+<tr>
+<td style="text-align:center">table</td>
+<td style="text-align:center">输出记录的表</td>
+</tr>
+<tr>
+<td style="text-align:center">partitions</td>
+<td style="text-align:center">符合的分区，[PARTITIONS]</td>
+</tr>
+<tr>
+<td style="text-align:center">type</td>
+<td style="text-align:center">JOIN的类型</td>
+</tr>
+<tr>
+<td style="text-align:center">possible_keys</td>
+<td style="text-align:center">优化器可能使用到的索引</td>
+</tr>
+<tr>
+<td style="text-align:center">key</td>
+<td style="text-align:center">优化器实际选择的索引</td>
+</tr>
+<tr>
+<td style="text-align:center">key_len</td>
+<td style="text-align:center">使用索引的字节长度</td>
+</tr>
+<tr>
+<td style="text-align:center">ref</td>
+<td style="text-align:center">进行比较的索引列</td>
+</tr>
+<tr>
+<td style="text-align:center">rows</td>
+<td style="text-align:center">优化器<code>预估</code>的记录数量</td>
+</tr>
+<tr>
+<td style="text-align:center">filtered</td>
+<td style="text-align:center">根据条件过滤得到的记录的百分比[EXTENDED]</td>
+</tr>
+<tr>
+<td style="text-align:center">extra</td>
+<td style="text-align:center">额外的显示选项</td>
+</tr>
+</tbody>
+</table>
+<p><img src="./Selection_001.png" alt="Explain示例"></p>
+<h4 id="（1）-id"><a href="#（1）-id" class="headerlink" title="（1）. id"></a>（1）. id</h4><p><code>从上往下理解</code>，不一定 id 序号大的先执行</p>
+<blockquote>
+<p>可以简单的理解为 id 相等的从上往下看，id 相等的从下往上看。但是在某些场合也<code>不一定适用</code></p>
+</blockquote>
+<h4 id="（2）-select-type"><a href="#（2）-select-type" class="headerlink" title="（2）. select_type"></a>（2）. select_type</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">select_type</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SIMPLE</td>
+<td style="text-align:center">简单SELECT(不使用UNION或子查询等)</td>
+</tr>
+<tr>
+<td style="text-align:center">PRIMARY</td>
+<td style="text-align:center">最外层的select</td>
+</tr>
+<tr>
+<td style="text-align:center">UNION</td>
+<td style="text-align:center">UNION中的第二个或后面的SELECT语句</td>
+</tr>
+<tr>
+<td style="text-align:center">DEPENDENT UNION</td>
+<td style="text-align:center">UNION中的第二个或后面的SELECT语句，依赖于外面的查询</td>
+</tr>
+<tr>
+<td style="text-align:center">UNION RESULT</td>
+<td style="text-align:center">UNION的结果</td>
+</tr>
+<tr>
+<td style="text-align:center">SUBQUERY</td>
+<td style="text-align:center">子查询中的第一个SELECT</td>
+</tr>
+<tr>
+<td style="text-align:center">DEPENDENT SUBQUERY</td>
+<td style="text-align:center">子查询中的第一个SELECT，依赖于外面的查询</td>
+</tr>
+<tr>
+<td style="text-align:center">DERIVED</td>
+<td style="text-align:center">派生表的SELECT(FROM子句的子查询)</td>
+</tr>
+<tr>
+<td style="text-align:center">MATERIALIZED</td>
+<td style="text-align:center">物化子查询</td>
+</tr>
+<tr>
+<td style="text-align:center">UNCACHEABLE SUBQUERY</td>
+<td style="text-align:center">不会被缓存的并且对于外部查询的每行都要重新计算的子查询</td>
+</tr>
+<tr>
+<td style="text-align:center">UNCACHEABLE UNION</td>
+<td style="text-align:center">属于不能被缓存的 UNION中的第二个或后面的SELECT语句</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>MATERIALIZED</strong><ul>
+<li>产生中间临时表（实体）</li>
+<li>临时表自动创建索引并和其他表进行关联，提高性能</li>
+<li>和子查询的区别是，优化器将可以进行<code>MATERIALIZED</code>的语句自动改写成<code>join</code>，并自动创建索引</li>
+</ul>
+</li>
+</ul>
+<h4 id="（3）-table"><a href="#（3）-table" class="headerlink" title="（3）. table"></a>（3）. table</h4><ul>
+<li>通常是用户操作的用户表</li>
+<li>&lt;unionM, N&gt; UNION得到的结果表</li>
+<li><derivedn> 排生表，由id=N的语句产生</derivedn></li>
+<li><subqueryn> 由子查询物化产生的表，由id=N的语句产生</subqueryn></li>
+</ul>
+<p>####（4）. type</p>
+<blockquote>
+<p><strong>摘自姜老师的PDF，按照图上箭头的顺序来看，成本（cost）是从小到大</strong></p>
+</blockquote>
+<p><img src="./Selection_002.png" alt="TYPE"></p>
+<p>####（5）. extra</p>
+<p><img src="./Selection_003.png" alt="Extra"></p>
+<ul>
+<li>Using filesort：可以使用复合索引将filesort进行优化。提高性能</li>
+<li>Using index：比如使用覆盖索引</li>
+<li>Using where: 使用where过滤条件</li>
+</ul>
+<blockquote>
+<p>Extra的信息是可以作为优化的提示，但是更多的是优化器优化的一种说明</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢你对我的支持 让我继续努力分享有用的技术和知识点.</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    pastor
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/" title="MySQL Explain_2">https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+    
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019-10-04/mysql/MySQL学习笔记-体系结构2/" rel="next" title="MySQL体系结构">
+                <i class="fa fa-chevron-left"></i> MySQL体系结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019-10-05/mysql/MySQL学习笔记（Day011：SELECT）/" rel="prev" title="MySQL SELECT">
+                MySQL SELECT <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+            
+              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/irudder" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL学习笔记（Day017：Explain-2）"><span class="nav-number">1.</span> <span class="nav-text">MySQL学习笔记（Day017：Explain_2）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-作业解析"><span class="nav-number">1.1.</span> <span class="nav-text">一. 作业解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-MySQL5-6安装sys库"><span class="nav-number">1.2.</span> <span class="nav-text">二. MySQL5.6安装sys库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-Explain（二）"><span class="nav-number">1.3.</span> <span class="nav-text">三. Explain（二）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Explain输出介绍"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. Explain输出介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#（1）-id"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">（1）. id</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（2）-select-type"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">（2）. select_type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（3）-table"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">（3）. table</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; long long ago &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">pastor</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v="></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v="></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v="></script>
+<script type="text/javascript" src="/js/src/post-details.js?v="></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v="></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
