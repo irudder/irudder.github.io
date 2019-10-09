@@ -76,7 +76,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+  <link rel="alternate" href="/atom.xml" title="牧师先生" type="application/atom+xml">
 
 
 
@@ -87,29 +87,29 @@
 <meta name="keywords" content="WebRTC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="WebRTC视频统计信息之延迟抖动与丢包">
-<meta property="og:url" content="https://mrpastor.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/index.html">
-<meta property="og:site_name" content="牧羊人">
+<meta property="og:url" content="https://irudder.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/index.html">
+<meta property="og:site_name" content="牧师先生">
 <meta property="og:description" content="前言 这篇文章主要想说明的是WebRTC内部对视频上下行延时、抖动、丢包如何更新，上层又怎么获取到这些统计信息的。对应的WebRTC版本：63。  背景 最近在内网情况下测试视频会议，视频下行延时很大，很多时候超过100ms。另外，视频的上下行抖动总是稳定在30~40ms这个区间。这些统计在内网环境下是不正常的，于是决定看看是哪里导致这些问题的。 在解决这些问题的过程中，也对WebRTC内部视频统">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/WebRTC内部获取视频统计信息和统计信息如何被更新的流程图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/SR和RR报文格式-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/SR和RR报文格式-02.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/RTT计算流程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/延时的更新流程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/rtt统计第一阶段.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/rtt统计第二阶段.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/rtt统计第三阶段.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/抖动定义.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/transmission_time_offset.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/抖动统计第一阶段.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/抖动统计第二阶段.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/WebRTC内部计算下行丢包.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/others/下行丢包计算.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/WebRTC内部获取视频统计信息和统计信息如何被更新的流程图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/SR和RR报文格式-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/SR和RR报文格式-02.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/RTT计算流程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/延时的更新流程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/rtt统计第一阶段.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/rtt统计第二阶段.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/rtt统计第三阶段.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/抖动定义.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/transmission_time_offset.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/抖动统计第一阶段.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/抖动统计第二阶段.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/WebRTC内部计算下行丢包.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/others/下行丢包计算.png">
 <meta property="og:updated_time" content="2019-09-11T07:37:19.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebRTC视频统计信息之延迟抖动与丢包">
 <meta name="twitter:description" content="前言 这篇文章主要想说明的是WebRTC内部对视频上下行延时、抖动、丢包如何更新，上层又怎么获取到这些统计信息的。对应的WebRTC版本：63。  背景 最近在内网情况下测试视频会议，视频下行延时很大，很多时候超过100ms。另外，视频的上下行抖动总是稳定在30~40ms这个区间。这些统计在内网环境下是不正常的，于是决定看看是哪里导致这些问题的。 在解决这些问题的过程中，也对WebRTC内部视频统">
-<meta name="twitter:image" content="https://mrpastor.github.io/images/imageWebRTC/others/WebRTC内部获取视频统计信息和统计信息如何被更新的流程图.png">
+<meta name="twitter:image" content="https://irudder.github.io/images/imageWebRTC/others/WebRTC内部获取视频统计信息和统计信息如何被更新的流程图.png">
 
 
 
@@ -145,13 +145,13 @@
 </script>
 
 
-  <link rel="canonical" href="https://mrpastor.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/">
+  <link rel="canonical" href="https://irudder.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/">
 
 
 
 
 
-  <title>WebRTC视频统计信息之延迟抖动与丢包 | 牧羊人</title>
+  <title>WebRTC视频统计信息之延迟抖动与丢包 | 牧师先生</title>
   
 
 
@@ -181,7 +181,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">牧羊人</span>
+        <span class="site-title">牧师先生</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -278,16 +278,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/">
+    <link itemprop="mainEntityOfPage" href="https://irudder.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
+      <meta itemprop="name" content="rudder">
       <meta itemprop="description" content>
       <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
+      <meta itemprop="name" content="牧师先生">
     </span>
 
     
@@ -514,14 +514,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="rudder 微信支付">
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="rudder 支付宝">
         <p>支付宝</p>
       </div>
     
@@ -539,11 +539,11 @@
         <ul class="post-copyright">
   <li class="post-copyright-author">
     <strong>本文作者：</strong>
-    pastor
+    rudder
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://mrpastor.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/" title="WebRTC视频统计信息之延迟抖动与丢包">https://mrpastor.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/</a>
+    <a href="https://irudder.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/" title="WebRTC视频统计信息之延迟抖动与丢包">https://irudder.github.io/2019-06-07/reference/WebRTC/webrtc的视频统计信息之延迟抖动与丢包/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -649,9 +649,9 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="rudder">
             
-              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-author-name" itemprop="name">rudder</p>
               <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
           </div>
 
@@ -764,7 +764,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">pastor</span>
+  <span class="author" itemprop="copyrightHolder">rudder</span>
 
   
 </div>

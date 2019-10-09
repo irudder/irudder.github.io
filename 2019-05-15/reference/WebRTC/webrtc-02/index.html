@@ -76,7 +76,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="牧羊人" type="application/atom+xml">
+  <link rel="alternate" href="/atom.xml" title="牧师先生" type="application/atom+xml">
 
 
 
@@ -87,131 +87,131 @@
 <meta name="keywords" content="WebRTC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="WebRTC（二）">
-<meta property="og:url" content="https://mrpastor.github.io/2019-05-15/reference/WebRTC/webrtc-02/index.html">
-<meta property="og:site_name" content="牧羊人">
+<meta property="og:url" content="https://irudder.github.io/2019-05-15/reference/WebRTC/webrtc-02/index.html">
+<meta property="og:site_name" content="牧师先生">
 <meta property="og:description" content="端对端1V1传输基本流程媒体能力协商过程WebRTC 端对端连接： RTCPeerConnection：  基本格式 1pc = new RTCPeerConnection([configuration]);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/媒体协商过程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/协商状态变化.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/addTrackParameters.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/端对端连接的基本流程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/SessionDescription.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/TimeDescription.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/MediaDescription.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-02.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-03.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-04.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-05.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-06.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/字段含义-07.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/WebRTC中的SDP.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/STUNTURN服务器选型.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/coTurn服务器搭建与部署.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/coTurn服务器配置.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/测试turn服务.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPeerConnection-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Configurations-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Configurations-02.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Configurations-03.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Configurations-04.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/addIceCandidate.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/直播系统消息处理流程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/createOffer.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/客户端状态机.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/客户端流程图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/客户端流程图-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/端对端连接的基本流程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/注意要点.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/getDisplayMedia-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/需要注意的点.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Receiver和Sender.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCRtpSender属性.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCRtpReceiver.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCRtpSender.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTPMedia.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCRtpTransceiver.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTPMedia-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/chromeWebRTC-internals.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/createDataChannel.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/option-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/option-02.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/使用Options.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/DataChannel事件.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/创建RTCDataChannel.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/非音视频数据传输方式.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/知识点.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/协议栈.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/传输协议.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTP协议.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTP字段说明.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCP包.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPPayloadType.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPHeader.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPHeader说明.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPSenderReport.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/SenderInfomationBlock.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/SenderInfo说明.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/ReportBlock.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/ReceiveReportBlock.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPReceiverReport.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPSR-RR发送时机.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPSDES.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/SDESitem.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/SDES说明.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPBYE.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPAPP.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPAPP字段说明.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/DTLS.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/SRTP.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/主要内容.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/需要权限.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Android权限管理.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/引入库.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/信令处理.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/AndroidSocketio.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/socketio接收消息.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/结构图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/呼叫端时序图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/被叫端时序图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/关闭时序图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/webrtc处理流程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/重要类-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/重要类-02.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/两个观察者.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/权限库界面.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/收发信令.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/主要内容-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/主要内容-02.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/引入WebRTC库的方式.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/引入WebRTC库.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/Podfile.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/socketio的使用.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/连接服务器.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/发送消息.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/注册侦听消息.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/媒体协商.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/信令时序图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/RTCPeerConnection委托.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/小结.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/信令服务器.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/JS客户端实现.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/JS客户端实现-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/进阶.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/进阶-01.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/行业痛点.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/webrtc分层协议图.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/信令会话协议.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/supplement/1V1互动直播通讯过程.png">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/supplement/TIM-01.jpg">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/supplement/TIM-02.jpg">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/supplement/WebRTC-ICECandidateExchange.svg">
-<meta property="og:image" content="https://mrpastor.github.io/images/imageWebRTC/supplement/WebRTC-SignalingDiagram.svg">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/媒体协商过程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/协商状态变化.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/addTrackParameters.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/端对端连接的基本流程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/SessionDescription.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/TimeDescription.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/MediaDescription.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-02.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-03.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-04.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-05.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-06.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/字段含义-07.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/WebRTC中的SDP.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/STUNTURN服务器选型.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/coTurn服务器搭建与部署.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/coTurn服务器配置.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/测试turn服务.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPeerConnection-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Configurations-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Configurations-02.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Configurations-03.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Configurations-04.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/addIceCandidate.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/直播系统消息处理流程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/createOffer.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/客户端状态机.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/客户端流程图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/客户端流程图-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/端对端连接的基本流程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/注意要点.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/getDisplayMedia-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/需要注意的点.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Receiver和Sender.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCRtpSender属性.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCRtpReceiver.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCRtpSender.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTPMedia.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCRtpTransceiver.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTPMedia-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/chromeWebRTC-internals.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/createDataChannel.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/option-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/option-02.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/使用Options.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/DataChannel事件.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/创建RTCDataChannel.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/非音视频数据传输方式.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/知识点.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/协议栈.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/传输协议.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTP协议.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTP字段说明.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCP包.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPPayloadType.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPHeader.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPHeader说明.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPSenderReport.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/SenderInfomationBlock.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/SenderInfo说明.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/ReportBlock.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/ReceiveReportBlock.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPReceiverReport.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPSR-RR发送时机.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPSDES.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/SDESitem.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/SDES说明.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPBYE.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPAPP.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPAPP字段说明.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/DTLS.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/SRTP.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/主要内容.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/需要权限.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Android权限管理.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/引入库.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/信令处理.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/AndroidSocketio.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/socketio接收消息.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/结构图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/呼叫端时序图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/被叫端时序图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/关闭时序图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/webrtc处理流程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/重要类-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/重要类-02.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/两个观察者.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/权限库界面.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/收发信令.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/主要内容-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/主要内容-02.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/引入WebRTC库的方式.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/引入WebRTC库.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/Podfile.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/socketio的使用.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/连接服务器.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/发送消息.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/注册侦听消息.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/媒体协商.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/信令时序图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/RTCPeerConnection委托.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/小结.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/信令服务器.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/JS客户端实现.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/JS客户端实现-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/进阶.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/进阶-01.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/行业痛点.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/webrtc分层协议图.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/信令会话协议.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/supplement/1V1互动直播通讯过程.png">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/supplement/TIM-01.jpg">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/supplement/TIM-02.jpg">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/supplement/WebRTC-ICECandidateExchange.svg">
+<meta property="og:image" content="https://irudder.github.io/images/imageWebRTC/supplement/WebRTC-SignalingDiagram.svg">
 <meta property="og:updated_time" content="2019-09-11T07:37:19.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebRTC（二）">
 <meta name="twitter:description" content="端对端1V1传输基本流程媒体能力协商过程WebRTC 端对端连接： RTCPeerConnection：  基本格式 1pc = new RTCPeerConnection([configuration]);">
-<meta name="twitter:image" content="https://mrpastor.github.io/images/imageWebRTC/媒体协商过程.png">
+<meta name="twitter:image" content="https://irudder.github.io/images/imageWebRTC/媒体协商过程.png">
 
 
 
@@ -247,13 +247,13 @@
 </script>
 
 
-  <link rel="canonical" href="https://mrpastor.github.io/2019-05-15/reference/WebRTC/webrtc-02/">
+  <link rel="canonical" href="https://irudder.github.io/2019-05-15/reference/WebRTC/webrtc-02/">
 
 
 
 
 
-  <title>WebRTC（二） | 牧羊人</title>
+  <title>WebRTC（二） | 牧师先生</title>
   
 
 
@@ -283,7 +283,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">牧羊人</span>
+        <span class="site-title">牧师先生</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -380,16 +380,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-05-15/reference/WebRTC/webrtc-02/">
+    <link itemprop="mainEntityOfPage" href="https://irudder.github.io/2019-05-15/reference/WebRTC/webrtc-02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="pastor">
+      <meta itemprop="name" content="rudder">
       <meta itemprop="description" content>
       <meta itemprop="image" content="http://irudder.me/resume/img/me.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="牧羊人">
+      <meta itemprop="name" content="牧师先生">
     </span>
 
     
@@ -982,14 +982,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="pastor 微信支付">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="rudder 微信支付">
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="pastor 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="rudder 支付宝">
         <p>支付宝</p>
       </div>
     
@@ -1007,11 +1007,11 @@
         <ul class="post-copyright">
   <li class="post-copyright-author">
     <strong>本文作者：</strong>
-    pastor
+    rudder
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://mrpastor.github.io/2019-05-15/reference/WebRTC/webrtc-02/" title="WebRTC（二）">https://mrpastor.github.io/2019-05-15/reference/WebRTC/webrtc-02/</a>
+    <a href="https://irudder.github.io/2019-05-15/reference/WebRTC/webrtc-02/" title="WebRTC（二）">https://irudder.github.io/2019-05-15/reference/WebRTC/webrtc-02/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -1117,9 +1117,9 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="pastor">
+              <img class="site-author-image" itemprop="image" src="http://irudder.me/resume/img/me.jpg" alt="rudder">
             
-              <p class="site-author-name" itemprop="name">pastor</p>
+              <p class="site-author-name" itemprop="name">rudder</p>
               <p class="site-description motion-element" itemprop="description">最富内涵的博文,最有哲理的谈论</p>
           </div>
 
@@ -1232,7 +1232,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">pastor</span>
+  <span class="author" itemprop="copyrightHolder">rudder</span>
 
   
 </div>
