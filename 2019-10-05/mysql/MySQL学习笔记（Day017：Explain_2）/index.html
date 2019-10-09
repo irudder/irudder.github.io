@@ -91,14 +91,14 @@
 <meta property="og:site_name" content="牧羊人">
 <meta property="og:description" content="MySQL学习笔记（Day017：Explain_2）@(MySQL学习) [TOC] 一. 作业解析 哪张原数据表中记录了Cardinality信息  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_001.png">
-<meta property="og:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_002.png">
-<meta property="og:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_003.png">
-<meta property="og:updated_time" content="2019-10-09T01:09:25.224Z">
+<meta property="og:image" content="https://mrpastor.github.io/Selection_001.png">
+<meta property="og:image" content="https://mrpastor.github.io/Selection_002.png">
+<meta property="og:image" content="https://mrpastor.github.io/Selection_003.png">
+<meta property="og:updated_time" content="2019-10-09T01:21:46.797Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL Explain_2">
 <meta name="twitter:description" content="MySQL学习笔记（Day017：Explain_2）@(MySQL学习) [TOC] 一. 作业解析 哪张原数据表中记录了Cardinality信息  123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566">
-<meta name="twitter:image" content="https://mrpastor.github.io/2019-10-05/mysql/MySQL学习笔记（Day017：Explain_2）/Selection_001.png">
+<meta name="twitter:image" content="https://mrpastor.github.io/Selection_001.png">
 
 
 
@@ -435,7 +435,7 @@
 </tr>
 </tbody>
 </table>
-<p><img src="./Selection_001.png" alt="Explain示例"></p>
+<p><img src="/Selection_001.png" alt="Explain示例"></p>
 <h4 id="（1）-id"><a href="#（1）-id" class="headerlink" title="（1）. id"></a>（1）. id</h4><p><code>从上往下理解</code>，不一定 id 序号大的先执行</p>
 <blockquote>
 <p>可以简单的理解为 id 相等的从上往下看，id 相等的从下往上看。但是在某些场合也<code>不一定适用</code></p>
@@ -512,9 +512,9 @@
 <blockquote>
 <p><strong>摘自姜老师的PDF，按照图上箭头的顺序来看，成本（cost）是从小到大</strong></p>
 </blockquote>
-<p><img src="./Selection_002.png" alt="TYPE"></p>
+<p><img src="/Selection_002.png" alt="TYPE"></p>
 <p>####（5）. extra</p>
-<p><img src="./Selection_003.png" alt="Extra"></p>
+<p><img src="/Selection_003.png" alt="Extra"></p>
 <ul>
 <li>Using filesort：可以使用复合索引将filesort进行优化。提高性能</li>
 <li>Using index：比如使用覆盖索引</li>
