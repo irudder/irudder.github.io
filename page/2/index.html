@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day006)/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -282,7 +282,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day006)/" itemprop="url">存储引擎二/多实例安装</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day012)/" itemprop="url">子查询/INSERT/UPDATE/DELETE/REPLACE</a></h1>
         
 
         <div class="post-meta">
@@ -356,33 +356,22 @@
       
         
           
-          MySQL学习笔记（Day006：存储引擎二/多实例安装）@(MySQL学习)
+          MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）@(MySQL学习)
 [TOC]
-一. MyISAM存储引擎(下)1. MyISAM还在使用的原因
-历史原因，需要逐步替换
-部分如User，DB等系统表(MyISAM引擎)，可以直接拷贝，比较方便
-性能好，或者存储小不是MyISAM的优点，也不是存在的原因
+一. 子查询
+子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。MySQL 5.6.x 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。
 
-2. MyISAM文件组成
-frm 表结构文件
-MYI 索引文件
-MYD 数据文件
-数据文件是堆表数据结构，堆是无序数据的集合
-MYI中的叶子节点，指向MYD中的数据页
-当数据移动到页外时，需要修改对应指针
+1select a from t1 where a &gt; any(select a from t2);
 
+select a from t1 是外部查询(outer query)
+(select a from t2) 是子查询
 
-
-3. myisamchkmyisamchk通过扫描MYD文件来重建MYI文件；如果MYD文件中某条记录有问题，将跳过该记录
-
-二. Memory存储引擎1. Memory介绍
-全内存存储的引擎
-数据库重启后数据丢失
-支持哈希索引
+一般说来，子查询嵌套于外部查询中，可以将两个或两个以上的子查询进行嵌套
+1. 子查询的使用1.1.  ANY / SOME如果外部查询的列的结果和子查询的列的结果比较得到为True的话，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day006)/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day012)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -433,7 +422,7 @@ MYI中的叶子节点，指向MYD中的数据页
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -452,7 +441,7 @@ MYI中的叶子节点，指向MYD中的数据页
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day007)/" itemprop="url">MySQL多实例下/SSL</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/" itemprop="url">存储引擎二/多实例安装</a></h1>
         
 
         <div class="post-meta">
@@ -526,17 +515,32 @@ MYI中的叶子节点，指向MYD中的数据页
       
         
           
-          MySQL学习笔记（Day007：多实例下/SSL）@(MySQL学习)
+          MySQL学习笔记（Day001-002：介绍和安装）@(MySQL学习)
 [TOC]
-一. 多实例安装 – 多版本1. [mysqld_multi]标签
-[mysqld_multi] 是否需要配置从操作演示来看，在my.cnf(老师给的模板配置)上直接配置[mysqld1]、[mysqld2]等实例标签，而不配置[mysqld_multi],使用mysqld_multi start 1也是可以启动数据库实例的，但是没有mysqld_safe的守护进程。所以该标签需要配置
+##一.MySQL版本选择
 
-2. 停止mysql实例
-multi_admin用户的作用通过官方文档中我们看到，&#39;multi_admin&#39;@&#39;localhost&#39;这个用户主要的作用是用来关闭数据库实例，因为文档中只授权了SHUTDOWN权限。所以在[mysqld_multi]标签
+MySQL5.6以后的版本，推荐使用官方版本。
+Percona：在5.6版本以后，MySQL将Percon之前优化集成到官方版本中;
+MariaDB：无INNODB;且核心代码较老
+MySQL在5.6以后不断重构源码，安装包越来越大，功能和性能在持续改进
+
+
+二. MySQL官方网站介绍官方网站：http://www.mysql.com
+
+Developer Zone： MySQL开发工程师板块
+
+Articles： Oracle工程师自己的博客
+Plant MySQL： 和MySQL相关从业人员的博客
+Bugs：MySQL BugList
+Worklog：开发记录
+Labs：MySQL实验性项目
+
+
+Downloads：MySQL下
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day007)/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -902,7 +906,7 @@ GROUP BY子句中列出的每一列都必须是检索列或有效的表达式（
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -921,7 +925,7 @@ GROUP BY子句中列出的每一列都必须是检索列或有效的表达式（
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/" itemprop="url">MySQL JSON格式</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day005)/" itemprop="url">slow_log/generic_log/audit/存储引擎一</a></h1>
         
 
         <div class="post-meta">
@@ -995,21 +999,33 @@ GROUP BY子句中列出的每一列都必须是检索列或有效的表达式（
       
         
           
-          MySQL学习笔记（Day009：JSON）@(MySQL学习)
+          MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）@(MySQL学习)
 [TOC]
-一. MySQL JSON类型1. JSON介绍
-JSON（JavaScript Object Notation）是一种轻量级的数据交换语言，并且是独立于语言的文本格式。
-一些NoSQL数据库选择JSON作为其数据存储格式，比如：MongoDB、CouchDB等。
-MySQL5.7.x开始支持JSON数据类型。
+一. 慢查询日志进阶1. 相关参数：
+slow_query_log
+
+是否开启慢查询日志                
 
 
-官方文档(JSON类型)
+slow_query_log_file
 
-2. JSON格式示例12345678910111213141516171819202122232425262728---- 摘自 维基百科--&#123;     "firstName": "John",    -- Key : Value 格式     "lastName": "Smith",     "sex": "male",
+慢查询日志文件名, 在my.cnf我们已经定义为slow.log，默认是 机器名-slow.log          
+
+
+long_query_time
+
+制定慢查询阈值, 单位是秒，且当版本 &gt;=5.5.X，支持毫秒。例如0.5即为500ms
+大于该值，不包括值本身。例如该值为2，则执行时间正好等于2的SQL语句不会记录
+
+
+log_queries_not_using_indexes
+
+将没有使用索引的SQL记录到慢查询日志 
+如果一开始因为数
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day005)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1060,7 +1076,7 @@ MySQL5.7.x开始支持JSON数据类型。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day012)/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day007)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1079,7 +1095,7 @@ MySQL5.7.x开始支持JSON数据类型。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day012)/" itemprop="url">子查询/INSERT/UPDATE/DELETE/REPLACE</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day007)/" itemprop="url">MySQL多实例下/SSL</a></h1>
         
 
         <div class="post-meta">
@@ -1153,22 +1169,17 @@ MySQL5.7.x开始支持JSON数据类型。
       
         
           
-          MySQL学习笔记（Day012：子查询/INSERT/UPDATE/DELETE/REPLACE）@(MySQL学习)
+          MySQL学习笔记（Day007：多实例下/SSL）@(MySQL学习)
 [TOC]
-一. 子查询
-子查询就是指在一个select语句中嵌套另一个select语句。同时，子查询必须包含括号。MySQL 5.6.x 版本之前，MySQL的子查询性能较差，但是从5.6开始，不存在性能差的问题。
+一. 多实例安装 – 多版本1. [mysqld_multi]标签
+[mysqld_multi] 是否需要配置从操作演示来看，在my.cnf(老师给的模板配置)上直接配置[mysqld1]、[mysqld2]等实例标签，而不配置[mysqld_multi],使用mysqld_multi start 1也是可以启动数据库实例的，但是没有mysqld_safe的守护进程。所以该标签需要配置
 
-1select a from t1 where a &gt; any(select a from t2);
-
-select a from t1 是外部查询(outer query)
-(select a from t2) 是子查询
-
-一般说来，子查询嵌套于外部查询中，可以将两个或两个以上的子查询进行嵌套
-1. 子查询的使用1.1.  ANY / SOME如果外部查询的列的结果和子查询的列的结果比较得到为True的话，
+2. 停止mysql实例
+multi_admin用户的作用通过官方文档中我们看到，&#39;multi_admin&#39;@&#39;localhost&#39;这个用户主要的作用是用来关闭数据库实例，因为文档中只授权了SHUTDOWN权限。所以在[mysqld_multi]标签
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day012)/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day007)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1219,7 +1230,7 @@ select a from t1 是外部查询(outer query)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day006)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1238,7 +1249,7 @@ select a from t1 是外部查询(outer query)
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day013)/" itemprop="url">作业讲解一/Rank/视图/UNION/触发器</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day006)/" itemprop="url">存储引擎二/多实例安装</a></h1>
         
 
         <div class="post-meta">
@@ -1312,26 +1323,33 @@ select a from t1 是外部查询(outer query)
       
         
           
-          MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）@(MySQL学习)
+          MySQL学习笔记（Day006：存储引擎二/多实例安装）@(MySQL学习)
 [TOC]
-一. 作业讲解
-查询employees表中非基层用户的最近详细信息
+一. MyISAM存储引擎(下)1. MyISAM还在使用的原因
+历史原因，需要逐步替换
+部分如User，DB等系统表(MyISAM引擎)，可以直接拷贝，比较方便
+性能好，或者存储小不是MyISAM的优点，也不是存在的原因
 
-老师的讲解的版本中存在问题，重新作为作业
+2. MyISAM文件组成
+frm 表结构文件
+MYI 索引文件
+MYD 数据文件
+数据文件是堆表数据结构，堆是无序数据的集合
+MYI中的叶子节点，指向MYD中的数据页
+当数据移动到页外时，需要修改对应指针
 
 
-统计dbt3库下orders每周每个客户的订单数量
 
+3. myisamchkmyisamchk通过扫描MYD文件来重建MYI文件；如果MYD文件中某条记录有问题，将跳过该记录
 
-
-思路
-
-找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了1970-01-05作为周一标记，作为起始(start)
-12345678[root@MyServer ~]&gt; cal 1 1970    January 1970    Su Mo Tu We Th Fr Sa             1  2  3 4  5  6  7  8  9 10  # 1970-01-05 刚好是周一，用1月12号，19号，26号等也是可以的11 12 1
+二. Memory存储引擎1. Memory介绍
+全内存存储的引擎
+数据库重启后数据丢失
+支持哈希索引
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day013)/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day006)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1567,7 +1585,7 @@ INT
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day013)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1586,7 +1604,7 @@ INT
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/" itemprop="url">存储引擎二/多实例安装</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day013)/" itemprop="url">作业讲解一/Rank/视图/UNION/触发器</a></h1>
         
 
         <div class="post-meta">
@@ -1660,32 +1678,26 @@ INT
       
         
           
-          MySQL学习笔记（Day001-002：介绍和安装）@(MySQL学习)
+          MySQL学习笔记（Day013：作业讲解一/Rank/视图/UNION/触发器）@(MySQL学习)
 [TOC]
-##一.MySQL版本选择
+一. 作业讲解
+查询employees表中非基层用户的最近详细信息
 
-MySQL5.6以后的版本，推荐使用官方版本。
-Percona：在5.6版本以后，MySQL将Percon之前优化集成到官方版本中;
-MariaDB：无INNODB;且核心代码较老
-MySQL在5.6以后不断重构源码，安装包越来越大，功能和性能在持续改进
+老师的讲解的版本中存在问题，重新作为作业
 
 
-二. MySQL官方网站介绍官方网站：http://www.mysql.com
-
-Developer Zone： MySQL开发工程师板块
-
-Articles： Oracle工程师自己的博客
-Plant MySQL： 和MySQL相关从业人员的博客
-Bugs：MySQL BugList
-Worklog：开发记录
-Labs：MySQL实验性项目
+统计dbt3库下orders每周每个客户的订单数量
 
 
-Downloads：MySQL下
+
+思路
+
+找到订单中最小周(week)之前的一周的周一，这里进行了简化，使用了1970-01-05作为周一标记，作为起始(start)
+12345678[root@MyServer ~]&gt; cal 1 1970    January 1970    Su Mo Tu We Th Fr Sa             1  2  3 4  5  6  7  8  9 10  # 1970-01-05 刚好是周一，用1月12号，19号，26号等也是可以的11 12 1
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记（Day001-002：介绍和安装）/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day013)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1736,7 +1748,7 @@ Downloads：MySQL下
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day005)/">
+    <link itemprop="mainEntityOfPage" href="https://mrpastor.github.io/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="pastor">
@@ -1755,7 +1767,7 @@ Downloads：MySQL下
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day005)/" itemprop="url">slow_log/generic_log/audit/存储引擎一</a></h1>
+                <a class="post-title-link" href="/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/" itemprop="url">MySQL JSON格式</a></h1>
         
 
         <div class="post-meta">
@@ -1829,33 +1841,21 @@ Downloads：MySQL下
       
         
           
-          MySQL学习笔记（Day005：slow_log/generic_log/audit/存储引擎一）@(MySQL学习)
+          MySQL学习笔记（Day009：JSON）@(MySQL学习)
 [TOC]
-一. 慢查询日志进阶1. 相关参数：
-slow_query_log
-
-是否开启慢查询日志                
-
-
-slow_query_log_file
-
-慢查询日志文件名, 在my.cnf我们已经定义为slow.log，默认是 机器名-slow.log          
+一. MySQL JSON类型1. JSON介绍
+JSON（JavaScript Object Notation）是一种轻量级的数据交换语言，并且是独立于语言的文本格式。
+一些NoSQL数据库选择JSON作为其数据存储格式，比如：MongoDB、CouchDB等。
+MySQL5.7.x开始支持JSON数据类型。
 
 
-long_query_time
+官方文档(JSON类型)
 
-制定慢查询阈值, 单位是秒，且当版本 &gt;=5.5.X，支持毫秒。例如0.5即为500ms
-大于该值，不包括值本身。例如该值为2，则执行时间正好等于2的SQL语句不会记录
-
-
-log_queries_not_using_indexes
-
-将没有使用索引的SQL记录到慢查询日志 
-如果一开始因为数
+2. JSON格式示例12345678910111213141516171819202122232425262728---- 摘自 维基百科--&#123;     "firstName": "John",    -- Key : Value 格式     "lastName": "Smith",     "sex": "male",
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day005)/#more" rel="contents">
+            <a class="btn" href="/2019-10-01/mysql/MySQL学习笔记(Day009：JSON)/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
